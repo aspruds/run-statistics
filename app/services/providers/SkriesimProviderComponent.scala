@@ -5,20 +5,32 @@ import scala.io.Source
 trait SkriesimProviderComponent {
   val skriesimProvider: SkriesimProvider = new DefaultSkriesimProvider
 
-  class DefaultSkriesimProvider extends SkriesimProvider {
+  class DefaultSkriesimProvider extends SkriesimProvider with HttpProviderComponent {
 
     override def getAthlete(id: Int): String = {
-      val url = "http://skriesim.lv/athletes?id=" + id
-      Source.fromURL(url).mkString
+      val url = " http://skriesim.lv/athletes?id=" + id
+      httpProvider.loadURL(url)
     }
 
     override def getClub(id: Int): String = ""
     override def getCoach(id: Int): String = ""
     override def getRace(id: Int): String = ""
 
-    override def getAthletes(): String = ""
-    override def getClubs(): String = ""
-    override def getCoaches(): String = ""
+    override def getAthletes(): String = {
+      val url = "http://skriesim.lv/athletes"
+      httpProvider.loadURL(url)
+    }
+
+    override def getClubs(): String = {
+      val url = "http://skriesim.lv/clubs"
+      httpProvider.loadURL(url)
+    }
+
+    override def getCoaches(): String = {
+      val url = "http://skriesim.lv/coaches"
+      httpProvider.loadURL(url)
+    }
+
     override def getRaces(): String = ""
   }
 

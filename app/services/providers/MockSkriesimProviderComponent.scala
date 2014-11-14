@@ -11,9 +11,9 @@ trait MockSkriesimProviderComponent extends SkriesimProviderComponent {
     override def getCoach(id: Int) = ""
     override def getRace(id: Int): String = ""
 
-    override def getAthletes(): String = ""
-    override def getClubs(): String = ""
-    override def getCoaches(): String = ""
+    override def getAthletes(): String = loadFile("athletes.html")
+    override def getClubs(): String = loadFile("clubs.html")
+    override def getCoaches(): String = loadFile("coaches.html")
     override def getRaces(): String = ""
 
     def loadFile(name: String) = {

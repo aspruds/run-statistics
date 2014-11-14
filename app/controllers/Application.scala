@@ -14,6 +14,17 @@ object Application extends Controller with SkriesimParserComponent {
       println("")
     }
 
+    /*
+    val athletes = skriesimParser.parseAthletes()
+    println(athletes)
+
+    val clubs = skriesimParser.parseClubs()
+    println(clubs.size)
+
+    val coaches = skriesimParser.parseCoaches()
+    println(coaches)
+    */
+
     Ok(views.html.index("Your new application is ready."))
   }
 

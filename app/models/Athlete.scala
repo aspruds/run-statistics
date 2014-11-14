@@ -1,5 +1,9 @@
 package models
 
+case class AthleteId(
+                      id: Int,
+                      name: String)
+
 case class Athlete(
                     name: String,
                     dateOfBirth: String,
