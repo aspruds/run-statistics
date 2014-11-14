@@ -18,7 +18,7 @@ object AthleteParser {
         a => {
           val id = a.attr("href").replace("http://skriesim.lv/clubs?id=", "").toInt
           val name = a.ownText
-          ClubInAthlete(id, name)
+          ClubId(id, name)
         }
       }
     }
@@ -28,7 +28,7 @@ object AthleteParser {
         a => {
           val id = a.attr("href").replace("http://skriesim.lv/coaches?id=", "").toInt
           val name = a.ownText
-          CoachInAthlete(id, name)
+          CoachId(id, name)
         }
       }
     }
@@ -50,7 +50,7 @@ object AthleteParser {
           rankingPoints = ex(4),
           ageGroup = ex(5),
           date = ex(6),
-          race = RaceInRaceResult(parseRaceId(), ex(7))
+          race = RaceId(parseRaceId(), ex(7))
         )
       }
 
