@@ -1,8 +1,14 @@
+package controllers
+
+import play.api._
+import play.api.mvc._
 import org.jsoup.Jsoup;
 import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 
-object Main extends App {
+object Application extends Controller {
+
+  def index = Action {
 	case class Result(
 						pk: String,
 						time: String,
@@ -37,4 +43,8 @@ object Main extends App {
 	}
 	val profile = parseSkriesim(24060)
 	println(profile)
+	  	
+    Ok(views.html.index("Your new application is ready."))
+  }
+
 }

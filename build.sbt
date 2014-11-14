@@ -1,11 +1,16 @@
-name := "Lutausis"
+name := """run-statistics"""
 
-version := "0.1-SNAPSHOT"
+version := "1.0-SNAPSHOT"
 
-scalacOptions ++= Seq("-deprecation", "-feature")
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.1"
 
-crossScalaVersions := Seq("2.10.4", "2.11.1")
+libraryDependencies ++= Seq(
+  jdbc,
+  anorm,
+  cache,
+  ws
+)
 
 libraryDependencies += "org.jsoup" % "jsoup" % "1.7.2"
