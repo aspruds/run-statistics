@@ -11,6 +11,10 @@ trait SkriesimParserComponent {
       AthleteParser.parseAthlete(skriesimProvider.getAthlete(id))
     }
 
+    override def parseCoach(id: Int): Athlete = {
+      AthleteParser.parseAthlete(skriesimProvider.getCoach(id))
+    }
+
     override def parseAthletes(): Seq[AthleteId] = {
       AthletesParser.parse(skriesimProvider.getAthletes())
     }
@@ -26,6 +30,8 @@ trait SkriesimParserComponent {
 
   trait SkriesimParser {
     def parseAthlete(id: Int): Athlete
+
+    def parseCoach(id: Int): Athlete
 
     def parseAthletes(): Seq[AthleteId]
 

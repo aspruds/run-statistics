@@ -13,7 +13,9 @@ trait SkriesimProviderComponent {
     }
 
     override def getClub(id: Int): String = ""
-    override def getCoach(id: Int): String = ""
+
+    override def getCoach(id: Int): String = getAthlete(id)
+
     override def getRace(id: Int): String = ""
 
     override def getAthletes(): String = {

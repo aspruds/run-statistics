@@ -25,6 +25,10 @@ object Application extends Controller with SkriesimParserComponent {
     println(coaches)
     */
 
+    val coaches = skriesimParser.parseCoaches()
+    val coach = skriesimParser.parseCoach(coaches(0).id)
+    println(coach)
+
     Ok(views.html.index("Your new application is ready."))
   }
 

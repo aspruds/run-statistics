@@ -12,4 +12,5 @@ case class Athlete(
                     country: String,
                     clubs: Seq[ClubId],
                     coaches: Seq[CoachId],
-                    raceResults: Seq[RaceResult])
+                    raceResults: Seq[RaceResult],
+                    isCoach: Boolean)

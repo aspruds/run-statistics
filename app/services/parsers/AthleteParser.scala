@@ -9,9 +9,19 @@ object AthleteParser {
   def parseAthlete(html: String): Athlete = {
     val doc = Jsoup.parse(html)
 
-    def parseName(): String = doc.select("td.name").first().ownText
+    def parseName(): String = doc.select("td.name").first.ownText
 
-    def parseAttribute(value: String) = doc.select(s":containsOwn($value) + td").first().ownText
+    def parseAttribute(value: String) = doc.select(s":containsOwn($value) + td").first.ownText
+
+    def parseIsCoach() = {
+      val selector = "table.personView td.name span.disciplineDetails"
+      val text = doc.select(selector).first.ownText
+
+      if(text == "(Treneris)")
+        true
+      else
+        false
+    }
 
     def parseClubs() = {
       doc.select(":containsOwn(Klubs) + td a").map {
@@ -34,6 +44,13 @@ object AthleteParser {
     }
 
     def parseRaceResults() = {
+      if(parseIsCoach())
+        Seq.empty
+      else
+        _parseRaceResults()
+    }
+
+    def _parseRaceResults() = {
       def parseContainer(container: Element): RaceResult = {
         val columns = container.select("td")
         def ex(id: Int) = columns(id).text
@@ -48,13 +65,13 @@ object AthleteParser {
               Some(el.select("td").text)
             }
             else {
-              val prev = el.previousElementSibling()
+              val prev = el.previousElementSibling
               if(prev == null) None
               else findDiscipline(prev)
             }
           }
 
-          findDiscipline(container.previousElementSibling())
+          findDiscipline(container.previousElementSibling)
         }
 
         RaceResult(
@@ -83,7 +100,8 @@ object AthleteParser {
       country = parseAttribute("Valsts"),
       clubs = parseClubs(),
       coaches = parseCoaches(),
-      raceResults = parseRaceResults()
+      raceResults = parseRaceResults(),
+      isCoach = parseIsCoach()
     )
   }
 }
