@@ -6,7 +6,7 @@ import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
 
 object AthleteParser {
-  def parseAthlete(html: String): Athlete = {
+  def parse(html: String): Athlete = {
     val doc = Jsoup.parse(html)
 
     def parseName(): String = doc.select("td.name").first.ownText
@@ -93,6 +93,7 @@ object AthleteParser {
     }
 
     Athlete(
+      None,
       name = parseName(),
       dateOfBirth = parseAttribute("Dz.datums"),
       ageGroup = parseAttribute("Vec.gr."),

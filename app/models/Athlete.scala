@@ -5,6 +5,7 @@ case class AthleteId(
                       name: String)
 
 case class Athlete(
+                    id: Option[Int],
                     name: String,
                     dateOfBirth: String,
                     ageGroup: String,

@@ -7,14 +7,14 @@ trait MockSkriesimProviderComponent extends SkriesimProviderComponent {
 
   class MockSkriesimProvider extends SkriesimProvider {
     override def getAthlete(id: Int): String = loadFile("athlete.html")
-    override def getClub(id: Int): String = ""
+    override def getClub(id: Int): String = loadFile("club.html")
     override def getCoach(id: Int) = loadFile("coach.html")
-    override def getRace(id: Int): String = ""
+    override def getRace(id: Int): String = loadFile("race.html")
 
     override def getAthletes(): String = loadFile("athletes.html")
     override def getClubs(): String = loadFile("clubs.html")
     override def getCoaches(): String = loadFile("coaches.html")
-    override def getRaces(): String = ""
+    override def getRaces(): String = loadFile("races.html")
 
     def loadFile(name: String) = {
       val location = "test/resources/skriesim/"

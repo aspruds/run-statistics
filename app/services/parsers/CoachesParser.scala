@@ -12,7 +12,7 @@ object CoachesParser {
     hrefs.map {
       href => {
         val id = href.attr("href").replace("http://skriesim.lv/athletes?id=", "").toInt
-        val name = href.ownText()
+        val name = href.ownText
         CoachId(id,name)
       }
     }

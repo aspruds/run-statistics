@@ -6,9 +6,9 @@ case class RaceId(
                    )
 
 case class Race(
-id: Int,
-name: String,
-date: String,
-country: String,
-url: Option[String]
+                 id: Option[Int],
+                 name: String,
+                 date: String,
+                 countryCode: String,
+                 url: Option[String]
                  )
