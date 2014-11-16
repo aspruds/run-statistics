@@ -14,3 +14,5 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "org.jsoup" % "jsoup" % "1.7.2"
+
+libraryDependencies += "com.github.tototoshi" %% "play-flyway" % "1.1.3"

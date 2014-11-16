@@ -2,7 +2,6 @@ package controllers
 
 import play.api.mvc._
 import services.parsers.SkriesimParserComponent
-import services.writers.sql.IdWriter
 
 object Application extends Controller with SkriesimParserComponent {
 
@@ -56,16 +55,29 @@ object Application extends Controller with SkriesimParserComponent {
     println(nonStandardDisciplineTypes)
     */
 
-    val standardDisciplineTypes = skriesimParser.parseStandardDisciplineTypes()
-    val standardDisciplineTypesSql = IdWriter.toSql(standardDisciplineTypes, "STANDARD_DISCIPLINE_TYPES")
-
-    val nonStandardDisciplineTypes = skriesimParser.parseNonStandardDisciplineTypes()
-    val nonStandardDisciplineTypesSql = IdWriter.toSql2(nonStandardDisciplineTypes, "NON_STANDARD_DISCIPLINE_TYPES")
-    println(nonStandardDisciplineTypesSql)
-
-
+    val sql = lookupSql()
+    println(sql)
 
     Ok(views.html.index("Your new application is ready."))
+  }
+
+  def lookupSql(): String = {
+    import services.writers.sql.SQLWriter._
+
+    val clubs = skriesimParser.parseClubs().take(2).map {
+      club => skriesimParser.parseClub(club.id)
+    }
+
+    val parts = List(
+      skriesimParser.parseStandardDisciplineTypes().toSql("STANDARD_DISCIPLINE_TYPES"),
+      skriesimParser.parseNonStandardDisciplineTypes().toSql("NON_STANDARD_DISCIPLINE_TYPES"),
+      skriesimParser.parseCountries().toSql("COUNTRIES"),
+      skriesimParser.parseAgeGroups().toSql("AGE_GROUPS"),
+      skriesimParser.parseDisciplineTypes().toSql("DISCIPLINE_TYPES"),
+      clubs.toSql("CLUBS")
+    )
+
+    parts.mkString("\n")
   }
 
 }

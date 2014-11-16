@@ -34,7 +34,7 @@ trait SkriesimParserComponent {
     }
 
     override def parseClubs(): Seq[IdName] = {
-      ClubsParser.parse(skriesimProvider.getClubs())
+      ClubsParser.parse(skriesimProvider.getClubs()).sortBy(_.id)
     }
 
     override def parseCoaches(): Seq[IdName] = {
@@ -54,11 +54,11 @@ trait SkriesimParserComponent {
     }
 
     override def parseDisciplineTypes(): Seq[IdName] = {
-      DisciplineTypesParser.parse(skriesimProvider.getStatistics())
+      DisciplineTypesParser.parse(skriesimProvider.getStatistics()).sortBy(_.id)
     }
 
     override def parseStandardDisciplineTypes(): Seq[IdName] = {
-      StandardDisciplineTypesParser.parse(skriesimProvider.getStatistics())
+      StandardDisciplineTypesParser.parse(skriesimProvider.getStatistics()).sortBy(_.id)
     }
 
     override def parseNonStandardDisciplineTypes(): Seq[CodeName] = {
