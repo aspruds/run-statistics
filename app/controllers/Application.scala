@@ -77,7 +77,9 @@ object Application extends Controller with SkriesimParserComponent {
       clubs.toSql("CLUBS")
     )
 
-    parts.mkString("\n")
+    parts
+      .map(_.mkString("\n"))
+      .mkString("\n")
   }
 
 }
