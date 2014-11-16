@@ -1,8 +1,8 @@
 package services.parsers
 
+import _root_.utils.TextUtils
 import models._
 import org.jsoup.Jsoup
-import utils.TextUtils
 
 object ClubParser {
   def parse(html: String): Club = {

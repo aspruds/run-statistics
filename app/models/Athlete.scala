@@ -1,8 +1,6 @@
 package models
 
-case class AthleteId(
-                      id: Int,
-                      name: String)
+import models.id.IdName
 
 case class Athlete(
                     id: Option[Int],
@@ -11,7 +9,7 @@ case class Athlete(
                     ageGroup: String,
                     sex: String,
                     country: String,
-                    clubs: Seq[ClubId],
-                    coaches: Seq[CoachId],
+                    clubs: Seq[IdName],
+                    coaches: Seq[IdName],
                     raceResults: Seq[RaceResult],
                     isCoach: Boolean)

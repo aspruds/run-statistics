@@ -1,8 +1,10 @@
 package services.parsers
 
 import models._
+import models.id.IdName
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+
 import scala.collection.JavaConversions._
 
 object AthleteParser {
@@ -28,7 +30,7 @@ object AthleteParser {
         a => {
           val id = a.attr("href").replace("http://skriesim.lv/clubs?id=", "").toInt
           val name = a.ownText
-          ClubId(id, name)
+          IdName(id, name)
         }
       }
     }
@@ -38,7 +40,7 @@ object AthleteParser {
         a => {
           val id = a.attr("href").replace("http://skriesim.lv/coaches?id=", "").toInt
           val name = a.ownText
-          CoachId(id, name)
+          IdName(id, name)
         }
       }
     }
@@ -84,7 +86,7 @@ object AthleteParser {
           rankingPoints = ex(4),
           ageGroup = ex(5),
           date = ex(6),
-          race = RaceId(parseRaceId(), ex(7))
+          race = IdName(parseRaceId(), ex(7))
         )
       }
 

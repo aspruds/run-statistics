@@ -1,7 +1,5 @@
 package services.providers
 
-import scala.io.Source
-
 trait SkriesimProviderComponent {
   val skriesimProvider: SkriesimProvider = new DefaultSkriesimProvider
 
@@ -21,7 +19,10 @@ trait SkriesimProviderComponent {
       getAthlete(id)
     }
 
-    override def getRace(id: Int): String = ""
+    override def getRace(id: Int): String = {
+      val url = "http://skriesim.lv/calendar?id=" + id
+      loadURL(url)
+    }
 
     override def getAthletes(): String = {
       val url = "http://skriesim.lv/athletes"
@@ -38,7 +39,7 @@ trait SkriesimProviderComponent {
       loadURL(url)
     }
 
-    override def getRaces(): String = {
+    override def getStatistics(): String = {
       val url = "http://skriesim.lv/statistics"
       loadURL(url)
     }
@@ -55,6 +56,6 @@ trait SkriesimProviderComponent {
     def getAthletes(): String
     def getClubs(): String
     def getCoaches(): String
-    def getRaces(): String
+    def getStatistics(): String
   }
 }

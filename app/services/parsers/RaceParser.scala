@@ -2,6 +2,7 @@ package services.parsers
 
 import models._
 import org.jsoup.Jsoup
+
 import scala.collection.JavaConversions._
 
 object RaceParser {

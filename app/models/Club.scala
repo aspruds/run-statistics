@@ -1,9 +1,5 @@
 package models
 
-case class ClubId(
-                   id: Int,
-                   name: String)
-
 case class Club(
                  id: Option[Int],
                  name: String,

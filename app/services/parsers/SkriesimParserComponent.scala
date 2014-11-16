@@ -1,6 +1,8 @@
 package services.parsers
 
 import models._
+import models.id.{IdName, CodeName}
+import services.parsers.lookups._
 import services.providers.MockSkriesimProviderComponent
 
 trait SkriesimParserComponent {
@@ -27,20 +29,40 @@ trait SkriesimParserComponent {
       ClubParser.parse(html).copy(id = Some(id))
     }
 
-    override def parseAthletes(): Seq[AthleteId] = {
+    override def parseAthletes(): Seq[IdName] = {
       AthletesParser.parse(skriesimProvider.getAthletes())
     }
 
-    override def parseClubs(): Seq[ClubId] = {
+    override def parseClubs(): Seq[IdName] = {
       ClubsParser.parse(skriesimProvider.getClubs())
     }
 
-    def parseCoaches(): Seq[CoachId] = {
+    override def parseCoaches(): Seq[IdName] = {
       CoachesParser.parse(skriesimProvider.getCoaches())
     }
 
-    def parseRaces(): Seq[RaceId] = {
-      RacesParser.parse(skriesimProvider.getRaces())
+    override def parseRaces(): Seq[IdName] = {
+      RacesParser.parse(skriesimProvider.getStatistics())
+    }
+
+    override def parseCountries(): Seq[CodeName] = {
+      CountryParser.parse(skriesimProvider.getStatistics())
+    }
+
+    override def parseAgeGroups(): Seq[CodeName] = {
+      AgeGroupParser.parse(skriesimProvider.getStatistics())
+    }
+
+    override def parseDisciplineTypes(): Seq[IdName] = {
+      DisciplineTypesParser.parse(skriesimProvider.getStatistics())
+    }
+
+    override def parseStandardDisciplineTypes(): Seq[IdName] = {
+      StandardDisciplineTypesParser.parse(skriesimProvider.getStatistics())
+    }
+
+    override def parseNonStandardDisciplineTypes(): Seq[CodeName] = {
+      NonStandardDisciplineTypesParser.parse(skriesimProvider.getStatistics())
     }
   }
 
@@ -53,13 +75,23 @@ trait SkriesimParserComponent {
 
     def parseClub(id: Int): Club
 
-    def parseAthletes(): Seq[AthleteId]
+    def parseAthletes(): Seq[IdName]
 
-    def parseClubs(): Seq[ClubId]
+    def parseClubs(): Seq[IdName]
 
-    def parseCoaches(): Seq[CoachId]
+    def parseCoaches(): Seq[IdName]
 
-    def parseRaces(): Seq[RaceId]
+    def parseRaces(): Seq[IdName]
+
+    def parseCountries(): Seq[CodeName]
+
+    def parseAgeGroups(): Seq[CodeName]
+
+    def parseDisciplineTypes(): Seq[IdName]
+
+    def parseStandardDisciplineTypes(): Seq[IdName]
+
+    def parseNonStandardDisciplineTypes(): Seq[CodeName]
   }
 
 }

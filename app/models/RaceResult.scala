@@ -1,5 +1,7 @@
 package models
 
+import models.id.IdName
+
 case class RaceResult(
                        discipline: String,
                        pk: String,
@@ -10,4 +12,4 @@ case class RaceResult(
                        rankingPoints: String,
                        ageGroup: String,
                        date: String,
-                       race: RaceId)
+                       race: IdName)

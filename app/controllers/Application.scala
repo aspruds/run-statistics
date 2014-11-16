@@ -2,6 +2,7 @@ package controllers
 
 import play.api.mvc._
 import services.parsers.SkriesimParserComponent
+import services.writers.sql.IdWriter
 
 object Application extends Controller with SkriesimParserComponent {
 
@@ -35,10 +36,34 @@ object Application extends Controller with SkriesimParserComponent {
     val raceId = 14825
     val race = skriesimParser.parseRace(raceId)
     println(race)
-    
+
     val races = skriesimParser.parseRaces()
     println(races)
+
+    val countries = skriesimParser.parseCountries()
+    println(countries)
+
+    val ageGroups = skriesimParser.parseAgeGroups()
+    println(ageGroups)
+
+    val disciplineTypes = skriesimParser.parseDisciplineTypes()
+    println(disciplineTypes)
+
+    val standardDisciplineTypes = skriesimParser.parseStandardDisciplineTypes()
+    println(standardDisciplineTypes)
+
+    val nonStandardDisciplineTypes = skriesimParser.parseNonStandardDisciplineTypes()
+    println(nonStandardDisciplineTypes)
     */
+
+    val standardDisciplineTypes = skriesimParser.parseStandardDisciplineTypes()
+    val standardDisciplineTypesSql = IdWriter.toSql(standardDisciplineTypes, "STANDARD_DISCIPLINE_TYPES")
+
+    val nonStandardDisciplineTypes = skriesimParser.parseNonStandardDisciplineTypes()
+    val nonStandardDisciplineTypesSql = IdWriter.toSql2(nonStandardDisciplineTypes, "NON_STANDARD_DISCIPLINE_TYPES")
+    println(nonStandardDisciplineTypesSql)
+
+
 
     Ok(views.html.index("Your new application is ready."))
   }

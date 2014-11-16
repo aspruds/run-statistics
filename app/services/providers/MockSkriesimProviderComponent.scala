@@ -14,7 +14,7 @@ trait MockSkriesimProviderComponent extends SkriesimProviderComponent {
     override def getAthletes(): String = loadFile("athletes.html")
     override def getClubs(): String = loadFile("clubs.html")
     override def getCoaches(): String = loadFile("coaches.html")
-    override def getRaces(): String = loadFile("races.html")
+    override def getStatistics(): String = loadFile("statistics.html")
 
     def loadFile(name: String) = {
       val location = "test/resources/skriesim/"
