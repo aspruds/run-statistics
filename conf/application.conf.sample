@@ -37,9 +37,9 @@ application.langs="en"
 # By convention, the default datasource is named `default`
 #
 db.default.driver=org.postgresql.Driver
-db.default.url="jdbc:postgresql://localhost/run-statistics"
-db.default.user=run-statistics
-db.default.password=memento
+db.default.url="jdbc:postgresql://localhost/runstatistics"
+db.default.user=runstatistics
+db.default.password=
 
 # Evolutions
 # ~~~~~

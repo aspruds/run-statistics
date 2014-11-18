@@ -1,7 +1,11 @@
 package controllers
 
+import services.skriesim.parsers.SkriesimParserComponent
+import services.skriesim.writers.sql.SQLWriter
+import play.api.db.slick.DB
 import play.api.mvc._
-import services.parsers.SkriesimParserComponent
+import play.api.db.slick.Session
+import play.api.Play.current
 
 object Application extends Controller with SkriesimParserComponent {
 
@@ -55,15 +59,26 @@ object Application extends Controller with SkriesimParserComponent {
     println(nonStandardDisciplineTypes)
     */
 
-    val sql = lookupSql()
-    println(sql)
+    DB.withSession {
+      implicit session => {
+         val sql = lookupSql()
+         println(sql)
+      }
+    }
 
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def lookupSql(): String = {
-    import services.writers.sql.SQLWriter._
+  def lookupSql()(implicit session: Session): String = {
+    import SQLWriter._
 
+    val athletes = skriesimParser.parseAthletes().map {
+      athlete => skriesimParser.parseAthlete(athlete.id)
+
+      Thread.sleep(1500)
+    }
+
+    /*
     val clubs = skriesimParser.parseClubs().take(2).map {
       club => skriesimParser.parseClub(club.id)
     }
@@ -80,6 +95,8 @@ object Application extends Controller with SkriesimParserComponent {
     parts
       .map(_.mkString("\n"))
       .mkString("\n")
+    */
+    ""
   }
 
 }
