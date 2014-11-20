@@ -1,100 +1,67 @@
 package services.skriesim.parsers
 
-import models._
-import models.skriesim.{Club, Athlete, Race}
-import models.skriesim.id.{IdName, CodeName}
+import models.skriesim.id.{CodeName, IdName}
+import models.skriesim.{Athlete, Club, Race}
 import services.skriesim.parsers.lookups._
-import services.skriesim.providers.{SkriesimProviderComponent, MockSkriesimProviderComponent}
 
 trait SkriesimParserComponent {
+
   val skriesimParser: SkriesimParser = new DefaultSkriesimParser
 
-  import play.api.db.slick.Config.driver.simple._
+  class DefaultSkriesimParser extends SkriesimParser {
+    override def parseAthlete(html: String): Athlete = AthleteParser.parse(html)
 
-  class DefaultSkriesimParser extends SkriesimParser with SkriesimProviderComponent {
-    override def parseAthlete(id: Int)(implicit session: Session): Athlete = {
-      val html = skriesimProvider.getAthlete(id)
-      AthleteParser.parse(html).copy(id = Some(id))
-    }
+    override def parseCoach(html: String): Athlete = AthleteParser.parse(html)
 
-    override def parseCoach(id: Int)(implicit session: Session): Athlete = {
-      val html = skriesimProvider.getCoach(id)
-      AthleteParser.parse(html).copy(id = Some(id))
-    }
+    override def parseRace(html: String): Race = RaceParser.parse(html)
 
-    override def parseRace(id: Int)(implicit session: Session): Race = {
-      val html = skriesimProvider.getRace(id)
-      RaceParser.parse(html).copy(id = Some(id))
-    }
+    override def parseClub(html: String): Club = ClubParser.parse(html)
 
-    override def parseClub(id: Int)(implicit session: Session): Club = {
-      val html = skriesimProvider.getClub(id)
-      ClubParser.parse(html).copy(id = Some(id))
-    }
+    override def parseAthleteIds(html: String): Seq[IdName] = AthletesParser.parse(html)
 
-    override def parseAthletes()(implicit session: Session): Seq[IdName] = {
-      AthletesParser.parse(skriesimProvider.getAthletes())
-    }
+    override def parseClubIds(html: String): Seq[IdName] = ClubsParser.parse(html)
 
-    override def parseClubs()(implicit session: Session): Seq[IdName] = {
-      ClubsParser.parse(skriesimProvider.getClubs()).sortBy(_.id)
-    }
+    override def parseCoachIds(html: String): Seq[IdName] = CoachesParser.parse(html)
 
-    override def parseCoaches()(implicit session: Session): Seq[IdName] = {
-      CoachesParser.parse(skriesimProvider.getCoaches())
-    }
+    override def parseRaceIds(html: String): Seq[IdName] = RacesParser.parse(html)
 
-    override def parseRaces()(implicit session: Session): Seq[IdName] = {
-      RacesParser.parse(skriesimProvider.getStatistics())
-    }
+    override def parseCountryIds(html: String): Seq[CodeName] = CountryParser.parse(html)
 
-    override def parseCountries()(implicit session: Session): Seq[CodeName] = {
-      CountryParser.parse(skriesimProvider.getStatistics())
-    }
+    override def parseAgeGroupIds(html: String): Seq[CodeName] = AgeGroupParser.parse(html)
 
-    override def parseAgeGroups()(implicit session: Session): Seq[CodeName] = {
-      AgeGroupParser.parse(skriesimProvider.getStatistics())
-    }
+    override def parseDisciplineTypeIds(html: String): Seq[IdName] = DisciplineTypesParser.parse(html)
 
-    override def parseDisciplineTypes()(implicit session: Session): Seq[IdName] = {
-      DisciplineTypesParser.parse(skriesimProvider.getStatistics()).sortBy(_.id)
-    }
+    override def parseStandardDisciplineTypeIds(html: String): Seq[IdName] = StandardDisciplineTypesParser.parse(html)
 
-    override def parseStandardDisciplineTypes()(implicit session: Session): Seq[IdName] = {
-      StandardDisciplineTypesParser.parse(skriesimProvider.getStatistics()).sortBy(_.id)
-    }
-
-    override def parseNonStandardDisciplineTypes()(implicit session: Session): Seq[CodeName] = {
-      NonStandardDisciplineTypesParser.parse(skriesimProvider.getStatistics())
-    }
+    override def parseNonStandardDisciplineTypeIds(html: String): Seq[CodeName] = NonStandardDisciplineTypesParser.parse(html)
   }
 
   trait SkriesimParser {
-    def parseAthlete(id: Int)(implicit session: Session): Athlete
+    def parseAthlete(html: String): Athlete
 
-    def parseCoach(id: Int)(implicit session: Session): Athlete
+    def parseCoach(html: String): Athlete
 
-    def parseRace(id: Int)(implicit session: Session): Race
+    def parseRace(html: String): Race
 
-    def parseClub(id: Int)(implicit session: Session): Club
+    def parseClub(html: String): Club
 
-    def parseAthletes()(implicit session: Session): Seq[IdName]
+    def parseAthleteIds(html: String): Seq[IdName]
 
-    def parseClubs()(implicit session: Session): Seq[IdName]
+    def parseClubIds(html: String): Seq[IdName]
 
-    def parseCoaches()(implicit session: Session): Seq[IdName]
+    def parseCoachIds(html: String): Seq[IdName]
 
-    def parseRaces()(implicit session: Session): Seq[IdName]
+    def parseRaceIds(html: String): Seq[IdName]
 
-    def parseCountries()(implicit session: Session): Seq[CodeName]
+    def parseCountryIds(html: String): Seq[CodeName]
 
-    def parseAgeGroups()(implicit session: Session): Seq[CodeName]
+    def parseAgeGroupIds(html: String): Seq[CodeName]
 
-    def parseDisciplineTypes()(implicit session: Session): Seq[IdName]
+    def parseDisciplineTypeIds(html: String): Seq[IdName]
 
-    def parseStandardDisciplineTypes()(implicit session: Session): Seq[IdName]
+    def parseStandardDisciplineTypeIds(html: String): Seq[IdName]
 
-    def parseNonStandardDisciplineTypes()(implicit session: Session): Seq[CodeName]
+    def parseNonStandardDisciplineTypeIds(html: String): Seq[CodeName]
   }
 
 }

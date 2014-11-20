@@ -11,10 +11,8 @@ trait HttpProviderComponent {
 
   val httpProvider: HttpProvider = new DefaultHttpProvider
 
-  import play.api.db.slick.Config.driver.simple._
-
   class DefaultHttpProvider extends HttpProvider {
-    override def loadURL(url: String)(implicit session: Session): String = {
+    override def loadURL(url: String): String = {
       urlRepository.getByUrl(url) match {
         case Some(url) => {
           println(s"returning cached url: ${url.url}")
@@ -22,6 +20,8 @@ trait HttpProviderComponent {
         }
         case None => {
           println(s"fetching url: $url")
+
+          Thread.sleep(2500)
 
           val content = Source.fromURL(url).mkString
           urlRepository.insert(Url(0, url, content, new LocalDateTime))
@@ -32,6 +32,6 @@ trait HttpProviderComponent {
   }
 
   trait HttpProvider {
-    def loadURL(url: String)(implicit session: Session): String
+    def loadURL(url: String): String
   }
 }
