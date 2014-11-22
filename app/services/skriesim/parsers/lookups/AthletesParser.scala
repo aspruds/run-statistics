@@ -15,6 +15,6 @@ object AthletesParser {
         val name = href.ownText()
         IdName(id,name)
       }
-    }
+    }.toStream
   }
 }

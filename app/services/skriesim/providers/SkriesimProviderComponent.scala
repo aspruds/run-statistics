@@ -48,6 +48,11 @@ trait SkriesimProviderComponent {
       loadURL(url)
     }
 
+    override def getStatisticsIdsEnglish: String = {
+      val url = "http://skriesim.lv/en/statistics"
+      loadURL(url)
+    }
+
     private def loadURL(url: String) = httpProvider.loadURL(url)
   }
 
@@ -61,5 +66,6 @@ trait SkriesimProviderComponent {
     def getClubIds: String
     def getCoachIds: String
     def getStatisticsIds: String
+    def getStatisticsIdsEnglish: String
   }
 }

@@ -16,7 +16,7 @@ object SQLWriter {
   implicit class CodeNameWriter(ids: Seq[CodeName]) {
     def toSql(tableName: String) = ids.map {
       case CodeName(code, name) => {
-        s"INSERT INTO $tableName (ID,VALUE) VALUES('$code', '$name');"
+        s"INSERT INTO $tableName (CODE,VALUE) VALUES('$code', '$name');"
       }
     }
   }

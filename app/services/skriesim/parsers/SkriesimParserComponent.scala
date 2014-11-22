@@ -27,6 +27,8 @@ trait SkriesimParserComponent {
 
     override def parseCountryIds(html: String): Seq[CodeName] = CountryParser.parse(html)
 
+    override def parseCountryIdsEnglish(html: String): Seq[CodeName] = CountryParser.parseEnglish(html)
+
     override def parseAgeGroupIds(html: String): Seq[CodeName] = AgeGroupParser.parse(html)
 
     override def parseDisciplineTypeIds(html: String): Seq[IdName] = DisciplineTypesParser.parse(html)
@@ -54,6 +56,8 @@ trait SkriesimParserComponent {
     def parseRaceIds(html: String): Seq[IdName]
 
     def parseCountryIds(html: String): Seq[CodeName]
+
+    def parseCountryIdsEnglish(html: String): Seq[CodeName]
 
     def parseAgeGroupIds(html: String): Seq[CodeName]
 

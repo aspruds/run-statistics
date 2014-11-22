@@ -2,6 +2,7 @@ package services.http.providers
 
 import models.http.Url
 import org.joda.time.LocalDateTime
+import play.api.Logger
 import services.http.db.UrlRepositoryComponent
 
 import scala.io.Source
@@ -12,14 +13,16 @@ trait HttpProviderComponent {
   val httpProvider: HttpProvider = new DefaultHttpProvider
 
   class DefaultHttpProvider extends HttpProvider {
+    val logger: Logger = Logger("DefaultHttpProvider")
+
     override def loadURL(url: String): String = {
       urlRepository.getByUrl(url) match {
         case Some(url) => {
-          println(s"returning cached url: ${url.url}")
+          logger.debug(s"returning cached url: ${url.url}")
           url.content
         }
         case None => {
-          println(s"fetching url: $url")
+          logger.info(s"fetching url: $url")
 
           Thread.sleep(2500)
 

@@ -10,4 +10,6 @@ object TextUtils {
     }
   }
 
+  val nbsp = "\u00a0"
+
 }

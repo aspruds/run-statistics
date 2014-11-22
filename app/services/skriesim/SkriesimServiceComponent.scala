@@ -1,7 +1,7 @@
 package services.skriesim
 
 import models.skriesim.Athlete
-import models.skriesim.id.IdName
+import models.skriesim.id.{CodeName, IdName}
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
 
@@ -35,6 +35,11 @@ trait SkriesimServiceComponent {
     override def getCoaches: Seq[Athlete] = getCoachIds.map {
       a => getCoach(a.id)
     }
+
+    override def getCountryIds = {
+      val html = skriesimProvider.getStatisticsIdsEnglish
+      skriesimParser.parseCountryIdsEnglish(html)
+    }
   }
 
   trait SkriesimService {
@@ -49,5 +54,7 @@ trait SkriesimServiceComponent {
     def getCoach(id: Int): Athlete
 
     def getCoaches: Seq[Athlete]
+
+    def getCountryIds: Seq[CodeName]
   }
 }

@@ -16,7 +16,7 @@ object ParserUtils {
         val name = option.ownText
         (id, name)
       }
-    }
+    }.toStream
   }
 
   def parsePersonList(html: String, url: String): Seq[IdName] = {
@@ -28,7 +28,7 @@ object ParserUtils {
         val name = href.ownText()
         IdName(id,name)
       }
-    }
+    }.toStream
   }
 
  }

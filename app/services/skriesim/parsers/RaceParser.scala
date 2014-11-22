@@ -1,6 +1,6 @@
 package services.skriesim.parsers
 
-import models._
+import _root_.utils.text.TextUtils
 import models.skriesim.Race
 import org.jsoup.Jsoup
 
@@ -12,7 +12,7 @@ object RaceParser {
     val container = doc.select("div.calendarView div.title").first
 
     // replace &nbsp;
-    val containerText = container.ownText.replace("\u00a0", "").trim
+    val containerText = container.ownText.replace(TextUtils.nbsp, "").trim
 
     val date = containerText.take(10)
 

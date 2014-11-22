@@ -1,11 +1,14 @@
 package models.skriesim
 
 import models.skriesim.id.IdName
+import org.joda.time.LocalDate
 
 case class Athlete(
-                    id: Option[Int],
-                    name: String,
-                    dateOfBirth: String,
+                    id: Option[Long],
+                    givenName: String,
+                    familyName: String,
+                    dateOfBirth: Option[LocalDate],
+                    yearOfBirth: Option[Int],
                     ageGroup: String,
                     sex: String,
                     country: String,

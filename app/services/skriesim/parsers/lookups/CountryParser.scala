@@ -9,4 +9,10 @@ object CountryParser {
       case(code,name) => CodeName(code,name)
     }
   }
+
+  def parseEnglish(html: String): Seq[CodeName] = {
+    ParserUtils.parseOptions(html, "Competition country:").map {
+      case(code,name) => CodeName(code,name)
+    }
+  }
 }
