@@ -1,5 +1,6 @@
 package services.skriesim.parsers
 
+import _root_.utils.text.TextUtils
 import models.skriesim.Athlete
 import models.skriesim.id.IdName
 import org.jsoup.Jsoup
@@ -65,7 +66,7 @@ object AthleteParser {
       yearOfBirth = dateParser.parseYearOfBirth(),
       ageGroup = parseAttribute("Vec.gr."),
       sex = parseSex(),
-      country = parseAttribute("Valsts"),
+      country = TextUtils.toOption(parseAttribute("Valsts")),
       clubs = parseClubs(),
       coaches = parseCoaches(),
       raceResults = parseRaceResults(),

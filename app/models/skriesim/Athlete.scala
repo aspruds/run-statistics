@@ -11,7 +11,7 @@ case class Athlete(
                     yearOfBirth: Option[Int],
                     ageGroup: String,
                     sex: String,
-                    country: String,
+                    country: Option[String],
                     clubs: Seq[IdName],
                     coaches: Seq[IdName],
                     raceResults: Seq[RaceResult],

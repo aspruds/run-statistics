@@ -1,19 +1,19 @@
 package services.skriesim.export
 
-import models.skriesim.Athlete
-import models.statistics.{Country, Person}
+import models.skriesim.{Athlete, Club => SkriesimClub}
+import models.statistics.{Club, Person}
 import org.joda.time.LocalDateTime
+import services.skriesim.export.mappers.CountryMapper
+import services.statistics.db.CountryRepositoryComponent
 
 trait SkriesimExporterComponent {
 
-  val skriesimExporter: SkriesimExporter = new DefaultSkriesimExporter
+  val skriesimExporter: SkriesimExporter
 
   class DefaultSkriesimExporter extends SkriesimExporter {
-    override def athleteToPerson(athlete: Athlete): Person = {
-      def getCountryIdByName(name: String): Long = {
-        Country(0,"LV","Latvia").id
-      }
+    this: CountryRepositoryComponent =>
 
+    override def exportAthlete(athlete: Athlete): Person = {
       Person(
         id = 0,
         givenName = athlete.givenName,
@@ -21,7 +21,7 @@ trait SkriesimExporterComponent {
         dateOfBirth = athlete.dateOfBirth,
         yearOfBirth = athlete.yearOfBirth,
         sex = athlete.sex,
-        countryId = getCountryIdByName(athlete.country),
+        countryId = athlete.country.map(getCountryIdByName(_)),
         skriesimId = athlete.id,
         sportlatId = None,
         noskrienId = None,
@@ -31,9 +31,31 @@ trait SkriesimExporterComponent {
         updatedById = None
       )
     }
+
+    override def exportClub(club: SkriesimClub): Club = {
+      Club(
+        id = 0,
+        name = club.name,
+        countryId = club.country.map(getCountryIdByName(_)),
+        title = club.title,
+        description = club.description,
+        fullDescription = club.fullDescription,
+        skriesimId = club.id,
+        createdAt = new LocalDateTime,
+        updateAt = new LocalDateTime,
+        updatedById = None
+      )
+    }
+
+    private def getCountryIdByName(name: String): Long = {
+      val code = CountryMapper.getCountryCodeFromName(name)
+      countryRepository.byCode(code).id
+    }
   }
 
   trait SkriesimExporter {
-    def athleteToPerson(athlete: Athlete): Person
+    def exportAthlete(athlete: Athlete): Person
+
+    def exportClub(club: SkriesimClub): Club
   }
 }

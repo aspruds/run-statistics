@@ -18,7 +18,7 @@ class Persons(tag: Tag) extends Table[Person](tag, "persons") {
 
   def sex = column[String]("sex", O.NotNull)
 
-  def countryId = column[Long]("country_id", O.NotNull)
+  def countryId = column[Option[Long]]("country_id", O.NotNull)
 
   def skriesimId = column[Option[Long]]("skriesim_id", O.NotNull)
 
@@ -26,7 +26,7 @@ class Persons(tag: Tag) extends Table[Person](tag, "persons") {
 
   def noskrienId = column[Option[Long]]("noskrien_id", O.NotNull)
 
-  def isCoach = column[Boolean]("content", O.NotNull)
+  def isCoach = column[Boolean]("is_coach", O.NotNull)
 
   def createdAt = column[LocalDateTime]("created_at", O.NotNull)
 

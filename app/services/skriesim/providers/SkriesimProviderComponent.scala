@@ -9,21 +9,21 @@ trait SkriesimProviderComponent {
   class DefaultSkriesimProvider extends SkriesimProvider {
     this: HttpProviderComponent =>
 
-    override def getAthlete(id: Int): String = {
+    override def getAthlete(id: Long): String = {
       val url = "http://skriesim.lv/athletes?id=" + id
       loadURL(url)
     }
 
-    override def getClub(id: Int): String = {
+    override def getClub(id: Long): String = {
       val url = "http://skriesim.lv/clubs?id=" + id
       loadURL(url)
     }
 
-    override def getCoach(id: Int): String = {
+    override def getCoach(id: Long): String = {
       getAthlete(id)
     }
 
-    override def getRace(id: Int): String = {
+    override def getRace(id: Long): String = {
       val url = "http://skriesim.lv/calendar?id=" + id
       loadURL(url)
     }
@@ -57,10 +57,10 @@ trait SkriesimProviderComponent {
   }
 
   trait SkriesimProvider {
-    def getAthlete(id: Int): String
-    def getClub(id: Int): String
-    def getCoach(id: Int): String
-    def getRace(id: Int): String
+    def getAthlete(id: Long): String
+    def getClub(id: Long): String
+    def getCoach(id: Long): String
+    def getRace(id: Long): String
 
     def getAthleteIds: String
     def getClubIds: String

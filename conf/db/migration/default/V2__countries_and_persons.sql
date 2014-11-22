@@ -284,7 +284,7 @@ CREATE TABLE persons (
     date_of_birth DATE,
     year_of_birth SMALLINT,
     sex CHAR(1) NOT NULL,
-    country_id INTEGER NOT NULL REFERENCES countries(id),
+    country_id INTEGER REFERENCES countries(id),
     skriesim_id INTEGER,
     sportlat_id INTEGER,
     noskrien_id INTEGER,

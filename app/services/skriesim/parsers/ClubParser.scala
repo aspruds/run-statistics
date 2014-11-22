@@ -32,6 +32,6 @@ object ClubParser {
       TextUtils.toOption(desc)
     }
 
-    Club(None, name, country, title, description, fullDescription)
+    Club(None, name, TextUtils.toOption(country), title, description, fullDescription)
   }
 }

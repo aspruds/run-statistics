@@ -1,18 +1,15 @@
 package controllers
 
-import models.statistics.Person
-import org.joda.time.{LocalDateTime, LocalDate}
-import play.api.Logger
+import play.api.Play.current
+import play.api.db.slick.{DB, Session}
+import play.api.mvc._
 import services.http.db.UrlRepositoryComponent
 import services.http.providers.HttpProviderComponent
 import services.skriesim.SkriesimServiceComponent
+import services.skriesim.export.SkriesimExporterComponent
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
-import services.skriesim.export.SkriesimExporterComponent
-import play.api.db.slick.DB
-import play.api.mvc._
-import play.api.db.slick.Session
-import play.api.Play.current
+import services.statistics.db.{ClubsRepositoryComponent, CountryRepositoryComponent, PersonRepositoryComponent, StatisticsServiceComponent}
 
 object Application extends Controller {
 
@@ -22,25 +19,8 @@ object Application extends Controller {
 
         val skriesimService = ServiceRepository.skriesimService
         val skriesimExporter = ServiceRepository.skriesimExporter
+        val statisticsService = ServiceRepository.statisticsService
 
-        val persons = skriesimService.getAthletes.take(20).map {
-          skriesimExporter.athleteToPerson(_)
-        }
-        persons.foreach(println)
-
-        /*
-        Logger.debug("getting athletes")
-
-        case class Name(id: Option[Int], givenName: String, familyName: String)
-
-        service.getAthletes
-          //.filter(_.givenName.count(_ == ' ') > 0)
-          //.filter(a => a.familyName.contains("-") || a.givenName.contains("-"))
-          .filter(_.familyName == "Sprūds")
-          .map(a => Name(a.id, a.givenName, a.familyName)).foreach(println)
-
-        //service.getCoaches.foreach(println)
-        */
       }
     }
 
@@ -57,7 +37,18 @@ object Application extends Controller {
       }.skriesimService
     }
 
-    def skriesimExporter = new SkriesimExporterComponent{}.skriesimExporter
+    def skriesimExporter(implicit session: Session) = new SkriesimExporterComponent {
+      override val skriesimExporter = new DefaultSkriesimExporter with CountryRepositoryComponent {
+        override val countryRepository = new DefaultCountryRepository
+      }
+    }.skriesimExporter
 
+    def statisticsService(implicit session: Session) = {
+      new StatisticsServiceComponent with PersonRepositoryComponent with ClubsRepositoryComponent {
+        override val personRepository = new DefaultPersonRepository
+        override val clubsRepository = new DefaultClubsRepository
+      }.statisticsService
+    }
   }
+
 }
