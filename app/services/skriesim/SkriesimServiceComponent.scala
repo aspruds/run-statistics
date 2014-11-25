@@ -8,7 +8,7 @@ import services.skriesim.providers.SkriesimProviderComponent
 trait SkriesimServiceComponent {
   this: SkriesimProviderComponent with SkriesimParserComponent =>
 
-  val skriesimService = new DefaultSkriesimService
+  val skriesimService: SkriesimService
 
   class DefaultSkriesimService extends SkriesimService{
     override def getAthleteIds = {

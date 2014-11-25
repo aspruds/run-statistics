@@ -6,7 +6,7 @@ import services.skriesim.parsers.lookups._
 
 trait SkriesimParserComponent {
 
-  val skriesimParser: SkriesimParser = new DefaultSkriesimParser
+  val skriesimParser: SkriesimParser
 
   class DefaultSkriesimParser extends SkriesimParser {
     override def parseAthlete(html: String): Athlete = AthleteParser.parse(html)

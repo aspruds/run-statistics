@@ -10,7 +10,7 @@ import scala.io.Source
 trait HttpProviderComponent {
   this: UrlRepositoryComponent =>
 
-  val httpProvider: HttpProvider = new DefaultHttpProvider
+  val httpProvider: HttpProvider
 
   class DefaultHttpProvider extends HttpProvider {
     val logger: Logger = Logger("DefaultHttpProvider")
