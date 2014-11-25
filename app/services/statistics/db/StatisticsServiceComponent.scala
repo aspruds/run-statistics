@@ -5,21 +5,23 @@ import models.statistics.{Club, Person}
 trait StatisticsServiceComponent {
   this: PersonRepositoryComponent with ClubsRepositoryComponent =>
 
-  val statisticsService = new DefaultStatisticsService
+  val statisticsService: StatisticsService
+
+  import play.api.db.slick.Config.driver.simple._
 
   class DefaultStatisticsService extends StatisticsService {
-    override def insertPerson(person: Person): Person = {
+    override def insertPerson(person: Person)(implicit session: Session): Person = {
       personRepository.insert(person)
     }
 
-    override def insertClub(club: Club): Club = {
+    override def insertClub(club: Club)(implicit session: Session): Club = {
       clubsRepository.insert(club)
     }
   }
 
   trait StatisticsService {
-    def insertPerson(person: Person): Person
+    def insertPerson(person: Person)(implicit session: Session): Person
 
-    def insertClub(club: Club): Club
+    def insertClub(club: Club)(implicit session: Session): Club
   }
 }

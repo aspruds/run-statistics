@@ -9,15 +9,15 @@ trait CountryRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultCountryRepository(implicit session: Session) extends CountryRepository {
+  class DefaultCountryRepository extends CountryRepository {
     val countries = TableQuery[Countries]
 
-    override def byCode(code: String) = {
+    override def byCode(code: String)(implicit session: Session) = {
       countries.filter(_.code === code).first
     }
   }
 
   trait CountryRepository {
-    def byCode(code: String): Country
+    def byCode(code: String)(implicit session: Session): Country
   }
 }

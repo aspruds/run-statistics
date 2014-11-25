@@ -2,13 +2,16 @@ package services.http.db
 
 import models.http.Url
 import models.http.db.Urls
+import play.api.db.slick._
+import play.api.Play.current
 
 trait UrlRepositoryComponent {
   val urlRepository: UrlRepository
 
   import play.api.db.slick.Config.driver.simple._
+  import Database.dynamicSession
 
-  class DefaultUrlRepository(implicit session: Session) extends UrlRepository {
+  class DefaultUrlRepository extends UrlRepository {
 
     val urls = TableQuery[Urls]
 
@@ -20,11 +23,15 @@ trait UrlRepositoryComponent {
     }
 
     override def insert(url: Url): Url = {
-      urlsAutoInc.insert(url)
+      DB.withDynSession {
+        urlsAutoInc.insert(url)
+      }
     }
 
     override def getByUrl(url: String) = {
-      urls.filter(_.url === url).firstOption
+      DB.withDynSession {
+        urls.filter(_.url === url).firstOption
+      }
     }
   }
 

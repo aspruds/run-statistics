@@ -1,6 +1,6 @@
 package services.statistics.db
 
-import models.statistics.Club
+import models.statistics.{Person, Club}
 import models.statistics.db.Clubs
 
 trait ClubsRepositoryComponent {
@@ -9,7 +9,7 @@ trait ClubsRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultClubsRepository(implicit session: Session) extends ClubsRepository {
+  class DefaultClubsRepository extends ClubsRepository {
     val clubs = TableQuery[Clubs]
 
     private val clubsAutoInc = {
@@ -19,12 +19,18 @@ trait ClubsRepositoryComponent {
       }
     }
 
-    override def insert(club: Club): Club = {
+    override def insert(club: Club)(implicit session: Session): Club = {
       clubsAutoInc.insert(club)
+    }
+
+    override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Club] = {
+      clubs.filter(_.skriesimId === skriesimId).firstOption
     }
   }
 
   trait ClubsRepository {
-    def insert(club: Club): Club
+    def insert(club: Club)(implicit session: Session): Club
+
+    def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Club]
   }
 }

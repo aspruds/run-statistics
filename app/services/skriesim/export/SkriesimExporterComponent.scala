@@ -3,6 +3,8 @@ package services.skriesim.export
 import models.skriesim.{Athlete, Club => SkriesimClub}
 import models.statistics.{Club, Person}
 import org.joda.time.LocalDateTime
+import play.api.Play.current
+import play.api.db.slick.DB
 import services.skriesim.export.mappers.CountryMapper
 import services.statistics.db.CountryRepositoryComponent
 
@@ -49,7 +51,13 @@ trait SkriesimExporterComponent {
 
     private def getCountryIdByName(name: String): Long = {
       val code = CountryMapper.getCountryCodeFromName(name)
-      countryRepository.byCode(code).id
+
+      import play.api.db.slick.Config.driver.simple._
+      import Database.dynamicSession
+
+      DB.withDynSession {
+        countryRepository.byCode(code).id
+      }
     }
   }
 

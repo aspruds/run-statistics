@@ -9,7 +9,7 @@ trait PersonRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultPersonRepository(implicit session: Session) extends PersonRepository {
+  class DefaultPersonRepository extends PersonRepository {
     val persons = TableQuery[Persons]
 
     private val personsAutoInc = {
@@ -19,12 +19,18 @@ trait PersonRepositoryComponent {
       }
     }
 
-    override def insert(person: Person): Person = {
+    override def insert(person: Person)(implicit session: Session): Person = {
       personsAutoInc.insert(person)
+    }
+
+    override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person] = {
+      persons.filter(_.skriesimId === skriesimId).firstOption
     }
   }
 
   trait PersonRepository {
-    def insert(person: Person): Person
+    def insert(person: Person)(implicit session: Session): Person
+
+    def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person]
   }
 }
