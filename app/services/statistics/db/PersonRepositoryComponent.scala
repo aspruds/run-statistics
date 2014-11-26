@@ -2,6 +2,7 @@ package services.statistics.db
 
 import models.statistics.Person
 import models.statistics.db.Persons
+import play.Logger
 
 trait PersonRepositoryComponent {
 
@@ -24,6 +25,7 @@ trait PersonRepositoryComponent {
     }
 
     override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person] = {
+      Logger.debug(s"finding Person by skriesimId: $skriesimId")
       persons.filter(_.skriesimId === skriesimId).firstOption
     }
   }

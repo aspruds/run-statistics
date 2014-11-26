@@ -24,7 +24,7 @@ object ParserUtils {
     val hrefs = doc.select("table.personList td a")
     hrefs.map {
       href => {
-        val id = href.attr("href").replace(url, "").toInt
+        val id = href.attr("href").replace(url, "").toLong
         val name = href.ownText()
         IdName(id,name)
       }

@@ -1,5 +1,5 @@
 package models.skriesim.id
 
 case class IdName(
-                   id: Int,
+                   id: Long,
                    name: String)

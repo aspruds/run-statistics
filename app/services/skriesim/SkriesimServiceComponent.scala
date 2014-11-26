@@ -2,11 +2,17 @@ package services.skriesim
 
 import models.skriesim.{Club, Athlete}
 import models.skriesim.id.{CodeName, IdName}
+import models.statistics.{PersonClub, Person}
+import modules.ComponentRegistry
+import org.joda.time.{LocalDateTime, LocalDate}
+import services.skriesim.export.SkriesimExporterComponent
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
+import play.api.Play.current
+import play.api.db.slick.DB
 
 trait SkriesimServiceComponent {
-  this: SkriesimProviderComponent with SkriesimParserComponent =>
+  this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent =>
 
   val skriesimService: SkriesimService
 
@@ -63,6 +69,51 @@ trait SkriesimServiceComponent {
         .filterNot(_.id == Some(682)) // Smiltene
         .filterNot(_.id == Some(652)) // Tīturga
     }
+
+    override def exportAthletes() = {
+      DB.withSession {
+        implicit session =>
+          getAthletes.map {
+            athlete => skriesimExporter.exportAthlete(athlete)
+          }.filterNot {
+            person => ComponentRegistry.personRepository.findBySkriesimId(person.skriesimId).isDefined
+          }.foreach {
+            person => ComponentRegistry.personRepository.insert(person)
+          }
+      }
+    }
+
+    override def exportClubs() = {
+      DB.withSession {
+        implicit session =>
+          getClubs.map {
+            club => skriesimExporter.exportClub(club)
+          }.filterNot {
+            club => ComponentRegistry.clubsRepository.findBySkriesimId(club.skriesimId).isDefined
+          }.foreach {
+            club => ComponentRegistry.clubsRepository.insert(club)
+          }
+      }
+    }
+
+    def exportClubsAthletes() = {
+      DB.withSession {
+        implicit session =>
+          val athleteClubs = for {
+            athlete <- ComponentRegistry.skriesimService.getAthletes
+            athleteClub <- athlete.clubs
+            person <- ComponentRegistry.personRepository.findBySkriesimId(athlete.id)
+            club <- ComponentRegistry.clubsRepository.findBySkriesimId(Some(athleteClub.id))
+          } yield (person, club)
+
+          athleteClubs.foreach {
+            case(person, club) => {
+              val personClub = PersonClub(0, person.id, club.id, new LocalDateTime(), new LocalDateTime(), None)
+              ComponentRegistry.personsClubsRepository.insert(personClub)
+            }
+          }
+      }
+    }
   }
 
   trait SkriesimService {
@@ -91,5 +142,11 @@ trait SkriesimServiceComponent {
     def getClub(id: Long): Club
 
     def getClubs: Seq[Club]
+
+    def exportAthletes()
+
+    def exportClubs()
+
+    def exportClubsAthletes()
   }
 }

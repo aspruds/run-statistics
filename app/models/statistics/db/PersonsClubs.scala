@@ -5,7 +5,7 @@ import org.joda.time.LocalDateTime
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
 
-class PeronsClubs(tag: Tag) extends Table[PersonClub](tag, "persons_clubs") {
+class PersonsClubs(tag: Tag) extends Table[PersonClub](tag, "persons_clubs") {
   def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
 
   def personId = column[Long]("person_id")
