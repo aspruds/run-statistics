@@ -2,7 +2,7 @@ package services.skriesim
 
 import models.skriesim.{Club, Athlete}
 import models.skriesim.id.{CodeName, IdName}
-import models.statistics.{PersonClub, Person}
+import models.statistics.{PersonCoach, PersonClub, Person}
 import modules.ComponentRegistry
 import org.joda.time.{LocalDateTime, LocalDate}
 import services.skriesim.export.SkriesimExporterComponent
@@ -99,17 +99,36 @@ trait SkriesimServiceComponent {
     def exportClubsAthletes() = {
       DB.withSession {
         implicit session =>
-          val athleteClubs = for {
+          val personsClubs = for {
             athlete <- ComponentRegistry.skriesimService.getAthletes
             athleteClub <- athlete.clubs
             person <- ComponentRegistry.personRepository.findBySkriesimId(athlete.id)
             club <- ComponentRegistry.clubsRepository.findBySkriesimId(Some(athleteClub.id))
           } yield (person, club)
 
-          athleteClubs.foreach {
+          personsClubs.foreach {
             case(person, club) => {
               val personClub = PersonClub(0, person.id, club.id, new LocalDateTime(), new LocalDateTime(), None)
               ComponentRegistry.personsClubsRepository.insert(personClub)
+            }
+          }
+      }
+    }
+
+    def exportAthletesCoaches() = {
+      DB.withSession {
+        implicit session =>
+          val personsCoaches = for {
+            athlete <- ComponentRegistry.skriesimService.getAthletes
+            athleteCoach <- athlete.coaches
+            person <- ComponentRegistry.personRepository.findBySkriesimId(athlete.id)
+            coach <- ComponentRegistry.personRepository.findBySkriesimId(Some(athleteCoach.id))
+          } yield (person, coach)
+
+          personsCoaches.foreach {
+            case(person, coach) => {
+              val personCoach = PersonCoach(0, person.id, coach.id, new LocalDateTime(), new LocalDateTime(), None)
+              ComponentRegistry.personsCoachesRepository.insert(personCoach)
             }
           }
       }
