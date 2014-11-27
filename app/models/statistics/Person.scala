@@ -1,5 +1,6 @@
 package models.statistics
 
+import models.statistics.metadata.{Relation, Metadata}
 import org.joda.time.{LocalDateTime, LocalDate}
 
 case class Person(
@@ -16,4 +17,4 @@ case class Person(
                    isCoach: Boolean,
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedById: Option[Long]) extends Metadata
+                   updatedBy: Option[Long]) extends Metadata with Relation

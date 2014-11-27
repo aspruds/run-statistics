@@ -1,5 +1,6 @@
 package models.statistics
 
+import models.statistics.metadata.Metadata
 import org.joda.time.LocalDateTime
 
 case class PersonCoach(
@@ -8,4 +9,4 @@ case class PersonCoach(
                    coachId: Long,
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedById: Option[Long]) extends Metadata
+                   updatedBy: Option[Long]) extends Metadata

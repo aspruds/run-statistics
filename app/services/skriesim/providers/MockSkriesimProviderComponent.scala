@@ -14,6 +14,7 @@ trait MockSkriesimProviderComponent extends SkriesimProviderComponent {
     override def getAthleteIds = loadFile("athletes.html")
     override def getClubIds = loadFile("clubs.html")
     override def getCoachIds = loadFile("coaches.html")
+    override def getRaceIds = getStatisticsIds
     override def getStatisticsIds = loadFile("statistics.html")
     override def getStatisticsIdsEnglish = loadFile("statistics_en.html")
 

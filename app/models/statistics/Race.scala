@@ -1,14 +1,18 @@
 package models.statistics
 
-import org.joda.time.LocalDateTime
+import models.statistics.metadata.{Relation, Metadata}
+import org.joda.time.{LocalDate, LocalDateTime}
 
 case class Race(
                  id: Long,
                  name: String,
-                 date: String,
-                 countryCode: String,
+                 date: LocalDate,
+                 countryId: Option[Long],
                  url: Option[String],
+                 skriesimId: Option[Long],
+                 sportlatId: Option[Long],
+                 noskrienId: Option[Long],
                  createdAt: LocalDateTime,
                  updateAt: LocalDateTime,
-                 updatedById: Option[Long]
-                 ) extends Metadata
+                 updatedBy: Option[Long]
+                 ) extends Metadata with Relation

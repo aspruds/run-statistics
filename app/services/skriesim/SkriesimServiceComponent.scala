@@ -1,19 +1,20 @@
 package services.skriesim
 
 import models.skriesim.id.{CodeName, IdName}
-import models.skriesim.{Athlete, Club}
+import models.skriesim.{Race, Athlete, Club}
 import models.statistics.{PersonClub, PersonCoach}
 import org.joda.time.LocalDateTime
+import play.api.Logger
 import play.api.Play.current
 import play.api.db.slick.DB
 import services.skriesim.export.SkriesimExporterComponent
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
-import services.statistics.db.{ClubsRepositoryComponent, PersonRepositoryComponent, PersonsClubsRepositoryComponent, PersonsCoachesRepositoryComponent}
+import services.statistics.db._
 
 trait SkriesimServiceComponent {
   this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent with PersonRepositoryComponent
-  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent =>
+  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent =>
 
   val skriesimService: SkriesimService
 
@@ -63,6 +64,22 @@ trait SkriesimServiceComponent {
       skriesimParser.parseClub(html).copy(id = Some(id))
     }
 
+    override def getRaceIds = {
+      val html = skriesimProvider.getRaceIds
+      skriesimParser.parseRaceIds(html)
+    }
+
+    override def getRace(id: Long) = {
+      val html = skriesimProvider.getRace(id)
+      skriesimParser.parseRace(html).copy(id = Some(id))
+    }
+
+    override def getRaces = getRaceIds.map {
+      r =>
+        Logger.debug(s"parsing Race ${r.id}")
+        getRace(r.id)
+    }
+
     override def getClubs = {
       getClubIds
         .map(c => getClub(c.id))
@@ -97,7 +114,7 @@ trait SkriesimServiceComponent {
       }
     }
 
-    def exportClubsAthletes() = {
+    override def exportClubsAthletes() = {
       DB.withSession {
         implicit session =>
           val personsClubs = for {
@@ -116,7 +133,7 @@ trait SkriesimServiceComponent {
       }
     }
 
-    def exportAthletesCoaches() = {
+    override def exportAthletesCoaches() = {
       DB.withSession {
         implicit session =>
           val personsCoaches = for {
@@ -131,6 +148,17 @@ trait SkriesimServiceComponent {
               val personCoach = PersonCoach(0, person.id, coach.id, new LocalDateTime(), new LocalDateTime(), None)
               personsCoachesRepository.insert(personCoach)
             }
+          }
+      }
+    }
+
+    def exportRaces() = {
+      DB.withSession {
+        implicit session =>
+          skriesimService.getRaces.map {
+            race => skriesimExporter.exportRace(race)
+          }.foreach {
+            race => raceRepository.insert(race)
           }
       }
     }
@@ -163,10 +191,21 @@ trait SkriesimServiceComponent {
 
     def getClubs: Seq[Club]
 
+    // clubs
+    def getRaceIds: Seq[IdName]
+
+    def getRace(id: Long): Race
+
+    def getRaces: Seq[Race]
+
     def exportAthletes()
 
     def exportClubs()
 
     def exportClubsAthletes()
+
+    def exportAthletesCoaches()
+
+    def exportRaces()
   }
 }

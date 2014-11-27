@@ -1,6 +1,7 @@
 package models.statistics.db
 
 import models.statistics.Club
+import models.statistics.metadata.db.Metadatas
 import play.api.db.slick.Config.driver.simple._
 
 class Clubs(tag: Tag) extends Table[Club](tag, "clubs") with Metadatas[Club] {

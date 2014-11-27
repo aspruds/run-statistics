@@ -1,11 +1,12 @@
 package models.statistics.db
 
 import models.statistics.Person
+import models.statistics.metadata.db.{Relations, Metadatas}
 import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
 
-class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Person] {
+class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Person] with Relations[Person] {
 
   def givenName = column[String]("given_name", O.NotNull)
 
@@ -18,12 +19,6 @@ class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Per
   def sex = column[String]("sex", O.NotNull)
 
   def countryId = column[Option[Long]]("country_id", O.NotNull)
-
-  def skriesimId = column[Option[Long]]("skriesim_id", O.NotNull)
-
-  def sportlatId = column[Option[Long]]("sportlat_id", O.NotNull)
-
-  def noskrienId = column[Option[Long]]("noskrien_id", O.NotNull)
 
   def isCoach = column[Boolean]("is_coach", O.NotNull)
 

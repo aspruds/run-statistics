@@ -13,11 +13,11 @@ trait CountryRepositoryComponent {
     val countries = TableQuery[Countries]
 
     override def byCode(code: String)(implicit session: Session) = {
-      countries.filter(_.code === code).first
+      countries.filter(_.code === code).firstOption
     }
   }
 
   trait CountryRepository {
-    def byCode(code: String)(implicit session: Session): Country
+    def byCode(code: String)(implicit session: Session): Option[Country]
   }
 }

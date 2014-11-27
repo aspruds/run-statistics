@@ -1,9 +1,9 @@
-package models.statistics
+package models.statistics.metadata
 
 import org.joda.time.LocalDateTime
 
 trait Metadata {
   def createdAt: LocalDateTime
   def updateAt: LocalDateTime
-  def updatedById: Option[Long]
+  def updatedBy: Option[Long]
 }

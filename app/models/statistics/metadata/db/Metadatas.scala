@@ -1,6 +1,6 @@
-package models.statistics.db
+package models.statistics.metadata.db
 
-import models.statistics.Metadata
+import models.statistics.metadata.Metadata
 import org.joda.time.LocalDateTime
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
