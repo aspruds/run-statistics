@@ -2,7 +2,8 @@ package services.skriesim
 
 import models.skriesim.id.{CodeName, IdName}
 import models.skriesim.{Race, Athlete, Club}
-import models.statistics.{PersonClub, PersonCoach}
+import models.statistics.{AgeGroup, PersonClub, PersonCoach}
+import modules.ComponentRegistry
 import org.joda.time.LocalDateTime
 import play.api.Logger
 import play.api.Play.current
@@ -14,7 +15,8 @@ import services.statistics.db._
 
 trait SkriesimServiceComponent {
   this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent with PersonRepositoryComponent
-  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent =>
+  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
+  with AgeGroupRepositoryComponent =>
 
   val skriesimService: SkriesimService
 
@@ -88,7 +90,13 @@ trait SkriesimServiceComponent {
         .filterNot(_.id == Some(652)) // Tīturga
     }
 
+    override def getAgeGroupsIds = {
+      val html = skriesimProvider.getStatisticsIds
+      skriesimParser.parseAgeGroupIds(html)
+    }
+
     override def exportAthletes() = {
+      Logger.info("Exporting skriesim.lv athletes")
       DB.withSession {
         implicit session =>
           getAthletes.map {
@@ -102,6 +110,7 @@ trait SkriesimServiceComponent {
     }
 
     override def exportClubs() = {
+      Logger.info("Exporting skriesim.lv clubs")
       DB.withSession {
         implicit session =>
           getClubs.map {
@@ -114,7 +123,8 @@ trait SkriesimServiceComponent {
       }
     }
 
-    override def exportClubsAthletes() = {
+    override def exportAthletesClubs() = {
+      Logger.info("Exporting skriesim.lv athletes-clubs")
       DB.withSession {
         implicit session =>
           val personsClubs = for {
@@ -134,6 +144,7 @@ trait SkriesimServiceComponent {
     }
 
     override def exportAthletesCoaches() = {
+      Logger.info("Exporting skriesim.lv athletes-coaches")
       DB.withSession {
         implicit session =>
           val personsCoaches = for {
@@ -152,7 +163,8 @@ trait SkriesimServiceComponent {
       }
     }
 
-    def exportRaces() = {
+    override def exportRaces() = {
+      Logger.info("Exporting skriesim.lv races")
       DB.withSession {
         implicit session =>
           skriesimService.getRaces.map {
@@ -162,50 +174,74 @@ trait SkriesimServiceComponent {
           }
       }
     }
+
+    override def exportAgeGroups() = {
+      Logger.info("Exporting skriesim.lv age groups")
+      DB.withSession {
+        implicit session =>
+          skriesimService.getAgeGroupsIds.map {
+            ageGroup => skriesimExporter.exportAgeGroup(ageGroup)
+          }.filterNot {
+            ageGroup => ageGroupRepository.findByName(ageGroup.name).isDefined
+          }.foreach {
+            ageGroup => ageGroupRepository.insert(ageGroup)
+          }
+      }
+    }
+
+    override def exportAll() = {
+      skriesimService.exportAthletes()
+      skriesimService.exportClubs()
+      skriesimService.exportAthletesClubs()
+      skriesimService.exportAthletesCoaches()
+      skriesimService.exportRaces()
+      skriesimService.exportAgeGroups()
+    }
   }
 
   trait SkriesimService {
-    // athletes
     def getAthleteIds: Seq[IdName]
 
     def getAthlete(id: Long): Athlete
 
     def getAthletes: Seq[Athlete]
 
-    // coaches
     def getCoachIds: Seq[IdName]
 
     def getCoach(id: Long): Athlete
 
     def getCoaches: Seq[Athlete]
 
-    // countries
     def getCountryIds: Seq[CodeName]
 
     def getCountryIdsLatvian: Seq[CodeName]
 
-    // clubs
     def getClubIds: Seq[IdName]
 
     def getClub(id: Long): Club
 
     def getClubs: Seq[Club]
 
-    // clubs
     def getRaceIds: Seq[IdName]
 
     def getRace(id: Long): Race
 
     def getRaces: Seq[Race]
 
-    def exportAthletes()
+    def getAgeGroupsIds: Seq[CodeName]
 
-    def exportClubs()
+    def exportAthletes(): Unit
 
-    def exportClubsAthletes()
+    def exportClubs(): Unit
 
-    def exportAthletesCoaches()
+    def exportAthletesClubs(): Unit
 
-    def exportRaces()
+    def exportAthletesCoaches(): Unit
+
+    def exportRaces(): Unit
+
+    def exportAgeGroups(): Unit
+
+    def exportAll(): Unit
   }
 }

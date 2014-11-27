@@ -1,7 +1,8 @@
 package services.skriesim.export
 
+import models.skriesim.id.CodeName
 import models.skriesim.{Athlete, Club => SkriesimClub, Race => SkriesimRace}
-import models.statistics.{Club, Person, Race}
+import models.statistics.{AgeGroup, Club, Person, Race}
 import org.joda.time.LocalDateTime
 import play.api.Logger
 import play.api.Play.current
@@ -26,7 +27,7 @@ trait SkriesimExporterComponent {
         dateOfBirth = athlete.dateOfBirth,
         yearOfBirth = athlete.yearOfBirth,
         sex = athlete.sex,
-        countryId = athlete.country.map(getCountryIdByName(_)).get,
+        countryId = athlete.country.flatMap(getCountryIdByName(_)),
         skriesimId = athlete.id,
         sportlatId = None,
         noskrienId = None,
@@ -41,7 +42,7 @@ trait SkriesimExporterComponent {
       Club(
         id = 0,
         name = club.name,
-        countryId = club.country.map(getCountryIdByName(_)).get,
+        countryId = club.country.flatMap(getCountryIdByName(_)),
         title = club.title,
         description = club.description,
         fullDescription = club.fullDescription,
@@ -68,6 +69,10 @@ trait SkriesimExporterComponent {
       )
     }
 
+    override def exportAgeGroup(ageGroup: CodeName) = {
+      AgeGroup(0, ageGroup.name, new LocalDateTime(), new LocalDateTime(), None)
+    }
+
     private def getCountryIdByCode(code: String): Option[Long] = {
       DB.withDynSession {
         countryRepository.byCode(code).map(_.id)
@@ -86,5 +91,7 @@ trait SkriesimExporterComponent {
     def exportClub(club: SkriesimClub): Club
 
     def exportRace(club: SkriesimRace): Race
+
+    def exportAgeGroup(ageGroup: CodeName): AgeGroup
   }
 }
