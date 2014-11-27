@@ -1,18 +1,19 @@
 package services.skriesim
 
-import models.skriesim.{Club, Athlete}
 import models.skriesim.id.{CodeName, IdName}
-import models.statistics.{PersonCoach, PersonClub, Person}
-import modules.ComponentRegistry
-import org.joda.time.{LocalDateTime, LocalDate}
+import models.skriesim.{Athlete, Club}
+import models.statistics.{PersonClub, PersonCoach}
+import org.joda.time.LocalDateTime
+import play.api.Play.current
+import play.api.db.slick.DB
 import services.skriesim.export.SkriesimExporterComponent
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
-import play.api.Play.current
-import play.api.db.slick.DB
+import services.statistics.db.{ClubsRepositoryComponent, PersonRepositoryComponent, PersonsClubsRepositoryComponent, PersonsCoachesRepositoryComponent}
 
 trait SkriesimServiceComponent {
-  this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent =>
+  this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent with PersonRepositoryComponent
+  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent =>
 
   val skriesimService: SkriesimService
 
@@ -76,9 +77,9 @@ trait SkriesimServiceComponent {
           getAthletes.map {
             athlete => skriesimExporter.exportAthlete(athlete)
           }.filterNot {
-            person => ComponentRegistry.personRepository.findBySkriesimId(person.skriesimId).isDefined
+            person => personRepository.findBySkriesimId(person.skriesimId).isDefined
           }.foreach {
-            person => ComponentRegistry.personRepository.insert(person)
+            person => personRepository.insert(person)
           }
       }
     }
@@ -89,9 +90,9 @@ trait SkriesimServiceComponent {
           getClubs.map {
             club => skriesimExporter.exportClub(club)
           }.filterNot {
-            club => ComponentRegistry.clubsRepository.findBySkriesimId(club.skriesimId).isDefined
+            club => clubsRepository.findBySkriesimId(club.skriesimId).isDefined
           }.foreach {
-            club => ComponentRegistry.clubsRepository.insert(club)
+            club => clubsRepository.insert(club)
           }
       }
     }
@@ -100,16 +101,16 @@ trait SkriesimServiceComponent {
       DB.withSession {
         implicit session =>
           val personsClubs = for {
-            athlete <- ComponentRegistry.skriesimService.getAthletes
+            athlete <- skriesimService.getAthletes
             athleteClub <- athlete.clubs
-            person <- ComponentRegistry.personRepository.findBySkriesimId(athlete.id)
-            club <- ComponentRegistry.clubsRepository.findBySkriesimId(Some(athleteClub.id))
+            person <- personRepository.findBySkriesimId(athlete.id)
+            club <- clubsRepository.findBySkriesimId(Some(athleteClub.id))
           } yield (person, club)
 
           personsClubs.foreach {
             case(person, club) => {
               val personClub = PersonClub(0, person.id, club.id, new LocalDateTime(), new LocalDateTime(), None)
-              ComponentRegistry.personsClubsRepository.insert(personClub)
+              personsClubsRepository.insert(personClub)
             }
           }
       }
@@ -119,16 +120,16 @@ trait SkriesimServiceComponent {
       DB.withSession {
         implicit session =>
           val personsCoaches = for {
-            athlete <- ComponentRegistry.skriesimService.getAthletes
+            athlete <- skriesimService.getAthletes
             athleteCoach <- athlete.coaches
-            person <- ComponentRegistry.personRepository.findBySkriesimId(athlete.id)
-            coach <- ComponentRegistry.personRepository.findBySkriesimId(Some(athleteCoach.id))
+            person <- personRepository.findBySkriesimId(athlete.id)
+            coach <- personRepository.findBySkriesimId(Some(athleteCoach.id))
           } yield (person, coach)
 
           personsCoaches.foreach {
             case(person, coach) => {
               val personCoach = PersonCoach(0, person.id, coach.id, new LocalDateTime(), new LocalDateTime(), None)
-              ComponentRegistry.personsCoachesRepository.insert(personCoach)
+              personsCoachesRepository.insert(personCoach)
             }
           }
       }

@@ -1,12 +1,11 @@
 package models.statistics.db
 
 import models.statistics.Person
-import org.joda.time.{LocalDate, LocalDateTime}
+import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
 
-class Persons(tag: Tag) extends Table[Person](tag, "persons") {
-  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
+class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Person] {
 
   def givenName = column[String]("given_name", O.NotNull)
 
@@ -27,12 +26,6 @@ class Persons(tag: Tag) extends Table[Person](tag, "persons") {
   def noskrienId = column[Option[Long]]("noskrien_id", O.NotNull)
 
   def isCoach = column[Boolean]("is_coach", O.NotNull)
-
-  def createdAt = column[LocalDateTime]("created_at", O.NotNull)
-
-  def updatedAt = column[LocalDateTime]("updated_at", O.NotNull)
-
-  def updatedBy = column[Option[Long]]("updated_by")
 
   def skriesimIdIdx = index("persons_idx_skriesim_id", skriesimId, unique = true)
 

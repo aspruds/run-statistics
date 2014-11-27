@@ -3,8 +3,7 @@ package models.statistics.db
 import models.statistics.Country
 import play.api.db.slick.Config.driver.simple._
 
-class Countries(tag: Tag) extends Table[Country](tag, "countries") {
-  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
+class Countries(tag: Tag) extends Table[Country](tag, "countries") with Metadatas[Country] {
 
   def code = column[String]("code", O.NotNull)
 
@@ -15,5 +14,8 @@ class Countries(tag: Tag) extends Table[Country](tag, "countries") {
   def * = (
     id,
     code,
-    name) <> (Country.tupled, Country.unapply)
+    name,
+    createdAt,
+    updatedAt,
+    updatedBy) <> (Country.tupled, Country.unapply)
 }

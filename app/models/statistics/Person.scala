@@ -16,4 +16,4 @@ case class Person(
                    isCoach: Boolean,
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedById: Option[Long])
+                   updatedById: Option[Long]) extends Metadata

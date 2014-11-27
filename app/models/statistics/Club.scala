@@ -12,4 +12,4 @@ case class Club(
                    skriesimId: Option[Long],
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedById: Option[Long])
+                   updatedById: Option[Long]) extends Metadata
