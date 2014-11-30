@@ -1,10 +1,10 @@
 package models.statistics.db
 
 import models.statistics.Country
-import models.statistics.metadata.db.Metadatas
+import models.statistics.metadata.db.WithMetadatas
 import play.api.db.slick.Config.driver.simple._
 
-class Countries(tag: Tag) extends Table[Country](tag, "countries") with Metadatas[Country] {
+class Countries(tag: Tag) extends Table[Country](tag, "countries") with WithMetadatas[Country] {
 
   def code = column[String]("code", O.NotNull)
 

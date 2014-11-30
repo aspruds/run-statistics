@@ -3,10 +3,13 @@ package models.statistics
 import models.statistics.metadata.WithMetadata
 import org.joda.time.LocalDateTime
 
-case class PersonClub(
+case class RaceDistance(
                    id: Long,
-                   personId: Long,
-                   clubId: Long,
+                   raceId: Long,
+                   distanceTypeId: Option[Long],
+                   name: String,
+                   isCertified: Option[Boolean],
+                   isElectronicTime: Option[Boolean],
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
                    updatedBy: Option[Long]) extends WithMetadata

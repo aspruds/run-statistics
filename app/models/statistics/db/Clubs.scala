@@ -1,12 +1,11 @@
 package models.statistics.db
 
 import models.statistics.Club
-import models.statistics.metadata.db.Metadatas
+import models.statistics.metadata.db.{WithNames, WithMetadatas}
 import play.api.db.slick.Config.driver.simple._
 
-class Clubs(tag: Tag) extends Table[Club](tag, "clubs") with Metadatas[Club] {
-
-  def name = column[String]("name", O.NotNull)
+class Clubs(tag: Tag) extends Table[Club](tag, "clubs")
+with WithMetadatas[Club] with WithNames[Club] {
 
   def countryId = column[Option[Long]]("country_id")
 
