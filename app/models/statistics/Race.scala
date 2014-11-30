@@ -1,6 +1,6 @@
 package models.statistics
 
-import models.statistics.metadata.{Relation, Metadata}
+import models.statistics.metadata.{WithRelation, WithMetadata}
 import org.joda.time.{LocalDate, LocalDateTime}
 
 case class Race(
@@ -15,4 +15,4 @@ case class Race(
                  createdAt: LocalDateTime,
                  updateAt: LocalDateTime,
                  updatedBy: Option[Long]
-                 ) extends Metadata with Relation
+                 ) extends WithMetadata with WithRelation

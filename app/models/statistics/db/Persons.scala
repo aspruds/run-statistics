@@ -1,12 +1,13 @@
 package models.statistics.db
 
 import models.statistics.Person
-import models.statistics.metadata.db.{Relations, Metadatas}
+import models.statistics.metadata.db.{WithRelations, WithMetadatas}
 import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
 
-class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Person] with Relations[Person] {
+class Persons(tag: Tag) extends Table[Person](tag, "persons")
+with WithMetadatas[Person] with WithRelations[Person] {
 
   def givenName = column[String]("given_name", O.NotNull)
 
@@ -52,5 +53,5 @@ class Persons(tag: Tag) extends Table[Person](tag, "persons") with Metadatas[Per
     isCoach,
     createdAt,
     updatedAt,
-    updatedBy) <> (Person.tupled, Person.unapply)
+    updatedBy) <>(Person.tupled, Person.unapply)
 }

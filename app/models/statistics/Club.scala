@@ -1,6 +1,6 @@
 package models.statistics
 
-import models.statistics.metadata.Metadata
+import models.statistics.metadata.WithMetadata
 import org.joda.time.LocalDateTime
 
 case class Club(
@@ -13,4 +13,4 @@ case class Club(
                    skriesimId: Option[Long],
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedBy: Option[Long]) extends Metadata
+                   updatedBy: Option[Long]) extends WithMetadata

@@ -3,10 +3,9 @@ package models.statistics
 import models.statistics.metadata.WithMetadata
 import org.joda.time.LocalDateTime
 
-case class PersonClub(
+case class DisciplineType(
                    id: Long,
-                   personId: Long,
-                   clubId: Long,
+                   name: Long,
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
                    updatedBy: Option[Long]) extends WithMetadata
