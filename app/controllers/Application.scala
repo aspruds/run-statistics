@@ -6,7 +6,7 @@ import play.api.mvc._
 object Application extends Controller {
 
   def index = Action {
-    ComponentRegistry.skriesimService.exportAgeGroups()
+    ComponentRegistry.skriesimService.exportAthletes();
     Ok(views.html.index("Your new application is ready."))
   }
 }

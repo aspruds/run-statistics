@@ -15,7 +15,7 @@ import services.statistics.db._
 
 trait SkriesimServiceComponent {
   this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimExporterComponent with PersonRepositoryComponent
-  with ClubsRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
+  with ClubRepositoryComponent with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
   with AgeGroupRepositoryComponent =>
 
   val skriesimService: SkriesimService
@@ -116,9 +116,9 @@ trait SkriesimServiceComponent {
           getClubs.map {
             club => skriesimExporter.exportClub(club)
           }.filterNot {
-            club => clubsRepository.findBySkriesimId(club.skriesimId).isDefined
+            club => clubRepository.findBySkriesimId(club.skriesimId).isDefined
           }.foreach {
-            club => clubsRepository.insert(club)
+            club => clubRepository.insert(club)
           }
       }
     }
@@ -131,7 +131,7 @@ trait SkriesimServiceComponent {
             athlete <- skriesimService.getAthletes
             athleteClub <- athlete.clubs
             person <- personRepository.findBySkriesimId(athlete.id)
-            club <- clubsRepository.findBySkriesimId(Some(athleteClub.id))
+            club <- clubRepository.findBySkriesimId(Some(athleteClub.id))
           } yield (person, club)
 
           personsClubs.foreach {

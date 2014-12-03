@@ -3,7 +3,7 @@ package services.statistics.db
 import models.statistics.{Club, Person}
 
 trait StatisticsServiceComponent {
-  this: PersonRepositoryComponent with ClubsRepositoryComponent =>
+  this: PersonRepositoryComponent with ClubRepositoryComponent =>
 
   val statisticsService: StatisticsService
 
@@ -15,7 +15,7 @@ trait StatisticsServiceComponent {
     }
 
     override def insertClub(club: Club)(implicit session: Session): Club = {
-      clubsRepository.insert(club)
+      clubRepository.insert(club)
     }
   }
 

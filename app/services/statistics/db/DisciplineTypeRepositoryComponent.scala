@@ -1,6 +1,7 @@
 package services.statistics.db
 
-import models.statistics.{DisciplineType, DisciplineTypes}
+import models.statistics.DisciplineType
+import models.statistics.db.DisciplineTypes
 
 trait DisciplineTypeRepositoryComponent {
 
@@ -8,7 +9,7 @@ trait DisciplineTypeRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultDisciplineRepository extends DisciplineTypeRepository {
+  class DefaultDisciplineTypeRepository extends DisciplineTypeRepository {
     val disciplineTypes = TableQuery[DisciplineTypes]
 
     private val racesAutoInc = {

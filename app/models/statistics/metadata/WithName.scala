@@ -1,5 +1,5 @@
 package models.statistics.metadata
 
 trait WithName {
-  def name: Long
+  def name: String
  }

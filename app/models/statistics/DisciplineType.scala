@@ -1,11 +1,11 @@
 package models.statistics
 
-import models.statistics.metadata.WithMetadata
+import models.statistics.metadata.{WithName, WithMetadata}
 import org.joda.time.LocalDateTime
 
 case class DisciplineType(
                    id: Long,
-                   name: Long,
+                   name: String,
                    createdAt: LocalDateTime,
                    updateAt: LocalDateTime,
-                   updatedBy: Option[Long]) extends WithMetadata
+                   updatedBy: Option[Long]) extends WithMetadata with WithName

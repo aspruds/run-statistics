@@ -47,7 +47,7 @@ CREATE TABLE distance_types (
   name VARCHAR(200) NOT NULL,
   skriesim_name varchar(400),
   distance INTEGER,
-  weight DOUBLE PRECISION,
+  weight INTEGER,
   discipline_type_id BIGINT REFERENCES discipline_types(id),
   venue_type_id BIGINT REFERENCES venue_types(id),
   is_standard BOOLEAN,
@@ -64,9 +64,11 @@ CREATE INDEX distance_types_idx_venue_type_id ON venue_types(id);
 
 CREATE TABLE race_distances (
   id SERIAL NOT NULL,
-  race_id BIGINT NOT NULL REFERENCES races(race_id),
+  race_id BIGINT NOT NULL REFERENCES races(id),
   name VARCHAR(200) NOT NULL,
   distance_type_id BIGINT REFERENCES distance_types(id),
+  is_certified BOOLEAN,
+  is_electronic_time BOOLEAN,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_by INTEGER,

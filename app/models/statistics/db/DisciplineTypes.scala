@@ -1,5 +1,6 @@
-package models.statistics
+package models.statistics.db
 
+import models.statistics.DisciplineType
 import models.statistics.metadata.db.{WithMetadatas, WithNames}
 import play.api.db.slick.Config.driver.simple._
 

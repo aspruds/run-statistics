@@ -10,18 +10,18 @@ trait VenueTypeRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultRaceRepository extends VenueTypeRepository {
+  class DefaultVenueTypeRepository extends VenueTypeRepository {
     val venueTypes = TableQuery[VenueTypes]
 
-    private val racesAutoInc = {
+    private val venueTypesAutoInc = {
       val insertInvoker = venueTypes returning venueTypes.map(_.id)
       insertInvoker into {
         case (url, id) => url.copy(id = id)
       }
     }
 
-    override def insert(venueType: VenueType)(implicit session: Session): Race = {
-      racesAutoInc.insert(venueType)
+    override def insert(venueType: VenueType)(implicit session: Session): VenueType = {
+      venueTypesAutoInc.insert(venueType)
     }
   }
 

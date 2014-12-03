@@ -4,13 +4,13 @@ import models.statistics.{Person, Club}
 import models.statistics.db.Clubs
 import play.Logger
 
-trait ClubsRepositoryComponent {
+trait ClubRepositoryComponent {
 
-  val clubsRepository: ClubsRepository
+  val clubRepository: ClubRepository
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultClubsRepository extends ClubsRepository {
+  class DefaultClubRepository extends ClubRepository {
     val clubs = TableQuery[Clubs]
 
     private val clubsAutoInc = {
@@ -30,7 +30,7 @@ trait ClubsRepositoryComponent {
     }
   }
 
-  trait ClubsRepository {
+  trait ClubRepository {
     def insert(club: Club)(implicit session: Session): Club
 
     def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Club]
