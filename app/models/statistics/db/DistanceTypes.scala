@@ -9,9 +9,9 @@ class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
 
   def skriesimName = column[Option[String]]("skriesim_name")
 
-  def distance = column[Option[Long]]("distance")
+  def distance = column[Option[BigDecimal]]("distance")
 
-  def weight = column[Option[Short]]("weight")
+  def weight = column[Option[BigDecimal]]("weight")
 
   def disciplineTypeId = column[Option[Long]]("discipline_type_id")
 

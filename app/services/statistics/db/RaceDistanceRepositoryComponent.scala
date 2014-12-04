@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.RaceDistance
+import models.statistics.{Race, RaceDistance}
 import models.statistics.db.RaceDistances
+import services.statistics.db.support.CRUDRepository
 
 trait RaceDistanceRepositoryComponent {
 
@@ -24,7 +25,5 @@ trait RaceDistanceRepositoryComponent {
     }
   }
 
-  trait RaceDistanceRepository {
-    def insert(raceDistance: RaceDistance)(implicit session: Session): RaceDistance
-  }
+  trait RaceDistanceRepository extends CRUDRepository[RaceDistance]
 }

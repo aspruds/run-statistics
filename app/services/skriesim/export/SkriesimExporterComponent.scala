@@ -1,8 +1,8 @@
 package services.skriesim.export
 
 import models.skriesim.id.CodeName
-import models.skriesim.{Athlete, Club => SkriesimClub, Race => SkriesimRace}
-import models.statistics.{AgeGroup, Club, Person, Race}
+import models.skriesim.{Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult, Athlete}
+import models.statistics._
 import org.joda.time.LocalDateTime
 import play.api.Logger
 import play.api.Play.current
@@ -73,6 +73,11 @@ trait SkriesimExporterComponent {
       AgeGroup(0, ageGroup.name, new LocalDateTime(), new LocalDateTime(), None)
     }
 
+    def exportRaceResult(raceResult: SkriesimRaceResult) = {
+      throw new RuntimeException("not implemented yet")
+    }
+
+
     private def getCountryIdByCode(code: String): Option[Long] = {
       DB.withDynSession {
         countryRepository.byCode(code).map(_.id)
@@ -93,5 +98,7 @@ trait SkriesimExporterComponent {
     def exportRace(club: SkriesimRace): Race
 
     def exportAgeGroup(ageGroup: CodeName): AgeGroup
+
+    def exportRaceResult(raceResult: SkriesimRaceResult): RaceResult
   }
 }

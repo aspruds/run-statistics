@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.PersonCoach
+import models.statistics.{RaceDistance, PersonCoach}
 import models.statistics.db.PersonsCoaches
+import services.statistics.db.support.CRUDRepository
 
 trait PersonsCoachesRepositoryComponent {
 
@@ -24,7 +25,5 @@ trait PersonsCoachesRepositoryComponent {
     }
   }
 
-  trait PersonsCoachesRepository {
-    def insert(personCoach: PersonCoach)(implicit session: Session): PersonCoach
-  }
+  trait PersonsCoachesRepository extends CRUDRepository[PersonCoach]
 }

@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.PersonClub
+import models.statistics.{PersonCoach, PersonClub}
 import models.statistics.db.PersonsClubs
+import services.statistics.db.support.CRUDRepository
 
 trait PersonsClubsRepositoryComponent {
 
@@ -24,7 +25,5 @@ trait PersonsClubsRepositoryComponent {
     }
   }
 
-  trait PersonsClubsRepository {
-    def insert(personClub: PersonClub)(implicit session: Session): PersonClub
-  }
+  trait PersonsClubsRepository extends CRUDRepository[PersonClub]
 }

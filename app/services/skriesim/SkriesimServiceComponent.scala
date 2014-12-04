@@ -101,8 +101,8 @@ trait SkriesimServiceComponent {
         implicit session =>
           getAthletes.map {
             athlete => skriesimExporter.exportAthlete(athlete)
-          }.filterNot {
-            person => personRepository.findBySkriesimId(person.skriesimId).isDefined
+          }.filter {
+            person => personRepository.findBySkriesimId(person.skriesimId).isEmpty
           }.foreach {
             person => personRepository.insert(person)
           }
@@ -115,8 +115,8 @@ trait SkriesimServiceComponent {
         implicit session =>
           getClubs.map {
             club => skriesimExporter.exportClub(club)
-          }.filterNot {
-            club => clubRepository.findBySkriesimId(club.skriesimId).isDefined
+          }.filter {
+            club => clubRepository.findBySkriesimId(club.skriesimId).isEmpty
           }.foreach {
             club => clubRepository.insert(club)
           }
@@ -181,12 +181,16 @@ trait SkriesimServiceComponent {
         implicit session =>
           skriesimService.getAgeGroupsIds.map {
             ageGroup => skriesimExporter.exportAgeGroup(ageGroup)
-          }.filterNot {
-            ageGroup => ageGroupRepository.findByName(ageGroup.name).isDefined
+          }.filter {
+            ageGroup => ageGroupRepository.findByName(ageGroup.name).isEmpty
           }.foreach {
             ageGroup => ageGroupRepository.insert(ageGroup)
           }
       }
+    }
+
+    override def exportRaceDistances() = {
+      Logger.info("Exporting skriesim.lv race distances")
     }
 
     override def exportAll() = {
@@ -243,5 +247,7 @@ trait SkriesimServiceComponent {
     def exportAgeGroups(): Unit
 
     def exportAll(): Unit
+
+    def exportRaceDistances(): Unit
   }
 }

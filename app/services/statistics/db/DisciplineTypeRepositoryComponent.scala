@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.DisciplineType
+import models.statistics.{DistanceType, DisciplineType}
 import models.statistics.db.DisciplineTypes
+import services.statistics.db.support.CRUDRepository
 
 trait DisciplineTypeRepositoryComponent {
 
@@ -24,7 +25,5 @@ trait DisciplineTypeRepositoryComponent {
     }
   }
 
-  trait DisciplineTypeRepository {
-    def insert(disciplineType: DisciplineType)(implicit session: Session): DisciplineType
-  }
+  trait DisciplineTypeRepository extends CRUDRepository[DisciplineType]
 }

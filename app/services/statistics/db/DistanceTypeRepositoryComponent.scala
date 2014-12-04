@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.{Race, DistanceType}
+import models.statistics.DistanceType
 import models.statistics.db.DistanceTypes
+import services.statistics.db.support.CRUDRepository
 
 trait DistanceTypeRepositoryComponent {
 
@@ -28,9 +29,7 @@ trait DistanceTypeRepositoryComponent {
     }
   }
 
-  trait DistanceTypeRepository {
-    def insert(distanceType: DistanceType)(implicit session: Session): DistanceType
-
+  trait DistanceTypeRepository extends CRUDRepository[DistanceType] {
     def findBySkriesimName(skriesimName: String)(implicit session: Session): Option[DistanceType]
   }
 }

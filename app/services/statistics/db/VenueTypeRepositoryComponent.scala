@@ -1,8 +1,9 @@
 package services.statistics.db
 
-import models.statistics.{VenueType, Race}
+import models.statistics.{Club, VenueType, Race}
 import models.statistics.db.{VenueTypes, Races}
 import play.Logger
+import services.statistics.db.support.CRUDRepository
 
 trait VenueTypeRepositoryComponent {
 
@@ -25,7 +26,5 @@ trait VenueTypeRepositoryComponent {
     }
   }
 
-  trait VenueTypeRepository {
-    def insert(venueType: VenueType)(implicit session: Session): VenueType
-  }
+  trait VenueTypeRepository extends CRUDRepository[VenueType]
 }

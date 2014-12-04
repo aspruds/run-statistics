@@ -20,7 +20,7 @@ class RaceResultsParser(doc: Document) {
       container.select("td.club a").attr("href").replace("http://skriesim.lv/calendar?id=", "").toInt
     }
 
-    def parseDiscipline() = {
+    val distanceTypeWithVenue = {
       def findDiscipline(el: Element): Option[String] = {
         if (el.hasClass("discipline")) {
           Some(el.select("td").text)
@@ -33,10 +33,18 @@ class RaceResultsParser(doc: Document) {
       }
 
       findDiscipline(container.previousElementSibling)
-    }
+    }.get
+
+    val distanceTypeWithVenueParts = distanceTypeWithVenue.split("\\(")
+
+    val distanceType = distanceTypeWithVenueParts(0)
+
+    val venue = distanceTypeWithVenueParts(1).replace(")", "")
 
     RaceResult(
-      discipline = parseDiscipline().get,
+      distanceType = distanceType,
+      venue = venue,
+      distanceTypeWithVenue = distanceTypeWithVenue,
       pk = ex(0),
       time = ex(1),
       rank = ex(2),

@@ -1,5 +1,3 @@
-DROP TABLE countries;
-
 CREATE TABLE countries(
     id SERIAL NOT NULL,
     code CHAR(2) NOT NULL,

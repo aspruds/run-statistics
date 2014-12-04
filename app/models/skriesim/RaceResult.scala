@@ -3,7 +3,9 @@ package models.skriesim
 import models.skriesim.id.IdName
 
 case class RaceResult(
-                       discipline: String,
+                       distanceType: String,
+                       venue: String,
+                       distanceTypeWithVenue: String,
                        pk: String,
                        time: String,
                        rank: String,

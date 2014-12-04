@@ -1,8 +1,9 @@
 package services.statistics.db
 
-import models.statistics.Person
+import models.statistics.{PersonClub, Person}
 import models.statistics.db.Persons
 import play.Logger
+import services.statistics.db.support.CRUDRepository
 
 trait PersonRepositoryComponent {
 
@@ -30,9 +31,7 @@ trait PersonRepositoryComponent {
     }
   }
 
-  trait PersonRepository {
-    def insert(person: Person)(implicit session: Session): Person
-
+  trait PersonRepository extends CRUDRepository[Person] {
     def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person]
   }
 }
