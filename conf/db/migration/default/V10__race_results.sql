@@ -21,6 +21,31 @@ INSERT INTO classification_types(name, created_at, updated_at) VALUES ('I j.', C
 INSERT INTO classification_types(name, created_at, updated_at) VALUES ('II j.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 INSERT INTO classification_types(name, created_at, updated_at) VALUES ('III j.', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+-- Age Groups
+
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-06', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-12', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-14', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-16', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-18', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-30', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-40', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-50', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-60', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-70', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('V-75', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-06', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-12', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-14', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-16', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-18', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-30', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-40', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-50', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-60', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-70', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO age_groups (name, created_at, updated_at) VALUES ('S-75', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 -- Race Results
 
 CREATE TABLE race_results (

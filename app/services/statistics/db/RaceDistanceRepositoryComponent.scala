@@ -14,7 +14,13 @@ trait RaceDistanceRepositoryComponent {
     override val tableReference = TableQuery[RaceDistances]
 
     override def copyWithId(valueObject: RaceDistance, id: Long) = valueObject.copy(id=id)
+
+    override def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session) = {
+      tableReference.filter(rd => rd.raceId === raceId && rd.distanceTypeId === distanceTypeId).firstOption
+    }
   }
 
-  trait RaceDistanceRepository extends CRUDRepository[RaceDistance]
+  trait RaceDistanceRepository extends CRUDRepository[RaceDistance] {
+    def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session): Option[RaceDistance]
+  }
 }

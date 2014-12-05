@@ -1,25 +1,20 @@
-package services.skriesim.export
+package services.skriesim.`import`
 
 import models.skriesim.id.CodeName
-import models.skriesim.{Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult, Athlete}
+import models.skriesim.{Athlete, Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult}
 import models.statistics._
+import modules.DAL
 import org.joda.time.LocalDateTime
-import play.api.Logger
 import play.api.Play.current
-import play.api.db.slick.DB
-import services.skriesim.export.mappers.CountryMapper
-import services.statistics.db.CountryRepositoryComponent
 import play.api.db.slick.Config.driver.simple._
 import Database.dynamicSession
+import play.api.db.slick.DB
+import services.skriesim.`import`.mappers.CountryMapper
 
-trait SkriesimExporterComponent {
+trait SkriesimImportUtils {
+  this: DAL =>
 
-  val skriesimExporter: SkriesimExporter
-
-  class DefaultSkriesimExporter extends SkriesimExporter {
-    this: CountryRepositoryComponent =>
-
-    override def exportAthlete(athlete: Athlete): Person = {
+     def importAthlete(athlete: Athlete): Person = {
       Person(
         id = 0,
         givenName = athlete.givenName,
@@ -38,7 +33,7 @@ trait SkriesimExporterComponent {
       )
     }
 
-    override def exportClub(club: SkriesimClub): Club = {
+     def importClub(club: SkriesimClub): Club = {
       Club(
         id = 0,
         name = club.name,
@@ -53,7 +48,7 @@ trait SkriesimExporterComponent {
       )
     }
 
-    override def exportRace(race: SkriesimRace): Race = {
+     def importRace(race: SkriesimRace): Race = {
       Race(
         id = 0,
         name = race.name,
@@ -69,20 +64,42 @@ trait SkriesimExporterComponent {
       )
     }
 
-    override def exportAgeGroup(ageGroup: CodeName) = {
+     def importAgeGroup(ageGroup: CodeName) = {
       AgeGroup(0, ageGroup.name, new LocalDateTime(), new LocalDateTime(), None)
     }
 
-    /*
+  /*
     def exportRaceResult(raceResult: SkriesimRaceResult) = {
+      val race = getRace(raceResult);
+
+
       RaceResult(
         id = 0,
         raceId = raceResult.race.id,
-        raceDistanceId = getRaceDistanceBy
+        raceDistanceId = getRaceDistance(raceResult),
       )
       throw new RuntimeException("not implemented yet")
     }
-*/
+    */
+
+    private def getRace(raceResult: SkriesimRaceResult): Race = {
+      val maybeRace = raceRepository.findBySkriesimId(Some(raceResult.race.id))
+      maybeRace match {
+        case Some(race) => race
+        case None => throw new RuntimeException("unknown race")
+      }
+    }
+
+  /*
+    private def getRaceDistance(raceResult: SkriesimRaceResult): Long = {
+      val distanceTypeId = getDistanceTypeId(raceResult);
+      val maybeDistance = raceDistanceRepository.findByRaceIdAndDistanceTypeId()
+    }
+
+    private def getDistanceTypeId(raceResult: SkriesimRaceResult): Long = {
+
+    }
+    */
 
     private def getCountryIdByCode(code: String): Option[Long] = {
       DB.withDynSession {
@@ -94,17 +111,5 @@ trait SkriesimExporterComponent {
       val code = CountryMapper.getCountryCodeFromName(name)
       getCountryIdByCode(code)
     }
-  }
 
-  trait SkriesimExporter {
-    def exportAthlete(athlete: Athlete): Person
-
-    def exportClub(club: SkriesimClub): Club
-
-    def exportRace(club: SkriesimRace): Race
-
-    def exportAgeGroup(ageGroup: CodeName): AgeGroup
-
-    //def exportRaceResult(raceResult: SkriesimRaceResult): RaceResult
-  }
 }

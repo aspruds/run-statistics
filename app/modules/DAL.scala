@@ -2,12 +2,11 @@ package modules
 
 import services.statistics.db._
 
-trait StatisticsModule extends StatisticsServiceComponent with PersonRepositoryComponent with ClubRepositoryComponent
+trait DAL extends PersonRepositoryComponent with ClubRepositoryComponent
 with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
 with DistanceTypeRepositoryComponent with DisciplineTypeRepositoryComponent with VenueTypeRepositoryComponent
-with RaceDistanceRepositoryComponent with RaceResultRepositoryComponent
+with RaceDistanceRepositoryComponent with RaceResultRepositoryComponent with CountryRepositoryComponent
 with AgeGroupRepositoryComponent {
-  override val statisticsService = new DefaultStatisticsService
   override val personRepository = new DefaultPersonRepository
   override val clubRepository = new DefaultClubRepository
   override val personsClubsRepository = new DefaultPersonsClubsRepository
@@ -19,4 +18,5 @@ with AgeGroupRepositoryComponent {
   override val venueTypeRepository = new DefaultVenueTypeRepository
   override val raceDistanceRepository = new DefaultRaceDistanceRepository
   override val raceResultRepository = new DefaultRaceResultRepository
+  override val countryRepository = new DefaultCountryRepository
 }

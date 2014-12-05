@@ -1,3 +1,3 @@
 package modules
 
-object ComponentRegistry extends SkriesimModule with StatisticsModule
+object ComponentRegistry extends SkriesimModule with DAL
