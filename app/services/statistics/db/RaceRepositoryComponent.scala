@@ -1,9 +1,9 @@
 package services.statistics.db
 
-import models.statistics.{VenueType, Race, Person}
-import models.statistics.db.{Races, Persons}
+import models.statistics.Race
+import models.statistics.db.Races
 import play.Logger
-import services.statistics.db.support.CRUDRepository
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait RaceRepositoryComponent {
 
@@ -11,23 +11,14 @@ trait RaceRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultRaceRepository extends RaceRepository {
-    val races = TableQuery[Races]
+  class DefaultRaceRepository extends DefaultCRUDRepository[Race, Races] with RaceRepository {
+    override val tableReference = TableQuery[Races]
 
-    private val racesAutoInc = {
-      val insertInvoker = races returning races.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
-
-    override def insert(race: Race)(implicit session: Session): Race = {
-      racesAutoInc.insert(race)
-    }
+    override def copyWithId(valueObject: Race, id: Long) = valueObject.copy(id=id)
 
     override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Race] = {
       Logger.debug(s"finding Race by skriesimId: $skriesimId")
-      races.filter(_.skriesimId === skriesimId).firstOption
+      tableReference.filter(_.skriesimId === skriesimId).firstOption
     }
   }
 

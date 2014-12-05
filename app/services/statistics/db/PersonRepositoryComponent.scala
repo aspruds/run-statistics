@@ -1,9 +1,9 @@
 package services.statistics.db
 
-import models.statistics.{PersonClub, Person}
+import models.statistics.Person
 import models.statistics.db.Persons
 import play.Logger
-import services.statistics.db.support.CRUDRepository
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait PersonRepositoryComponent {
 
@@ -11,23 +11,14 @@ trait PersonRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultPersonRepository extends PersonRepository {
-    val persons = TableQuery[Persons]
+  class DefaultPersonRepository extends DefaultCRUDRepository[Person, Persons] with PersonRepository {
+    override val tableReference = TableQuery[Persons]
 
-    private val personsAutoInc = {
-      val insertInvoker = persons returning persons.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
-
-    override def insert(person: Person)(implicit session: Session): Person = {
-      personsAutoInc.insert(person)
-    }
+    override def copyWithId(valueObject: Person, id: Long) = valueObject.copy(id=id)
 
     override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person] = {
       Logger.debug(s"finding Person by skriesimId: $skriesimId")
-      persons.filter(_.skriesimId === skriesimId).firstOption
+      tableReference.filter(_.skriesimId === skriesimId).firstOption
     }
   }
 

@@ -24,7 +24,7 @@ trait HttpProviderComponent {
         case None => {
           logger.info(s"fetching url: $url")
 
-          Thread.sleep(2500)
+          Thread.sleep(1000)
 
           val content = Source.fromURL(url).mkString
           urlRepository.insert(Url(0, url, content, new LocalDateTime))

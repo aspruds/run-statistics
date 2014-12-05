@@ -1,9 +1,8 @@
 package services.statistics.db
 
-import models.statistics.{Club, VenueType, Race}
-import models.statistics.db.{VenueTypes, Races}
-import play.Logger
-import services.statistics.db.support.CRUDRepository
+import models.statistics.VenueType
+import models.statistics.db.VenueTypes
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait VenueTypeRepositoryComponent {
 
@@ -11,19 +10,10 @@ trait VenueTypeRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultVenueTypeRepository extends VenueTypeRepository {
-    val venueTypes = TableQuery[VenueTypes]
+  class DefaultVenueTypeRepository extends DefaultCRUDRepository[VenueType, VenueTypes] with VenueTypeRepository {
+    override val tableReference = TableQuery[VenueTypes]
 
-    private val venueTypesAutoInc = {
-      val insertInvoker = venueTypes returning venueTypes.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
-
-    override def insert(venueType: VenueType)(implicit session: Session): VenueType = {
-      venueTypesAutoInc.insert(venueType)
-    }
+    override def copyWithId(valueObject: VenueType, id: Long) = valueObject.copy(id=id)
   }
 
   trait VenueTypeRepository extends CRUDRepository[VenueType]

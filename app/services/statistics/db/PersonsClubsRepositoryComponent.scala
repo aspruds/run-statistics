@@ -1,8 +1,8 @@
 package services.statistics.db
 
-import models.statistics.{PersonCoach, PersonClub}
+import models.statistics.PersonClub
 import models.statistics.db.PersonsClubs
-import services.statistics.db.support.CRUDRepository
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait PersonsClubsRepositoryComponent {
 
@@ -10,19 +10,10 @@ trait PersonsClubsRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultPersonsClubsRepository extends PersonsClubsRepository {
-    val personsClubs = TableQuery[PersonsClubs]
+  class DefaultPersonsClubsRepository extends DefaultCRUDRepository[PersonClub, PersonsClubs] with PersonsClubsRepository {
+    override val tableReference = TableQuery[PersonsClubs]
 
-    private val clubsPersonsAutoInc = {
-      val insertInvoker = personsClubs returning personsClubs.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
-
-    override def insert(personClub: PersonClub)(implicit session: Session): PersonClub = {
-      clubsPersonsAutoInc.insert(personClub)
-    }
+    override def copyWithId(valueObject: PersonClub, id: Long) = valueObject.copy(id=id)
   }
 
   trait PersonsClubsRepository extends CRUDRepository[PersonClub]

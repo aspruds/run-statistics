@@ -1,7 +1,8 @@
 package services.statistics.db
 
-import models.statistics.Country
+import models.statistics.{Club, Country}
 import models.statistics.db.Countries
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait CountryRepositoryComponent {
 
@@ -9,15 +10,17 @@ trait CountryRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultCountryRepository extends CountryRepository {
-    val countries = TableQuery[Countries]
+  class DefaultCountryRepository extends DefaultCRUDRepository[Country, Countries] with CountryRepository {
+    override val tableReference = TableQuery[Countries]
+
+    override def copyWithId(valueObject: Country, id: Long) = valueObject.copy(id=id)
 
     override def byCode(code: String)(implicit session: Session) = {
-      countries.filter(_.code === code).firstOption
+      tableReference.filter(_.code === code).firstOption
     }
   }
 
-  trait CountryRepository {
+  trait CountryRepository extends CRUDRepository[Country] {
     def byCode(code: String)(implicit session: Session): Option[Country]
   }
 }

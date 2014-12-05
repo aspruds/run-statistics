@@ -73,10 +73,16 @@ trait SkriesimExporterComponent {
       AgeGroup(0, ageGroup.name, new LocalDateTime(), new LocalDateTime(), None)
     }
 
+    /*
     def exportRaceResult(raceResult: SkriesimRaceResult) = {
+      RaceResult(
+        id = 0,
+        raceId = raceResult.race.id,
+        raceDistanceId = getRaceDistanceBy
+      )
       throw new RuntimeException("not implemented yet")
     }
-
+*/
 
     private def getCountryIdByCode(code: String): Option[Long] = {
       DB.withDynSession {
@@ -99,6 +105,6 @@ trait SkriesimExporterComponent {
 
     def exportAgeGroup(ageGroup: CodeName): AgeGroup
 
-    def exportRaceResult(raceResult: SkriesimRaceResult): RaceResult
+    //def exportRaceResult(raceResult: SkriesimRaceResult): RaceResult
   }
 }

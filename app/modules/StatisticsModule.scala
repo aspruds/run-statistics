@@ -5,7 +5,7 @@ import services.statistics.db._
 trait StatisticsModule extends StatisticsServiceComponent with PersonRepositoryComponent with ClubRepositoryComponent
 with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
 with DistanceTypeRepositoryComponent with DisciplineTypeRepositoryComponent with VenueTypeRepositoryComponent
-with RaceDistanceRepositoryComponent
+with RaceDistanceRepositoryComponent with RaceResultRepositoryComponent
 with AgeGroupRepositoryComponent {
   override val statisticsService = new DefaultStatisticsService
   override val personRepository = new DefaultPersonRepository
@@ -18,4 +18,5 @@ with AgeGroupRepositoryComponent {
   override val disciplineTypeRepository = new DefaultDisciplineTypeRepository
   override val venueTypeRepository = new DefaultVenueTypeRepository
   override val raceDistanceRepository = new DefaultRaceDistanceRepository
+  override val raceResultRepository = new DefaultRaceResultRepository
 }

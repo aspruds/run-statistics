@@ -3,6 +3,7 @@ package services.statistics.db
 import models.statistics.AgeGroup
 import models.statistics.db.AgeGroups
 import play.Logger
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait AgeGroupRepositoryComponent {
 
@@ -10,27 +11,18 @@ trait AgeGroupRepositoryComponent {
 
   import play.api.db.slick.Config.driver.simple._
 
-  class DefaultAgeGroupRepository extends AgeGroupRepository {
-    val ageGroups = TableQuery[AgeGroups]
+  class DefaultAgeGroupRepository extends DefaultCRUDRepository[AgeGroup, AgeGroups] with AgeGroupRepository {
+    override val tableReference = TableQuery[AgeGroups]
 
-    private val ageGroupsAutoInc = {
-      val insertInvoker = ageGroups returning ageGroups.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
-
-    override def insert(ageGroup: AgeGroup)(implicit session: Session): AgeGroup = {
-      ageGroupsAutoInc.insert(ageGroup)
-    }
+    override def copyWithId(valueObject: AgeGroup, id: Long) = valueObject.copy(id=id)
 
     override def findByName(name: String)(implicit session: Session): Option[AgeGroup] = {
       Logger.debug(s"finding AgeGroup by name: $name")
-      ageGroups.filter(_.name === name).firstOption
+      tableReference.filter(_.name === name).firstOption
     }
   }
 
-  trait AgeGroupRepository {
+  trait AgeGroupRepository extends CRUDRepository[AgeGroup] {
     def insert(ageGroup: AgeGroup)(implicit session: Session): AgeGroup
 
     def findByName(name: String)(implicit session: Session): Option[AgeGroup]
