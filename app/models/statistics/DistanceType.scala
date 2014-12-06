@@ -12,6 +12,5 @@ case class DistanceType(
                          disciplineTypeId: Option[Long],
                          venueTypeId: Option[Long],
                          isStandard: Option[Boolean],
-                         createdAt: LocalDateTime,
-                         updateAt: LocalDateTime,
+                         updatedAt: Option[LocalDateTime],
                          updatedBy: Option[Long]) extends WithMetadata with WithName

@@ -9,7 +9,6 @@ with WithMetadatas[ClassificationType] with WithNames[ClassificationType] {
   def * = (
     id,
     name,
-    createdAt,
     updatedAt,
     updatedBy) <> (ClassificationType.tupled, ClassificationType.unapply)
 }

@@ -16,7 +16,6 @@ class Countries(tag: Tag) extends Table[Country](tag, "countries") with WithMeta
     id,
     code,
     name,
-    createdAt,
     updatedAt,
     updatedBy) <> (Country.tupled, Country.unapply)
 }

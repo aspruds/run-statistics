@@ -9,7 +9,6 @@ with WithMetadatas[VenueType] with WithNames[VenueType] {
   def * = (
     id,
     name,
-    createdAt,
     updatedAt,
     updatedBy) <> (VenueType.tupled, VenueType.unapply)
 }

@@ -11,6 +11,5 @@ case class Club(
                    description: Option[String],
                    fullDescription: Option[String],
                    skriesimId: Option[Long],
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata with WithName

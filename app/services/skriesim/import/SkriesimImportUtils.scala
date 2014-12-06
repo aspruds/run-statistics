@@ -4,7 +4,6 @@ import models.skriesim.id.CodeName
 import models.skriesim.{Athlete, Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult}
 import models.statistics._
 import modules.DAL
-import org.joda.time.LocalDateTime
 import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
 import Database.dynamicSession
@@ -27,8 +26,7 @@ trait SkriesimImportUtils {
         sportlatId = None,
         noskrienId = None,
         isCoach = athlete.isCoach,
-        createdAt = new LocalDateTime,
-        updateAt = new LocalDateTime,
+        updatedAt = None,
         updatedBy = None
       )
     }
@@ -42,8 +40,7 @@ trait SkriesimImportUtils {
         description = club.description,
         fullDescription = club.fullDescription,
         skriesimId = club.id,
-        createdAt = new LocalDateTime,
-        updateAt = new LocalDateTime,
+        updatedAt = None,
         updatedBy = None
       )
     }
@@ -58,14 +55,18 @@ trait SkriesimImportUtils {
         skriesimId = race.id,
         sportlatId = None,
         noskrienId = None,
-        createdAt = new LocalDateTime,
-        updateAt = new LocalDateTime,
+        updatedAt = None,
         updatedBy = None
       )
     }
 
      def importAgeGroup(ageGroup: CodeName) = {
-      AgeGroup(0, ageGroup.name, new LocalDateTime(), new LocalDateTime(), None)
+      AgeGroup(
+        id = 0,
+        name = ageGroup.name,
+        updatedAt = None,
+        updatedBy = None
+      )
     }
 
   /*

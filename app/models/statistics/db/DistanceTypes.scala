@@ -28,7 +28,6 @@ class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
      disciplineTypeId,
      venueTypeId,
      isStandard,
-     createdAt,
      updatedAt,
      updatedBy) <> (DistanceType.tupled, DistanceType.unapply)
  }

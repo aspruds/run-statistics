@@ -1,6 +1,6 @@
 package services.statistics.db
 
-import models.statistics.PersonCoach
+import models.statistics.{Person, PersonCoach}
 import models.statistics.db.PersonsCoaches
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
@@ -14,7 +14,20 @@ trait PersonsCoachesRepositoryComponent {
     override val tableReference = TableQuery[PersonsCoaches]
 
     override def copyWithId(valueObject: PersonCoach, id: Long) = valueObject.copy(id=id)
+
+    override def find(personId: Long, coachId: Long)(implicit session: Session) = {
+      tableReference.filter(pc => pc.personId === personId && pc.coachId === coachId).firstOption
+    }
+
+    override def insert(person: Person, coach: Person)(implicit session: Session) = {
+      val personCoach = PersonCoach(0, person.id, coach.id, None, None)
+      insert(personCoach)
+    }
   }
 
-  trait PersonsCoachesRepository extends CRUDRepository[PersonCoach]
+  trait PersonsCoachesRepository extends CRUDRepository[PersonCoach] {
+    def find(personId: Long, coachId: Long)(implicit session: Session): Option[PersonCoach]
+
+    def insert(person: Person, coach: Person)(implicit session: Session): PersonCoach
+  }
 }

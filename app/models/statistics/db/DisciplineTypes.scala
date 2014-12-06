@@ -9,7 +9,6 @@ with WithMetadatas[DisciplineType] with WithNames[DisciplineType] {
   def * = (
     id,
     name,
-    createdAt,
     updatedAt,
     updatedBy) <> (DisciplineType.tupled, DisciplineType.unapply)
 }

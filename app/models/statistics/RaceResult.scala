@@ -15,6 +15,5 @@ case class RaceResult(
                    ageGroupId: Option[Long],
                    classificationTypeId: Option[Long],
                    wind: Option[BigDecimal],
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata

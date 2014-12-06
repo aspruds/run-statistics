@@ -12,7 +12,6 @@ case class Race(
                  skriesimId: Option[Long],
                  sportlatId: Option[Long],
                  noskrienId: Option[Long],
-                 createdAt: LocalDateTime,
-                 updateAt: LocalDateTime,
+                 updatedAt: Option[LocalDateTime],
                  updatedBy: Option[Long]
                  ) extends WithMetadata with WithRelation with WithName

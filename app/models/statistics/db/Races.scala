@@ -24,7 +24,6 @@ with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race]{
     skriesimId,
     sportlatId,
     noskrienId,
-    createdAt,
     updatedAt,
     updatedBy) <> (Race.tupled, Race.unapply)
 }

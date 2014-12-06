@@ -16,13 +16,13 @@ trait PersonRepositoryComponent {
 
     override def copyWithId(valueObject: Person, id: Long) = valueObject.copy(id=id)
 
-    override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person] = {
+    override def findBySkriesimId(skriesimId: Long)(implicit session: Session): Option[Person] = {
       Logger.debug(s"finding Person by skriesimId: $skriesimId")
       tableReference.filter(_.skriesimId === skriesimId).firstOption
     }
   }
 
   trait PersonRepository extends CRUDRepository[Person] {
-    def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Person]
+    def findBySkriesimId(skriesimId: Long)(implicit session: Session): Option[Person]
   }
 }

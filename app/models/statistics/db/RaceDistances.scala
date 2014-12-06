@@ -22,7 +22,6 @@ class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
      name,
      isCertified,
      isElectronicTime,
-     createdAt,
      updatedAt,
      updatedBy) <> (RaceDistance.tupled, RaceDistance.unapply)
  }

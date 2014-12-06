@@ -31,7 +31,6 @@ with WithMetadatas[Club] with WithNames[Club] {
     description,
     fullDescription,
     skriesimId,
-    createdAt,
     updatedAt,
     updatedBy) <> (Club.tupled, Club.unapply)
 }

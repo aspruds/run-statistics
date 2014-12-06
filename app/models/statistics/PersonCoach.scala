@@ -7,6 +7,5 @@ case class PersonCoach(
                    id: Long,
                    personId: Long,
                    coachId: Long,
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata

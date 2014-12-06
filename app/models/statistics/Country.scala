@@ -7,6 +7,5 @@ case class Country(
                    id: Long,
                    code: String,
                    name: String,
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata

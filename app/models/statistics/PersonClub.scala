@@ -7,6 +7,5 @@ case class PersonClub(
                    id: Long,
                    personId: Long,
                    clubId: Long,
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata

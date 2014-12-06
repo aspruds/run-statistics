@@ -9,7 +9,6 @@ with WithMetadatas[AgeGroup] with WithNames[AgeGroup] {
   def * = (
     id,
     name,
-    createdAt,
     updatedAt,
     updatedBy) <> (AgeGroup.tupled, AgeGroup.unapply)
 }

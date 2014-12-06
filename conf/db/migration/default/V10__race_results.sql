@@ -70,3 +70,47 @@ CREATE INDEX race_results_idx_race_id ON race_results(race_id);
 CREATE INDEX race_results_idx_race_distance_id ON race_results(race_distance_id);
 CREATE INDEX race_results_idx_age_group_id ON race_results(age_group_id);
 CREATE INDEX race_results_idx_classification_type_id ON race_results(classification_type_id);
+
+-- Table refactoring
+
+alter table age_groups drop column created_at;
+alter table classification_types drop column created_at;
+alter table clubs drop column created_at;
+alter table discipline_types drop column created_at;
+alter table distance_types drop column created_at;
+alter table persons drop column created_at;
+alter table persons_clubs drop column created_at;
+alter table persons_coaches drop column created_at;
+alter table race_distances drop column created_at;
+alter table race_results drop column created_at;
+alter table races drop column created_at;
+alter table venue_types drop column created_at;
+
+alter table age_groups alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table classification_types alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table clubs alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table discipline_types alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table distance_types alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table persons alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table persons_clubs alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table persons_coaches alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table race_distances alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table race_results alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table races alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+alter table venue_types alter column updated_at SET DEFAULT CURRENT_TIMESTAMP;
+
+alter table age_groups alter column updated_at DROP NOT NULL;
+alter table classification_types alter column updated_at DROP NOT NULL;
+alter table clubs alter column updated_at DROP NOT NULL;
+alter table discipline_types alter column updated_at DROP NOT NULL;
+alter table distance_types alter column updated_at DROP NOT NULL;
+alter table persons alter column updated_at DROP NOT NULL;
+alter table persons_clubs alter column updated_at DROP NOT NULL;
+alter table persons_coaches alter column updated_at DROP NOT NULL;
+alter table race_distances alter column updated_at DROP NOT NULL;
+alter table race_results alter column updated_at DROP NOT NULL;
+alter table races alter column updated_at DROP NOT NULL;
+alter table venue_types alter column updated_at DROP NOT NULL;
+
+
+

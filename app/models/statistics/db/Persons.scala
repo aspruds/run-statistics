@@ -51,7 +51,6 @@ with WithMetadatas[Person] with WithRelations[Person] {
     sportlatId,
     noskrienId,
     isCoach,
-    createdAt,
     updatedAt,
     updatedBy) <>(Person.tupled, Person.unapply)
 }

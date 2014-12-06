@@ -10,6 +10,5 @@ case class RaceDistance(
                    name: String,
                    isCertified: Option[Boolean],
                    isElectronicTime: Option[Boolean],
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata with WithName

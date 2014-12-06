@@ -6,6 +6,5 @@ import org.joda.time.LocalDateTime
 case class DisciplineType(
                    id: Long,
                    name: String,
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata with WithName

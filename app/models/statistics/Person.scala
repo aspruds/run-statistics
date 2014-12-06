@@ -15,6 +15,5 @@ case class Person(
                    sportlatId: Option[Long],
                    noskrienId: Option[Long],
                    isCoach: Boolean,
-                   createdAt: LocalDateTime,
-                   updateAt: LocalDateTime,
+                   updatedAt: Option[LocalDateTime],
                    updatedBy: Option[Long]) extends WithMetadata with WithRelation

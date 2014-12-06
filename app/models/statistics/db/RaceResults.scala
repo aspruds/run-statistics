@@ -39,7 +39,6 @@ with WithMetadatas[RaceResult] {
     ageGroupId,
     classificationTypeId,
     wind,
-    createdAt,
     updatedAt,
     updatedBy) <>(RaceResult.tupled, RaceResult.unapply)
 }

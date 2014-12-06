@@ -53,7 +53,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           skriesimDataService.getAthletes.map {
             athlete => importAthlete(athlete)
           }.filter {
-            person => personRepository.findBySkriesimId(person.skriesimId).isEmpty
+            person => personRepository.findBySkriesimId(person.skriesimId.getOrElse(0)).isEmpty
           }.foreach {
             person => personRepository.insert(person)
           }
@@ -83,15 +83,16 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           val personsClubs = for {
             athlete <- skriesimDataService.getAthletes
             athleteClub <- athlete.clubs
-            person <- personRepository.findBySkriesimId(athlete.id)
+            person <- personRepository.findBySkriesimId(athlete.id.getOrElse(0))
             club <- clubRepository.findBySkriesimId(Some(athleteClub.id))
           } yield (person, club)
 
-          personsClubs.foreach {
-            case (person, club) => {
-              val personClub = PersonClub(0, person.id, club.id, new LocalDateTime(), new LocalDateTime(), None)
-              personsClubsRepository.insert(personClub)
-            }
+          val newPersonsClubs = personsClubs.filter {
+            case (person, club) => personsClubsRepository.find(person.id, club.id).isEmpty
+          }
+
+          newPersonsClubs.foreach {
+            case (person, club) => personsClubsRepository.insert(person, club)
           }
       }
     }
@@ -103,15 +104,16 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           val personsCoaches = for {
             athlete <- skriesimDataService.getAthletes
             athleteCoach <- athlete.coaches
-            person <- personRepository.findBySkriesimId(athlete.id)
-            coach <- personRepository.findBySkriesimId(Some(athleteCoach.id))
+            person <- personRepository.findBySkriesimId(athlete.id.getOrElse(0))
+            coach <- personRepository.findBySkriesimId(athleteCoach.id)
           } yield (person, coach)
 
-          personsCoaches.foreach {
-            case (person, coach) => {
-              val personCoach = PersonCoach(0, person.id, coach.id, new LocalDateTime(), new LocalDateTime(), None)
-              personsCoachesRepository.insert(personCoach)
-            }
+          val newPersonsCoaches = personsCoaches.filter {
+            case (person, coach) => personsCoachesRepository.find(person.id, coach.id).isEmpty
+          }
+
+          newPersonsCoaches.foreach {
+            case (person, coach) => personsCoachesRepository.insert(person, coach)
           }
       }
     }
