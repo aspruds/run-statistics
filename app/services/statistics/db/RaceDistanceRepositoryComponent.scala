@@ -18,9 +18,19 @@ trait RaceDistanceRepositoryComponent {
     override def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session) = {
       tableReference.filter(rd => rd.raceId === raceId && rd.distanceTypeId === distanceTypeId).firstOption
     }
+
+    def exists(raceDistance: RaceDistance)(implicit session: Session) = {
+      tableReference.filter(_.raceId === raceDistance.raceId).
+      filter(_.distanceTypeId === raceDistance.distanceTypeId).
+      filter(_.venueTypeId === raceDistance.venueTypeId).
+      filter(_.withQualification === raceDistance.withQualification).
+      firstOption.isDefined
+    }
   }
 
   trait RaceDistanceRepository extends CRUDRepository[RaceDistance] {
     def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session): Option[RaceDistance]
+
+    def exists(raceDistance: RaceDistance)(implicit session: Session): Boolean
   }
 }

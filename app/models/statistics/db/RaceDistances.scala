@@ -11,6 +11,12 @@ class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
 
   def distanceTypeId = column[Option[Long]]("distance_type_id")
 
+  def withQualification = column[Option[Boolean]]("with_qualification")
+
+  def distance = column[Option[BigDecimal]]("distance")
+
+  def venueTypeId = column[Option[Long]]("venue_type_id")
+
   def isCertified = column[Option[Boolean]]("is_certified")
 
   def isElectronicTime = column[Option[Boolean]]("is_electronic_time")
@@ -19,6 +25,8 @@ class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
      id,
      raceId,
      distanceTypeId,
+     withQualification,
+     venueTypeId,
      name,
      isCertified,
      isElectronicTime,

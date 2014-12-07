@@ -1,3 +1,5 @@
 package models.skriesim.id
 
-case class CodeName(code: String,name: String)
+import models.statistics.metadata.WithName
+
+case class CodeName(code: String,name: String) extends WithName

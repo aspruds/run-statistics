@@ -1,6 +1,6 @@
 package services.skriesim
 
-import models.statistics.{PersonClub, PersonCoach}
+import models.statistics.{DistanceType, PersonClub, PersonCoach}
 import modules.DAL
 import org.joda.time.LocalDateTime
 import play.api.Logger
@@ -99,6 +99,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
 
     override def importAthletesCoaches() = {
       Logger.info("Importing skriesim.lv athletes-coaches")
+
       DB.withSession {
         implicit session =>
           val personsCoaches = for {
@@ -118,19 +119,96 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
       }
     }
 
+    override def importStandardDistanceTypes() = {
+      Logger.info("Importing skriesim.lv standard distance types")
+
+      DB.withSession {
+        implicit session =>
+          val distanceTypes = skriesimDataService.getStandardDisciplineTypeIds
+          assert(!distanceTypes.isEmpty)
+
+          val newDistanceTypes = distanceTypes.filter {
+            dt => distanceTypeRepository.findBySkriesimName(dt.name).isEmpty
+          }
+
+          newDistanceTypes.foreach {
+            dt =>
+              val distanceType = importDistanceType(dt)
+              distanceTypeRepository.insert(distanceType)
+          }
+      }
+    }
+
+    override def importNonStandardDistanceTypes() = {
+      Logger.info("Importing skriesim.lv non standard distance types")
+
+      DB.withSession {
+        implicit session =>
+          val distanceTypes = skriesimDataService.getNonStandardDisciplineTypeIds
+          assert(!distanceTypes.isEmpty)
+
+          val newDistanceTypes = distanceTypes.filter {
+            dt => distanceTypeRepository.findBySkriesimName(dt.name).isEmpty
+          }
+
+          newDistanceTypes.foreach {
+            dt =>
+
+              val distance = {
+                if(dt.name.endsWith("km")) {
+                  val decimal: String = dt.name.replace("km","")
+                  Some(BigDecimal(decimal))
+                }
+                else
+                  None
+              }
+
+              val distanceType = importDistanceType(dt)
+                .copy(isStandard = Some(false))
+                .copy(distance = distance)
+              distanceTypeRepository.insert(distanceType)
+          }
+      }
+    }
+
+    override def importRaceDistances() = {
+      Logger.info("Importing skriesim.lv race distances")
+
+      DB.withSession {
+        implicit session =>
+
+          val uniqueDistances = skriesimDataService.getAthletes.flatMap(_.raceResults).groupBy {
+            result => (result.distanceType, result.venue, result.withQualification, result.race.id)
+          }.map(_._2.head)
+
+          uniqueDistances.map {
+            importRaceDistance(_)
+          }.filter {
+            !raceDistanceRepository.exists(_)
+          }.foreach {
+            raceDistanceRepository.insert(_)
+          }
+      }
+    }
 
     override def importAll() = {
       importAgeGroups()
+      importNonStandardDistanceTypes()
       importAthletes()
       importClubs()
       importRaces()
       importAthletesClubs()
       importAthletesCoaches()
+      importRaceDistances()
     }
   }
 
   trait SkriesimIntegrationService {
     def importAgeGroups()
+
+    def importStandardDistanceTypes()
+
+    def importNonStandardDistanceTypes()
 
     def importRaces()
 
@@ -141,6 +219,8 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
     def importAthletesClubs()
 
     def importAthletesCoaches()
+
+    def importRaceDistances()
 
     def importAll()
   }

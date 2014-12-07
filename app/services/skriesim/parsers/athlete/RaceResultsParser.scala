@@ -3,6 +3,7 @@ package services.skriesim.parsers.athlete
 import models.skriesim.RaceResult
 import models.skriesim.id.IdName
 import org.jsoup.nodes.{Document, Element}
+import utils.text.TextUtils
 
 import scala.collection.JavaConversions._
 
@@ -35,16 +36,27 @@ class RaceResultsParser(doc: Document) {
       findDiscipline(container.previousElementSibling)
     }.get
 
-    val distanceTypeWithVenueParts = distanceTypeWithVenue.split("\\(")
+    val distanceTypeWithVenueParts = {
+      val lastIndex = distanceTypeWithVenue.lastIndexOf("(")
+      distanceTypeWithVenue.splitAt(lastIndex)
+    }
 
-    val distanceType = distanceTypeWithVenueParts(0)
+    val distanceType = TextUtils.removeNbsp(distanceTypeWithVenueParts._1).replace(" ar kvkl.", "")
 
-    val venue = distanceTypeWithVenueParts(1).replace(")", "")
+    val venue = distanceTypeWithVenueParts._2.replaceAll("\\(|\\)", "")
+
+    val withQualification = {
+      if(distanceTypeWithVenue.contains("ar kvkl."))
+        Some(true)
+      else
+        None
+    }
 
     RaceResult(
       distanceType = distanceType,
       venue = venue,
       distanceTypeWithVenue = distanceTypeWithVenue,
+      withQualification = withQualification,
       pk = ex(0),
       time = ex(1),
       rank = ex(2),

@@ -9,8 +9,8 @@ case class DistanceType(
                          skriesimName: Option[String],
                          distance: Option[BigDecimal],
                          weight: Option[BigDecimal],
+                         height: Option[BigDecimal],
                          disciplineTypeId: Option[Long],
-                         venueTypeId: Option[Long],
                          isStandard: Option[Boolean],
                          updatedAt: Option[LocalDateTime],
                          updatedBy: Option[Long]) extends WithMetadata with WithName

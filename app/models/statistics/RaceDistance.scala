@@ -7,6 +7,8 @@ case class RaceDistance(
                    id: Long,
                    raceId: Long,
                    distanceTypeId: Option[Long],
+                   withQualification: Option[Boolean],
+                   venueTypeId: Option[Long],
                    name: String,
                    isCertified: Option[Boolean],
                    isElectronicTime: Option[Boolean],

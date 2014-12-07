@@ -6,6 +6,7 @@ case class RaceResult(
                        distanceType: String,
                        venue: String,
                        distanceTypeWithVenue: String,
+                       withQualification: Option[Boolean],
                        pk: String,
                        time: String,
                        rank: String,

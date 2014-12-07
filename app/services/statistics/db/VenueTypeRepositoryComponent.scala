@@ -14,7 +14,13 @@ trait VenueTypeRepositoryComponent {
     override val tableReference = TableQuery[VenueTypes]
 
     override def copyWithId(valueObject: VenueType, id: Long) = valueObject.copy(id=id)
+
+    override def findByName(name: String)(implicit session: Session): Option[VenueType] = {
+      tableReference.filter(_.name === name).firstOption
+    }
   }
 
-  trait VenueTypeRepository extends CRUDRepository[VenueType]
+  trait VenueTypeRepository extends CRUDRepository[VenueType] {
+    def findByName(name: String)(implicit session: Session): Option[VenueType]
+  }
 }

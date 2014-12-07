@@ -16,7 +16,7 @@ trait DistanceTypeRepositoryComponent {
     override def copyWithId(valueObject: DistanceType, id: Long) = valueObject.copy(id=id)
 
     override def findBySkriesimName(skriesimName: String)(implicit session: Session) = {
-      tableReference.filter(_.skriesimName === skriesimName).firstOption
+      tableReference.filter(_.skriesimName === skriesimName.toLowerCase).firstOption
     }
   }
 

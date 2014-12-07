@@ -1,5 +1,7 @@
 package models.skriesim.id
 
+import models.statistics.metadata.WithName
+
 case class IdName(
                    id: Long,
-                   name: String)
+                   name: String) extends WithName

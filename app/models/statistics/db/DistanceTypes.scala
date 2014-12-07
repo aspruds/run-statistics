@@ -13,9 +13,9 @@ class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
 
   def weight = column[Option[BigDecimal]]("weight")
 
-  def disciplineTypeId = column[Option[Long]]("discipline_type_id")
+  def height = column[Option[BigDecimal]]("height")
 
-  def venueTypeId = column[Option[Long]]("venue_type_id")
+  def disciplineTypeId = column[Option[Long]]("discipline_type_id")
 
   def isStandard = column[Option[Boolean]]("is_standard")
 
@@ -25,8 +25,8 @@ class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
      skriesimName,
      distance,
      weight,
+     height,
      disciplineTypeId,
-     venueTypeId,
      isStandard,
      updatedAt,
      updatedBy) <> (DistanceType.tupled, DistanceType.unapply)

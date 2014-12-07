@@ -10,6 +10,8 @@ object TextUtils {
     }
   }
 
+  def removeNbsp(string: String) = string.replaceAll(nbsp, "")
+
   val nbsp = "\u00a0"
 
 }

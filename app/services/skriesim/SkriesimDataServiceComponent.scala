@@ -87,6 +87,16 @@ trait SkriesimDataServiceComponent {
       val html = skriesimProvider.getStatisticsIds
       skriesimParser.parseAgeGroupIds(html)
     }
+
+    override def getStandardDisciplineTypeIds = {
+      val html = skriesimProvider.getStatisticsIds
+      skriesimParser.parseStandardDisciplineTypeIds(html)
+    }
+
+    override def getNonStandardDisciplineTypeIds = {
+      val html = skriesimProvider.getStatisticsIds
+      skriesimParser.parseNonStandardDisciplineTypeIds(html)
+    }
   }
 
   trait SkriesimDataService {
@@ -119,6 +129,10 @@ trait SkriesimDataServiceComponent {
     def getRaces: Seq[Race]
 
     def getAgeGroupsIds: Seq[CodeName]
+
+    def getStandardDisciplineTypeIds: Seq[IdName]
+
+    def getNonStandardDisciplineTypeIds: Seq[CodeName]
   }
 
 }
