@@ -10,5 +10,5 @@ with WithMetadatas[VenueType] with WithNames[VenueType] {
     id,
     name,
     updatedAt,
-    updatedBy) <> (VenueType.tupled, VenueType.unapply)
+    updatedBy) <>(VenueType.tupled, VenueType.unapply)
 }

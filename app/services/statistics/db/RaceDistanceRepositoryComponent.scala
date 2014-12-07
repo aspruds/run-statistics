@@ -13,7 +13,7 @@ trait RaceDistanceRepositoryComponent {
   class DefaultRaceDistanceRepository extends DefaultCRUDRepository[RaceDistance, RaceDistances] with RaceDistanceRepository {
     override val tableReference = TableQuery[RaceDistances]
 
-    override def copyWithId(valueObject: RaceDistance, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: RaceDistance, id: Long) = valueObject.copy(id = id)
 
     override def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session) = {
       tableReference.filter(rd => rd.raceId === raceId && rd.distanceTypeId === distanceTypeId).firstOption
@@ -21,10 +21,10 @@ trait RaceDistanceRepositoryComponent {
 
     def exists(raceDistance: RaceDistance)(implicit session: Session) = {
       tableReference.filter(_.raceId === raceDistance.raceId).
-      filter(_.distanceTypeId === raceDistance.distanceTypeId).
-      filter(_.venueTypeId === raceDistance.venueTypeId).
-      filter(_.withQualification === raceDistance.withQualification).
-      firstOption.isDefined
+        filter(_.distanceTypeId === raceDistance.distanceTypeId).
+        filter(_.venueTypeId === raceDistance.venueTypeId).
+        filter(_.withQualification === raceDistance.withQualification).
+        firstOption.isDefined
     }
   }
 
@@ -33,4 +33,5 @@ trait RaceDistanceRepositoryComponent {
 
     def exists(raceDistance: RaceDistance)(implicit session: Session): Boolean
   }
+
 }

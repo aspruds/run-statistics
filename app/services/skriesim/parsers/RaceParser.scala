@@ -28,7 +28,7 @@ object RaceParser {
     val countryCode = {
       val location = {
         val parts = containerText.split("-")
-        if(parts.length < 3)
+        if (parts.length < 3)
           None
         else
           TextUtils.toOption(parts.last)
@@ -36,7 +36,7 @@ object RaceParser {
 
       location.flatMap {
         loc =>
-          if(loc.length >= 2) {
+          if (loc.length >= 2) {
             Some(loc.takeRight(2))
           }
           else {

@@ -1,13 +1,13 @@
 package models.statistics.db
 
 import models.statistics.Race
-import models.statistics.metadata.db.{WithNames, WithRelations, WithMetadatas}
+import models.statistics.metadata.db.{WithMetadatas, WithNames, WithRelations}
 import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._
 
 class Races(tag: Tag) extends Table[Race](tag, "races")
-with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race]{
+with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race] {
 
   def date = column[LocalDate]("race_date", O.NotNull)
 
@@ -25,5 +25,5 @@ with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race]{
     sportlatId,
     noskrienId,
     updatedAt,
-    updatedBy) <> (Race.tupled, Race.unapply)
+    updatedBy) <>(Race.tupled, Race.unapply)
 }

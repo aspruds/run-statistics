@@ -1,8 +1,8 @@
 package services.statistics.db
 
-import models.statistics.{Race, RaceResult, RaceDistance}
-import models.statistics.db.{Races, RaceResults, RaceDistances}
-import services.statistics.db.support.{DefaultCRUDRepository, CRUDRepository}
+import models.statistics.RaceResult
+import models.statistics.db.RaceResults
+import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait RaceResultRepositoryComponent {
 
@@ -13,8 +13,9 @@ trait RaceResultRepositoryComponent {
   class DefaultRaceResultRepository extends DefaultCRUDRepository[RaceResult, RaceResults] with RaceResultRepository {
     override val tableReference = TableQuery[RaceResults]
 
-    override def copyWithId(valueObject: RaceResult, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: RaceResult, id: Long) = valueObject.copy(id = id)
   }
 
   trait RaceResultRepository extends CRUDRepository[RaceResult]
+
 }

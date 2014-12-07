@@ -10,5 +10,5 @@ with WithMetadatas[AgeGroup] with WithNames[AgeGroup] {
     id,
     name,
     updatedAt,
-    updatedBy) <> (AgeGroup.tupled, AgeGroup.unapply)
+    updatedBy) <>(AgeGroup.tupled, AgeGroup.unapply)
 }

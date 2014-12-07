@@ -13,8 +13,9 @@ trait DisciplineTypeRepositoryComponent {
   class DefaultDisciplineTypeRepository extends DefaultCRUDRepository[DisciplineType, DisciplineTypes] with DisciplineTypeRepository {
     override val tableReference = TableQuery[DisciplineTypes]
 
-    override def copyWithId(valueObject: DisciplineType, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: DisciplineType, id: Long) = valueObject.copy(id = id)
   }
 
   trait DisciplineTypeRepository extends CRUDRepository[DisciplineType]
+
 }

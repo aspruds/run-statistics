@@ -1,7 +1,6 @@
 package services.skriesim.parsers
 
 import _root_.utils.text.TextUtils
-import models._
 import models.skriesim.Club
 import org.jsoup.Jsoup
 
@@ -12,7 +11,7 @@ object ClubParser {
     val nameTD = container.select("td.name").first
 
     def getOptionFromElement(selector: String) = {
-      val text  = container.select(selector).first.ownText.trim
+      val text = container.select(selector).first.ownText.trim
       TextUtils.toOption(text)
     }
 

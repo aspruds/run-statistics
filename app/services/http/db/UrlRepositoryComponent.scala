@@ -2,8 +2,8 @@ package services.http.db
 
 import models.http.Url
 import models.http.db.Urls
-import play.api.db.slick._
 import play.api.Play.current
+import play.api.db.slick._
 
 trait UrlRepositoryComponent {
   val urlRepository: UrlRepository

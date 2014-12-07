@@ -1,6 +1,6 @@
 package services.statistics.db
 
-import models.statistics.{Club, Country}
+import models.statistics.Country
 import models.statistics.db.Countries
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
@@ -13,7 +13,7 @@ trait CountryRepositoryComponent {
   class DefaultCountryRepository extends DefaultCRUDRepository[Country, Countries] with CountryRepository {
     override val tableReference = TableQuery[Countries]
 
-    override def copyWithId(valueObject: Country, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: Country, id: Long) = valueObject.copy(id = id)
 
     override def byCode(code: String)(implicit session: Session) = {
       tableReference.filter(_.code === code).firstOption
@@ -23,4 +23,5 @@ trait CountryRepositoryComponent {
   trait CountryRepository extends CRUDRepository[Country] {
     def byCode(code: String)(implicit session: Session): Option[Country]
   }
+
 }

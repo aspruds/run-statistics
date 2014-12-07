@@ -26,9 +26,9 @@ object ParserUtils {
       href => {
         val id = href.attr("href").replace(url, "").toLong
         val name = href.ownText()
-        IdName(id,name)
+        IdName(id, name)
       }
     }.toStream
   }
 
- }
+}

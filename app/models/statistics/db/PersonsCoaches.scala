@@ -15,5 +15,5 @@ class PersonsCoaches(tag: Tag) extends Table[PersonCoach](tag, "persons_coaches"
     personId,
     coachId,
     updatedAt,
-    updatedBy) <> (PersonCoach.tupled, PersonCoach.unapply)
+    updatedBy) <>(PersonCoach.tupled, PersonCoach.unapply)
 }

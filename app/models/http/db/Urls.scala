@@ -1,9 +1,9 @@
 package models.http.db
 
 import models.http.Url
-import utils.db.PortableJodaSupport._
 import org.joda.time.LocalDateTime
 import play.api.db.slick.Config.driver.simple._
+import utils.db.PortableJodaSupport._
 
 class Urls(tag: Tag) extends Table[Url](tag, "url_cache") {
   def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -18,5 +18,5 @@ class Urls(tag: Tag) extends Table[Url](tag, "url_cache") {
     id,
     url,
     content,
-    dateVisited) <> (Url.tupled, Url.unapply)
+    dateVisited) <>(Url.tupled, Url.unapply)
 }

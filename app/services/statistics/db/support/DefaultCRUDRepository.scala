@@ -4,7 +4,7 @@ import models.statistics.metadata.WithMetadata
 import models.statistics.metadata.db.WithMetadatas
 import play.api.db.slick.Config.driver.simple._
 
-abstract class DefaultCRUDRepository[M <: WithMetadata, T <: Table[M] with WithMetadatas[M]] extends CRUDRepository[M]{
+abstract class DefaultCRUDRepository[M <: WithMetadata, T <: Table[M] with WithMetadatas[M]] extends CRUDRepository[M] {
 
   type VO = T#TableElementType
 

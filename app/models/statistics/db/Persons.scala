@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.Person
-import models.statistics.metadata.db.{WithRelations, WithMetadatas}
+import models.statistics.metadata.db.{WithMetadatas, WithRelations}
 import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 import utils.db.PortableJodaSupport._

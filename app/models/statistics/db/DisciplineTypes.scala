@@ -10,5 +10,5 @@ with WithMetadatas[DisciplineType] with WithNames[DisciplineType] {
     id,
     name,
     updatedAt,
-    updatedBy) <> (DisciplineType.tupled, DisciplineType.unapply)
+    updatedBy) <>(DisciplineType.tupled, DisciplineType.unapply)
 }

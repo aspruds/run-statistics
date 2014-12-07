@@ -5,7 +5,7 @@ import models.statistics.metadata.db.{WithMetadatas, WithNames}
 import play.api.db.slick.Config.driver.simple._
 
 class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
- with WithMetadatas[DistanceType] with WithNames[DistanceType] {
+with WithMetadatas[DistanceType] with WithNames[DistanceType] {
 
   def skriesimName = column[Option[String]]("skriesim_name")
 
@@ -19,15 +19,15 @@ class DistanceTypes(tag: Tag) extends Table[DistanceType](tag, "distance_types")
 
   def isStandard = column[Option[Boolean]]("is_standard")
 
-   def * = (
-     id,
-     name,
-     skriesimName,
-     distance,
-     weight,
-     height,
-     disciplineTypeId,
-     isStandard,
-     updatedAt,
-     updatedBy) <> (DistanceType.tupled, DistanceType.unapply)
- }
+  def * = (
+    id,
+    name,
+    skriesimName,
+    distance,
+    weight,
+    height,
+    disciplineTypeId,
+    isStandard,
+    updatedAt,
+    updatedBy) <>(DistanceType.tupled, DistanceType.unapply)
+}

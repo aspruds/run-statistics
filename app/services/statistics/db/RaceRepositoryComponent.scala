@@ -14,7 +14,7 @@ trait RaceRepositoryComponent {
   class DefaultRaceRepository extends DefaultCRUDRepository[Race, Races] with RaceRepository {
     override val tableReference = TableQuery[Races]
 
-    override def copyWithId(valueObject: Race, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: Race, id: Long) = valueObject.copy(id = id)
 
     override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Race] = {
       Logger.debug(s"finding Race by skriesimId: $skriesimId")
@@ -25,4 +25,5 @@ trait RaceRepositoryComponent {
   trait RaceRepository extends CRUDRepository[Race] {
     def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Race]
   }
+
 }

@@ -17,5 +17,5 @@ class Countries(tag: Tag) extends Table[Country](tag, "countries") with WithMeta
     code,
     name,
     updatedAt,
-    updatedBy) <> (Country.tupled, Country.unapply)
+    updatedBy) <>(Country.tupled, Country.unapply)
 }

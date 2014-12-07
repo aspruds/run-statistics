@@ -1,7 +1,7 @@
 package services.statistics.db
 
-import models.statistics.{Person, PersonCoach}
 import models.statistics.db.PersonsCoaches
+import models.statistics.{Person, PersonCoach}
 import org.joda.time.LocalDateTime
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
@@ -14,7 +14,7 @@ trait PersonsCoachesRepositoryComponent {
   class DefaultPersonsCoachesRepository extends DefaultCRUDRepository[PersonCoach, PersonsCoaches] with PersonsCoachesRepository {
     override val tableReference = TableQuery[PersonsCoaches]
 
-    override def copyWithId(valueObject: PersonCoach, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: PersonCoach, id: Long) = valueObject.copy(id = id)
 
     override def find(personId: Long, coachId: Long)(implicit session: Session) = {
       tableReference.filter(pc => pc.personId === personId && pc.coachId === coachId).firstOption
@@ -31,4 +31,5 @@ trait PersonsCoachesRepositoryComponent {
 
     def insert(person: Person, coach: Person)(implicit session: Session): PersonCoach
   }
+
 }

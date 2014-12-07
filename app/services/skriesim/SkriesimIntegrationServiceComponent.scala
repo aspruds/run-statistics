@@ -1,8 +1,6 @@
 package services.skriesim
 
-import models.statistics.{DistanceType, PersonClub, PersonCoach}
 import modules.DAL
-import org.joda.time.LocalDateTime
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.slick.DB
@@ -13,7 +11,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
 
   val skriesimIntegrationService: SkriesimIntegrationService
 
-  class DefaultSkriesimIntegrationService extends SkriesimIntegrationService{
+  class DefaultSkriesimIntegrationService extends SkriesimIntegrationService {
     override def importAgeGroups() = {
       Logger.info("Importing skriesim.lv age groups")
 
@@ -155,8 +153,8 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
             dt =>
 
               val distance = {
-                if(dt.name.endsWith("km")) {
-                  val decimal: String = dt.name.replace("km","")
+                if (dt.name.endsWith("km")) {
+                  val decimal: String = dt.name.replace("km", "")
                   Some(BigDecimal(decimal))
                 }
                 else
@@ -224,4 +222,5 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
 
     def importAll()
   }
+
 }

@@ -60,15 +60,24 @@ trait SkriesimProviderComponent {
 
   trait SkriesimProvider {
     def getAthlete(id: Long): String
+
     def getClub(id: Long): String
+
     def getCoach(id: Long): String
+
     def getRace(id: Long): String
 
     def getAthleteIds: String
+
     def getClubIds: String
+
     def getCoachIds: String
+
     def getRaceIds: String
+
     def getStatisticsIds: String
+
     def getStatisticsIdsEnglish: String
   }
+
 }

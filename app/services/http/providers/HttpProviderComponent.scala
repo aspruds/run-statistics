@@ -37,4 +37,5 @@ trait HttpProviderComponent {
   trait HttpProvider {
     def loadURL(url: String): String
   }
+
 }

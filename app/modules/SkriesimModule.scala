@@ -7,7 +7,7 @@ import services.skriesim.providers.SkriesimProviderComponent
 import services.skriesim.{SkriesimDataServiceComponent, SkriesimIntegrationServiceComponent}
 
 trait SkriesimModule extends SkriesimDataServiceComponent with SkriesimParserComponent with SkriesimProviderComponent
- with DAL with SkriesimIntegrationServiceComponent {
+with DAL with SkriesimIntegrationServiceComponent {
   override lazy val skriesimDataService = new DefaultSkriesimDataService
 
   override lazy val skriesimIntegrationService = new DefaultSkriesimIntegrationService

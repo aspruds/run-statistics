@@ -1,6 +1,6 @@
 package models.statistics
 
-import models.statistics.metadata.{WithName, WithRelation, WithMetadata}
+import models.statistics.metadata.{WithMetadata, WithName, WithRelation}
 import org.joda.time.{LocalDate, LocalDateTime}
 
 case class Race(

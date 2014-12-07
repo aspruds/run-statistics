@@ -1,6 +1,6 @@
 package models.statistics
 
-import models.statistics.metadata.{WithName, WithMetadata}
+import models.statistics.metadata.{WithMetadata, WithName}
 import org.joda.time.LocalDateTime
 
 case class DistanceType(

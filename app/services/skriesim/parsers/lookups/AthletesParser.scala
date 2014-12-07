@@ -13,7 +13,7 @@ object AthletesParser {
       href => {
         val id = href.attr("href").replace("http://skriesim.lv/athletes?id=", "").toInt
         val name = href.ownText()
-        IdName(id,name)
+        IdName(id, name)
       }
     }.toStream
   }

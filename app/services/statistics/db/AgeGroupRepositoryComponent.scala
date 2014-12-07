@@ -14,7 +14,7 @@ trait AgeGroupRepositoryComponent {
   class DefaultAgeGroupRepository extends DefaultCRUDRepository[AgeGroup, AgeGroups] with AgeGroupRepository {
     override val tableReference = TableQuery[AgeGroups]
 
-    override def copyWithId(valueObject: AgeGroup, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: AgeGroup, id: Long) = valueObject.copy(id = id)
 
     override def findByName(name: String)(implicit session: Session): Option[AgeGroup] = {
       Logger.debug(s"finding AgeGroup by name: $name")
@@ -27,4 +27,5 @@ trait AgeGroupRepositoryComponent {
 
     def findByName(name: String)(implicit session: Session): Option[AgeGroup]
   }
+
 }

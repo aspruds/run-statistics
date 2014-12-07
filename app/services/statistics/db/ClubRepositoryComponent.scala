@@ -14,7 +14,7 @@ trait ClubRepositoryComponent {
   class DefaultClubRepository extends DefaultCRUDRepository[Club, Clubs] with ClubRepository {
     override val tableReference = TableQuery[Clubs]
 
-    override def copyWithId(valueObject: Club, id: Long) = valueObject.copy(id=id)
+    override def copyWithId(valueObject: Club, id: Long) = valueObject.copy(id = id)
 
     override def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Club] = {
       Logger.debug(s"finding Club by skriesimId: $skriesimId")
@@ -25,4 +25,5 @@ trait ClubRepositoryComponent {
   trait ClubRepository extends CRUDRepository[Club] {
     def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Club]
   }
+
 }

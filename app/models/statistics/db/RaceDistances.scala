@@ -1,11 +1,11 @@
 package models.statistics.db
 
 import models.statistics.RaceDistance
-import models.statistics.metadata.db.{WithMetadatas, WithNames}
+import models.statistics.metadata.db.WithMetadatas
 import play.api.db.slick.Config.driver.simple._
 
 class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
- with WithMetadatas[RaceDistance] {
+with WithMetadatas[RaceDistance] {
 
   def raceId = column[Long]("race_id")
 
@@ -21,14 +21,14 @@ class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
 
   def isElectronicTime = column[Option[Boolean]]("is_electronic_time")
 
-   def * = (
-     id,
-     raceId,
-     distanceTypeId,
-     withQualification,
-     venueTypeId,
-     isCertified,
-     isElectronicTime,
-     updatedAt,
-     updatedBy) <> (RaceDistance.tupled, RaceDistance.unapply)
- }
+  def * = (
+    id,
+    raceId,
+    distanceTypeId,
+    withQualification,
+    venueTypeId,
+    isCertified,
+    isElectronicTime,
+    updatedAt,
+    updatedBy) <>(RaceDistance.tupled, RaceDistance.unapply)
+}

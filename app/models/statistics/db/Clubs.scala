@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.Club
-import models.statistics.metadata.db.{WithNames, WithMetadatas}
+import models.statistics.metadata.db.{WithMetadatas, WithNames}
 import play.api.db.slick.Config.driver.simple._
 
 class Clubs(tag: Tag) extends Table[Club](tag, "clubs")
@@ -32,5 +32,5 @@ with WithMetadatas[Club] with WithNames[Club] {
     fullDescription,
     skriesimId,
     updatedAt,
-    updatedBy) <> (Club.tupled, Club.unapply)
+    updatedBy) <>(Club.tupled, Club.unapply)
 }

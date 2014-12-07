@@ -8,4 +8,4 @@ trait WithRelations[T] extends Table[T] {
   def sportlatId = column[Option[Long]]("sportlat_id", O.NotNull)
 
   def noskrienId = column[Option[Long]]("noskrien_id", O.NotNull)
- }
+}

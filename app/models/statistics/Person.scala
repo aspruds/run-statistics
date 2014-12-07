@@ -1,7 +1,7 @@
 package models.statistics
 
-import models.statistics.metadata.{WithRelation, WithMetadata}
-import org.joda.time.{LocalDateTime, LocalDate}
+import models.statistics.metadata.{WithMetadata, WithRelation}
+import org.joda.time.{LocalDate, LocalDateTime}
 
 case class Person(
                    id: Long,

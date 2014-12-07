@@ -46,7 +46,7 @@ class RaceResultsParser(doc: Document) {
     val venue = distanceTypeWithVenueParts._2.replaceAll("\\(|\\)", "")
 
     val withQualification = {
-      if(distanceTypeWithVenue.contains("ar kvkl."))
+      if (distanceTypeWithVenue.contains("ar kvkl."))
         Some(true)
       else
         None

@@ -10,5 +10,5 @@ with WithMetadatas[ClassificationType] with WithNames[ClassificationType] {
     id,
     name,
     updatedAt,
-    updatedBy) <> (ClassificationType.tupled, ClassificationType.unapply)
+    updatedBy) <>(ClassificationType.tupled, ClassificationType.unapply)
 }
