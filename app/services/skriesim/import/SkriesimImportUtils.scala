@@ -111,7 +111,6 @@ trait SkriesimImportUtils {
       distanceTypeId = distanceType.map(_.id),
       withQualification = raceResult.withQualification,
       venueTypeId = venueType.map(_.id),
-      name = raceResult.distanceType,
       isCertified = None,
       isElectronicTime = None,
       updatedAt = Some(new LocalDateTime),

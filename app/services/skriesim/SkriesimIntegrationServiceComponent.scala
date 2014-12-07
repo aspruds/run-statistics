@@ -194,8 +194,8 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
     override def importAll() = {
       importAgeGroups()
       importNonStandardDistanceTypes()
-      importAthletes()
       importClubs()
+      importAthletes()
       importRaces()
       importAthletesClubs()
       importAthletesCoaches()

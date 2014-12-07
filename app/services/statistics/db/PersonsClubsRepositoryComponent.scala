@@ -2,6 +2,7 @@ package services.statistics.db
 
 import models.statistics.{Person, Club, PersonClub}
 import models.statistics.db.PersonsClubs
+import org.joda.time.LocalDateTime
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait PersonsClubsRepositoryComponent {
@@ -20,7 +21,7 @@ trait PersonsClubsRepositoryComponent {
     }
 
     override def insert(person: Person, club: Club)(implicit session: Session) = {
-      val personClub = PersonClub(0, person.id, club.id, None, None)
+      val personClub = PersonClub(0, person.id, club.id, Some(new LocalDateTime), None)
       insert(personClub)
     }
   }

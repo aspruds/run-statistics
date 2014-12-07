@@ -1,6 +1,6 @@
 package models.statistics
 
-import models.statistics.metadata.{WithName, WithMetadata}
+import models.statistics.metadata.WithMetadata
 import org.joda.time.LocalDateTime
 
 case class RaceDistance(
@@ -9,8 +9,7 @@ case class RaceDistance(
                    distanceTypeId: Option[Long],
                    withQualification: Option[Boolean],
                    venueTypeId: Option[Long],
-                   name: String,
                    isCertified: Option[Boolean],
                    isElectronicTime: Option[Boolean],
                    updatedAt: Option[LocalDateTime],
-                   updatedBy: Option[Long]) extends WithMetadata with WithName
+                   updatedBy: Option[Long]) extends WithMetadata

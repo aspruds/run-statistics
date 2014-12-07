@@ -5,7 +5,7 @@ import models.statistics.metadata.db.{WithMetadatas, WithNames}
 import play.api.db.slick.Config.driver.simple._
 
 class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
- with WithMetadatas[RaceDistance] with WithNames[RaceDistance] {
+ with WithMetadatas[RaceDistance] {
 
   def raceId = column[Long]("race_id")
 
@@ -27,7 +27,6 @@ class RaceDistances(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
      distanceTypeId,
      withQualification,
      venueTypeId,
-     name,
      isCertified,
      isElectronicTime,
      updatedAt,
