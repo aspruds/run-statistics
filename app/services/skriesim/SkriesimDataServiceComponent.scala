@@ -1,7 +1,7 @@
 package services.skriesim
 
 import models.skriesim.id.{CodeName, IdName}
-import models.skriesim.{Athlete, Club, Race}
+import models.skriesim.{NonStandardDistance, Athlete, Club, Race}
 import modules.DAL
 import play.api.Logger
 import services.skriesim.`import`.SkriesimImportUtils
@@ -132,7 +132,7 @@ trait SkriesimDataServiceComponent {
 
     def getStandardDisciplineTypeIds: Seq[IdName]
 
-    def getNonStandardDisciplineTypeIds: Seq[CodeName]
+    def getNonStandardDisciplineTypeIds: Seq[NonStandardDistance]
   }
 
 }

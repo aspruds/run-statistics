@@ -19,7 +19,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
         implicit session =>
 
           skriesimDataService.getAgeGroupsIds.map {
-            ageGroup => importAgeGroup(ageGroup)
+            ageGroup => mapAgeGroup(ageGroup)
           }.filter {
             ageGroup => ageGroupRepository.findByName(ageGroup.name).isEmpty
           }.foreach {
@@ -36,7 +36,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           skriesimDataService.getRaces.filter(
             race => raceRepository.findBySkriesimId(race.id).isEmpty
           ).map {
-            race => importRace(race)
+            race => mapRace(race)
           }.foreach {
             race => raceRepository.insert(race)
           }
@@ -49,7 +49,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
       DB.withSession {
         implicit session =>
           skriesimDataService.getAthletes.map {
-            athlete => importAthlete(athlete)
+            athlete => mapAthleteToPerson(athlete)
           }.filter {
             person => personRepository.findBySkriesimId(person.skriesimId.getOrElse(0)).isEmpty
           }.foreach {
@@ -64,7 +64,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
       DB.withSession {
         implicit session =>
           skriesimDataService.getClubs.map {
-            club => importClub(club)
+            club => mapClub(club)
           }.filter {
             club => clubRepository.findBySkriesimId(club.skriesimId).isEmpty
           }.foreach {
@@ -126,13 +126,13 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           assert(!distanceTypes.isEmpty)
 
           val newDistanceTypes = distanceTypes.filter {
-            dt => distanceTypeRepository.findBySkriesimName(dt.name).isEmpty
+            distanceType => distanceTypeRepository.findBySkriesimName(distanceType.name).isEmpty
           }
 
-          newDistanceTypes.foreach {
-            dt =>
-              val distanceType = importDistanceType(dt)
-              distanceTypeRepository.insert(distanceType)
+          newDistanceTypes.map {
+            mapDistanceType(_)
+          }.foreach {
+            distanceTypeRepository.insert(_)
           }
       }
     }
@@ -146,25 +146,13 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           assert(!distanceTypes.isEmpty)
 
           val newDistanceTypes = distanceTypes.filter {
-            dt => distanceTypeRepository.findBySkriesimName(dt.name).isEmpty
+            distanceType => distanceTypeRepository.findBySkriesimName(distanceType.name).isEmpty
           }
 
-          newDistanceTypes.foreach {
-            dt =>
-
-              val distance = {
-                if (dt.name.endsWith("km")) {
-                  val decimal: String = dt.name.replace("km", "")
-                  Some(BigDecimal(decimal))
-                }
-                else
-                  None
-              }
-
-              val distanceType = importDistanceType(dt)
-                .copy(isStandard = Some(false))
-                .copy(distance = distance)
-              distanceTypeRepository.insert(distanceType)
+          newDistanceTypes.map {
+            mapDistanceType(_)
+          }.foreach {
+            distanceTypeRepository.insert(_)
           }
       }
     }
@@ -180,7 +168,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
           }.map(_._2.head)
 
           uniqueDistances.map {
-            importRaceDistance(_)
+            mapRaceResultToRaceDistance(_)
           }.filter {
             !raceDistanceRepository.exists(_)
           }.foreach {

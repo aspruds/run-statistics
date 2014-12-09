@@ -1,7 +1,7 @@
 package services.skriesim.`import`
 
 import models.skriesim.id.CodeName
-import models.skriesim.{Athlete, Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult}
+import models.skriesim.{Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult, NonStandardDistance, Athlete}
 import models.statistics._
 import models.statistics.metadata.WithName
 import modules.DAL
@@ -13,7 +13,7 @@ trait SkriesimImportUtils {
 
   import play.api.db.slick.Config.driver.simple._
 
-  def importAthlete(athlete: Athlete)(implicit session: Session): Person = {
+  def mapAthleteToPerson(athlete: Athlete)(implicit session: Session): Person = {
     Person(
       id = 0,
       givenName = athlete.givenName,
@@ -31,7 +31,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def importClub(club: SkriesimClub)(implicit session: Session): Club = {
+  def mapClub(club: SkriesimClub)(implicit session: Session): Club = {
     Club(
       id = 0,
       name = club.name,
@@ -45,7 +45,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def importRace(race: SkriesimRace)(implicit session: Session): Race = {
+  def mapRace(race: SkriesimRace)(implicit session: Session): Race = {
     Race(
       id = 0,
       name = race.name,
@@ -60,7 +60,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def importAgeGroup(ageGroup: CodeName) = {
+  def mapAgeGroup(ageGroup: CodeName) = {
     AgeGroup(
       id = 0,
       name = ageGroup.name,
@@ -69,7 +69,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def importDistanceType(distanceType: WithName) = {
+  def mapDistanceType(distanceType: WithName): DistanceType = {
     DistanceType(
       id = 0,
       name = distanceType.name,
@@ -84,7 +84,13 @@ trait SkriesimImportUtils {
     )
   }
 
-  def importRaceDistance(raceResult: SkriesimRaceResult)(implicit session: Session): RaceDistance = {
+  def mapDistanceType(distanceType: NonStandardDistance): DistanceType = {
+    mapDistanceType(distanceType.asInstanceOf[WithName]).
+      copy(distance = Some(distanceType.distance)).
+      copy(isStandard = Some(false))
+  }
+
+  def mapRaceResultToRaceDistance(raceResult: SkriesimRaceResult)(implicit session: Session): RaceDistance = {
 
     def mapVenueTypeName(venueType: String) = {
       venueType match {
