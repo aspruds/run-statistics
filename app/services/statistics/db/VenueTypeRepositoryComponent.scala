@@ -2,7 +2,10 @@ package services.statistics.db
 
 import models.statistics.VenueType
 import models.statistics.db.VenueTypes
+import play.Logger
+import play.api.cache.Cache
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
+import play.api.Play.current
 
 trait VenueTypeRepositoryComponent {
 
@@ -16,7 +19,10 @@ trait VenueTypeRepositoryComponent {
     override def copyWithId(valueObject: VenueType, id: Long) = valueObject.copy(id = id)
 
     override def findByName(name: String)(implicit session: Session): Option[VenueType] = {
-      tableReference.filter(_.name === name).firstOption
+      Cache.getOrElse(s"VenueType.name.$name") {
+        Logger.debug(s"finding VenueType by name: $name")
+        tableReference.filter(_.name === name).firstOption
+      }
     }
   }
 

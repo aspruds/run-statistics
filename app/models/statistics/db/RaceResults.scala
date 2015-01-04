@@ -11,13 +11,15 @@ with WithMetadatas[RaceResult] {
 
   def raceDistanceId = column[Long]("race_distance_id")
 
+  def personId = column[Long]("person_id")
+
   def time = column[Option[Long]]("time")
 
   def distance = column[Option[BigDecimal]]("distance")
 
   def points = column[Option[Short]]("points")
 
-  def rank = column[Option[Short]]("rank")
+  def rank = column[Option[Int]]("rank")
 
   def rankText = column[Option[String]]("rank_text")
 
@@ -31,6 +33,7 @@ with WithMetadatas[RaceResult] {
     id,
     raceId,
     raceDistanceId,
+    personId,
     time,
     distance,
     points,

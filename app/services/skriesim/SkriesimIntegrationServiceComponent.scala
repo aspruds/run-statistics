@@ -4,7 +4,7 @@ import modules.DAL
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.slick.DB
-import services.skriesim.`import`.SkriesimImportUtils
+import services.skriesim.utils.SkriesimImportUtils
 
 trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
   this: SkriesimDataServiceComponent with DAL =>
@@ -177,6 +177,31 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
       }
     }
 
+    override def importRaceResults() = {
+      Logger.info("Importing skriesim.lv race results")
+
+      DB.withSession {
+        implicit session =>
+
+          val raceResults = skriesimDataService.getAthletes.map {
+            athlete =>
+              val person = personRepository.findBySkriesimId(athlete.id.get)
+              (person, athlete.raceResults)
+          }
+
+          raceResults.flatMap {
+            case(person, results) => results.map {
+              result => mapRaceResult(person.get, result)
+            }
+          }.filter {
+            !raceResultRepository.exists(_)
+          }.foreach {
+            raceResultRepository.insert(_)
+          }
+
+      }
+    }
+
     override def importAll() = {
       importAgeGroups()
       importNonStandardDistanceTypes()
@@ -186,6 +211,7 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
       importAthletesClubs()
       importAthletesCoaches()
       importRaceDistances()
+      importRaceResults()
     }
   }
 
@@ -207,6 +233,8 @@ trait SkriesimIntegrationServiceComponent extends SkriesimImportUtils {
     def importAthletesCoaches()
 
     def importRaceDistances()
+
+    def importRaceResults()
 
     def importAll()
   }

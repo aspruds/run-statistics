@@ -6,9 +6,10 @@ trait DAL extends PersonRepositoryComponent with ClubRepositoryComponent
 with PersonsClubsRepositoryComponent with PersonsCoachesRepositoryComponent with RaceRepositoryComponent
 with DistanceTypeRepositoryComponent with DisciplineTypeRepositoryComponent with VenueTypeRepositoryComponent
 with RaceDistanceRepositoryComponent with RaceResultRepositoryComponent with CountryRepositoryComponent
-with AgeGroupRepositoryComponent {
+with ClassificationTypeRepositoryComponent with AgeGroupRepositoryComponent {
   override val personRepository = new DefaultPersonRepository
   override val clubRepository = new DefaultClubRepository
+  override val classificationTypeRepository = new DefaultClassificationTypeRepository
   override val personsClubsRepository = new DefaultPersonsClubsRepository
   override val personsCoachesRepository = new DefaultPersonsCoachesRepository
   override val raceRepository = new DefaultRaceRepository

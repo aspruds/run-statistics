@@ -2,6 +2,7 @@ package services.statistics.db
 
 import models.statistics.RaceDistance
 import models.statistics.db.RaceDistances
+import play.Logger
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 
 trait RaceDistanceRepositoryComponent {
@@ -15,21 +16,35 @@ trait RaceDistanceRepositoryComponent {
 
     override def copyWithId(valueObject: RaceDistance, id: Long) = valueObject.copy(id = id)
 
-    override def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session) = {
-      tableReference.filter(rd => rd.raceId === raceId && rd.distanceTypeId === distanceTypeId).firstOption
+    override def find(raceDistance: RaceDistance)(implicit session: Session) = {
+      Logger.debug(s"finding RaceDistance by example: $raceDistance")
+      getFirst(
+        raceDistance.raceId,
+        raceDistance.distanceTypeId,
+        raceDistance.venueTypeId,
+        raceDistance.withQualification
+      )
     }
 
     def exists(raceDistance: RaceDistance)(implicit session: Session) = {
-      tableReference.filter(_.raceId === raceDistance.raceId).
-        filter(_.distanceTypeId === raceDistance.distanceTypeId).
-        filter(_.venueTypeId === raceDistance.venueTypeId).
-        filter(_.withQualification === raceDistance.withQualification).
-        firstOption.isDefined
+      find(raceDistance).isDefined
+    }
+
+    private def getFirst(raceId: Long,
+                         distanceTypeId: Option[Long],
+                         venueTypeId: Option[Long],
+                         withQualification: Option[Boolean])(implicit session: Session) = {
+
+      tableReference.filter(_.raceId === raceId).
+        filter(_.distanceTypeId === distanceTypeId).
+        filter(_.venueTypeId === venueTypeId).
+        filter(row => row.withQualification.isEmpty || row.withQualification === withQualification).
+        firstOption
     }
   }
 
   trait RaceDistanceRepository extends CRUDRepository[RaceDistance] {
-    def findByRaceIdAndDistanceTypeId(raceId: Long, distanceTypeId: Long)(implicit session: Session): Option[RaceDistance]
+    def find(raceDistance: RaceDistance)(implicit session: Session): Option[RaceDistance]
 
     def exists(raceDistance: RaceDistance)(implicit session: Session): Boolean
   }

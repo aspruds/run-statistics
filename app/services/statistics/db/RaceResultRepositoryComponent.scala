@@ -14,8 +14,17 @@ trait RaceResultRepositoryComponent {
     override val tableReference = TableQuery[RaceResults]
 
     override def copyWithId(valueObject: RaceResult, id: Long) = valueObject.copy(id = id)
+
+    override def exists(raceResult: RaceResult)(implicit session: Session) = {
+      tableReference.filter(_.raceId === raceResult.raceId).
+      filter(_.raceDistanceId === raceResult.raceDistanceId).
+      filter(_.personId === raceResult.personId).
+      firstOption.isDefined
+    }
   }
 
-  trait RaceResultRepository extends CRUDRepository[RaceResult]
+  trait RaceResultRepository extends CRUDRepository[RaceResult] {
+    def exists(raceResult: RaceResult)(implicit session: Session): Boolean
+  }
 
 }

@@ -2,7 +2,10 @@ package services.statistics.db
 
 import models.statistics.DistanceType
 import models.statistics.db.DistanceTypes
+import play.Logger
+import play.api.cache.Cache
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
+import play.api.Play.current
 
 trait DistanceTypeRepositoryComponent {
 
@@ -16,7 +19,10 @@ trait DistanceTypeRepositoryComponent {
     override def copyWithId(valueObject: DistanceType, id: Long) = valueObject.copy(id = id)
 
     override def findBySkriesimName(skriesimName: String)(implicit session: Session) = {
-      tableReference.filter(_.skriesimName === skriesimName.toLowerCase).firstOption
+      Cache.getOrElse(s"DistanceType.skriesimName.$skriesimName") {
+        Logger.debug(s"finding DistanceType by skriesimName: $skriesimName")
+        tableReference.filter(_.skriesimName === skriesimName.toLowerCase).firstOption
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-package services.skriesim.`import`
+package services.skriesim.utils
 
 import models.skriesim.id.CodeName
 import models.skriesim.{Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult, NonStandardDistance, Athlete}
@@ -6,7 +6,7 @@ import models.statistics._
 import models.statistics.metadata.WithName
 import modules.DAL
 import org.joda.time.LocalDateTime
-import services.skriesim.`import`.mappers.CountryMapper
+import services.skriesim.utils.mappers.CountryMapper
 
 trait SkriesimImportUtils {
   this: DAL =>
@@ -90,17 +90,16 @@ trait SkriesimImportUtils {
       copy(isStandard = Some(false))
   }
 
-  def mapRaceResultToRaceDistance(raceResult: SkriesimRaceResult)(implicit session: Session): RaceDistance = {
-
-    def mapVenueTypeName(venueType: String) = {
-      venueType match {
-        case "Kross" => "Cross Country"
-        case "Telpās" => "Indoor"
-        case "Stadionā" => "Stadium"
-        case "Šosejā" => "Road"
-      }
+  def mapVenueTypeName(venueType: String) = {
+    venueType match {
+      case "Kross" => "Cross Country"
+      case "Telpās" => "Indoor"
+      case "Stadionā" => "Stadium"
+      case "Šosejā" => "Road"
     }
+  }
 
+  def mapRaceResultToRaceDistance(raceResult: SkriesimRaceResult)(implicit session: Session): RaceDistance = {
     val distanceType = distanceTypeRepository.findBySkriesimName(raceResult.distanceType)
     assert(distanceType.isDefined)
 
@@ -119,6 +118,32 @@ trait SkriesimImportUtils {
       venueTypeId = venueType.map(_.id),
       isCertified = None,
       isElectronicTime = None,
+      updatedAt = Some(new LocalDateTime),
+      updatedBy = None
+    )
+  }
+
+  def mapRaceResult(person: Person, raceResult: SkriesimRaceResult)(implicit session: Session): RaceResult = {
+    val mappedRaceDistance = mapRaceResultToRaceDistance(raceResult)
+    val raceDistance = raceDistanceRepository.find(mappedRaceDistance).get
+
+    val ageGroup = ageGroupRepository.findByName(raceResult.ageGroup)
+
+    val classificationType = raceResult.classificationType.flatMap(classificationTypeRepository.findByName(_))
+
+    RaceResult(
+      id = 0,
+      raceId = raceDistance.raceId,
+      raceDistanceId = raceDistance.id,
+      personId = person.id,
+      time = raceResult.time,
+      distance = raceResult.distance,
+      points = raceResult.points,
+      rank = raceResult.rank,
+      rankText = raceResult.rankText,
+      ageGroupId = ageGroup.map(_.id),
+      classificationTypeId = classificationType.map(_.id),
+      wind = None,
       updatedAt = Some(new LocalDateTime),
       updatedBy = None
     )

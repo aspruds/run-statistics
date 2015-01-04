@@ -1,4 +1,4 @@
-package services.skriesim.`import`.mappers
+package services.skriesim.utils.mappers
 
 object CountryMapper {
   def getCountryCodeFromName(name: String): String = {

@@ -70,6 +70,7 @@ CREATE INDEX race_results_idx_race_id ON race_results(race_id);
 CREATE INDEX race_results_idx_race_distance_id ON race_results(race_distance_id);
 CREATE INDEX race_results_idx_age_group_id ON race_results(age_group_id);
 CREATE INDEX race_results_idx_classification_type_id ON race_results(classification_type_id);
+ALTER TABLE race_results ALTER COLUMN rank TYPE INT;
 
 -- Table refactoring
 
@@ -413,5 +414,9 @@ INSERT INTO distance_types (name, skriesim_name, distance, weight, discipline_ty
 ALTER TABLE race_distances ADD COLUMN venue_type_id BIGINT REFERENCES venue_types(id);
 ALTER TABLE race_distances ADD COLUMN with_qualification BOOLEAN;
 ALTER TABLE race_distances DROP COLUMN name;
+
+ALTER TABLE race_results ADD COLUMN person_id BIGINT REFERENCES persons(id);
+CREATE UNIQUE INDEX race_distances_idx_lookup ON race_distances(race_id, distance_type_id, venue_type_id, with_qualification);
+CREATE UNIQUE INDEX race_results_idx_lookup ON race_results(race_id, race_distance_id, person_id);
 
 

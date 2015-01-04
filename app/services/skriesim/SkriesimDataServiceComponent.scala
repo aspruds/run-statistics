@@ -4,12 +4,11 @@ import models.skriesim.id.{CodeName, IdName}
 import models.skriesim.{NonStandardDistance, Athlete, Club, Race}
 import modules.DAL
 import play.api.Logger
-import services.skriesim.`import`.SkriesimImportUtils
 import services.skriesim.parsers.SkriesimParserComponent
 import services.skriesim.providers.SkriesimProviderComponent
 
 trait SkriesimDataServiceComponent {
-  this: SkriesimProviderComponent with SkriesimParserComponent with SkriesimImportUtils with DAL =>
+  this: SkriesimProviderComponent with SkriesimParserComponent with DAL =>
 
   val skriesimDataService: SkriesimDataService
 

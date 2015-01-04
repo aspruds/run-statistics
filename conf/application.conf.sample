@@ -40,6 +40,7 @@ db.default.driver=org.postgresql.Driver
 db.default.url="jdbc:postgresql://localhost/runstatistics"
 db.default.user=runstatistics
 db.default.password=
+db.default.connectionTestStatement="SELECT 1"
 
 # Evolutions
 # ~~~~~
