@@ -6,6 +6,7 @@ import play.api.Logger
 import services.http.db.UrlRepositoryComponent
 
 import scala.io.Source
+import scala.util.Random
 
 trait HttpProviderComponent {
   this: UrlRepositoryComponent =>
@@ -24,7 +25,7 @@ trait HttpProviderComponent {
         case None => {
           logger.info(s"fetching url: $url")
 
-          Thread.sleep(1000)
+          Thread.sleep(Random.nextInt(3000))
 
           val content = Source.fromURL(url).mkString
           urlRepository.insert(Url(0, url, content, new LocalDateTime))

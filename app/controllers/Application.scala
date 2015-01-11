@@ -6,7 +6,8 @@ import play.api.mvc._
 object Application extends Controller {
 
   def index = Action {
-    ComponentRegistry.skriesimIntegrationService.importRaceResults()
+    val races = ComponentRegistry.sportlatIntegrationService.importAthletes
+    println(races)
     Ok(views.html.index("Your new application is ready."))
   }
 }

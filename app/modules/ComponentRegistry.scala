@@ -1,3 +1,3 @@
 package modules
 
-object ComponentRegistry extends SkriesimModule with DAL
+object ComponentRegistry extends SkriesimModule with SportlatModule with DAL
