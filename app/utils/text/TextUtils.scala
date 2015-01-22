@@ -10,8 +10,18 @@ object TextUtils {
     }
   }
 
-  def removeNbsp(string: String) = string.replaceAll(nbsp, "")
+  def toLongOption(text: String): Option[Long] = {
+    toOption(text).flatMap {
+      case(text) =>
 
-  val nbsp = "\u00a0"
+        if (text.forall(_.isDigit))
+          Some(text.toLong)
+        else
+          None
+    }
+  }
 
+  def removeNbsp(string: String) = {
+    string.replaceAll(HtmlConstants.NbspUnicode, "").trim
+  }
 }

@@ -8,11 +8,11 @@ trait SportlatParserComponent {
   val sportlatParser: SportlatParser
 
   class DefaultSportlatParser extends SportlatParser {
-    override def parseRacesInYear(html: String) = RacesInYearParser.parse(html)
+    override def parseRacesInYear(html: String): Seq[RaceId] = RacesInYearParser.parse(html)
 
-    override def parseRaceDistance(html: String) = RaceDistanceParser.parse(html)
+    override def parseRaceDistance(html: String): RaceDistance = RaceDistanceParser.parse(html)
 
-    override def parseAthlete(html: String) = AthleteParser.parse(html)
+    override def parseAthlete(html: String): Option[Athlete] = AthleteParser.parse(html)
   }
 
   trait SportlatParser {

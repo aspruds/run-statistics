@@ -6,4 +6,7 @@ case class Athlete(
                     id: Option[Long],
                     givenName: String,
                     familyName: String,
+                    city: Option[String],
+                    country: Option[String],
+                    club: Option[String],
                     dateOfBirth: Option[LocalDate])

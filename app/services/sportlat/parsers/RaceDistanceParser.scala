@@ -1,10 +1,11 @@
 package services.sportlat.parsers
 
-import models.sportlat.id.{Total, InGroup, EvaluationType, RaceDistanceId}
-import models.sportlat.{RaceDistance, RaceResult, Race}
+import models.sportlat.id.{EvaluationType, InGroup, RaceDistanceId, Total}
+import models.sportlat.{RaceDistance, RaceResult}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import utils.text.TextUtils
+
 import scala.collection.JavaConversions._
 
 object RaceDistanceParser {
@@ -14,7 +15,7 @@ object RaceDistanceParser {
 
     val currentDistanceLink = doc.select("center a[style=font-weight:bold;]").first
 
-    def parseDistanceId: Option[Long] = {
+    def parseDistanceId(): Option[Long] = {
       val href = currentDistanceLink.attr("href")
 
       val pattern = "dist=(\\d+)".r("distanceId")
@@ -27,31 +28,15 @@ object RaceDistanceParser {
       }
     }
 
-    def parseName = currentDistanceLink.ownText
+    def parseName() = currentDistanceLink.ownText
 
-    def parseResults: Seq[RaceResult] = {
-      val trs = doc.select("table tr").toList.drop(1)
-      trs.map {
-        case tr => {
-
-          def parseAthleteId: Option[Long] = {
-            val nameTd = tr.child(2)
-
-            val maybeAthleteId = nameTd.select("a").attr("href").replace("http://www.sportlat.lv/index.php?id=user&uid=", "")
-            TextUtils.toOption(maybeAthleteId).map(_.toLong)
-          }
-          RaceResult(athleteId = parseAthleteId)
-        }
-      }
-    }
-
-    def parseOtherRaceDistances: Seq[RaceDistanceId] = {
+    def parseOtherRaceDistances(): Seq[RaceDistanceId] = {
       def parseName(link: Element) = link.ownText().replaceAll(" (kopvērtējums)", "").replace(" (pa grupām)", "")
 
       def parseEvaluationType(group: String): EvaluationType = group match {
         case g if g == "group" => InGroup()
         case g if g == "total" => Total()
-        case _ => throw new Exception(s"unable to parse evaluationt type: $group")
+        case _ => throw new Exception(s"unable to parse evaluation type: $group")
       }
 
       def parseDistanceLink(link: Element): RaceDistanceId = {
@@ -64,7 +49,8 @@ object RaceDistanceParser {
               distanceId = Option(m.group("distanceId")).map(_.toLong),
               raceId = m.group("raceId").toLong,
               evaluationType = parseEvaluationType(m.group("evaluationType")),
-              name = parseName(link)
+              name = parseName(link),
+              href = href
             )
           }
           case None => throw new Exception(s"unable to parse race distance: $href")
@@ -72,16 +58,38 @@ object RaceDistanceParser {
       }
 
       val distanceLinks = doc.select("center > a")
+
       val distanceLinksWithoutExcel = distanceLinks.toList.filterNot(_.ownText.contains("formātā"))
 
       distanceLinksWithoutExcel.map(parseDistanceLink(_))
     }
 
+    def parseResults(): Seq[RaceResult] = {
+      val trs = doc.select("table tr").toList.drop(1)
+      trs.map {
+        case(tr) =>
+
+          def parseAthleteId(): Option[Long] = {
+            val nameTd = tr.child(2)
+
+            val maybeAthleteId = nameTd.select("a").attr("href").replace("http://www.sportlat.lv/index.php?id=user&uid=", "")
+            TextUtils.toLongOption(maybeAthleteId)
+          }
+
+          def parseBibNumber() = TextUtils.toLongOption(tr.child(4).ownText)
+
+          RaceResult(
+            athleteId = parseAthleteId(),
+            bibNumber = parseBibNumber()
+          )
+      }
+    }
+
     RaceDistance(
-      distanceId = parseDistanceId,
-      name = parseName,
-      otherRaceDistances = parseOtherRaceDistances,
-      results = parseResults
+      distanceId = parseDistanceId(),
+      name = parseName(),
+      otherRaceDistances = parseOtherRaceDistances(),
+      results = parseResults()
     )
   }
 }

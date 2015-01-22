@@ -16,7 +16,7 @@ object RaceParser {
     val container = doc.select("div.calendarView div.title").first
 
     // replace &nbsp;
-    val containerText = container.ownText.replace(TextUtils.nbsp, "").trim
+    val containerText = TextUtils.removeNbsp(container.ownText)
 
     val date = {
       val dateAsText = containerText.take(10)
