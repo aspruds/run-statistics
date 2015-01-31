@@ -1,11 +1,9 @@
-package services.skriesim.parsers.athlete
+package services.skriesim.parsers.results
 
 import models.skriesim.RaceResult
 import models.skriesim.id.IdName
 import org.jsoup.nodes.{Document, Element}
-import play.Logger
-import utils.text.TextUtils
-import models.skriesim.results.{Distance, Time}
+import utils.text.TextUtils._
 
 import scala.collection.JavaConversions._
 
@@ -43,9 +41,11 @@ class RaceResultsParser(doc: Document) {
       distanceTypeWithVenue.splitAt(lastIndex)
     }
 
-    val distanceType = TextUtils.removeNbsp(distanceTypeWithVenueParts._1).replace(" ar kvkl.", "")
+    def parseDistanceType() = {
+      distanceTypeWithVenueParts._1.replace(" ar kvkl.", "")
+    }
 
-    val venue = distanceTypeWithVenueParts._2.replaceAll("\\(|\\)", "")
+    def parseVenue() = distanceTypeWithVenueParts._2.replaceAll("\\(|\\)", "")
 
     val withQualification = {
       if (distanceTypeWithVenue.contains("ar kvkl."))
@@ -54,11 +54,13 @@ class RaceResultsParser(doc: Document) {
         None
     }
 
-    val rankingPoints = TextUtils.toOption(ex(4)).map(_.toShort)
+    def parseRankingPoints() = {
+      ex(4).toOption.map(_.toShort)
+    }
 
     def isNumeric(str: String) = str.forall(Character.isDigit)
 
-    val rank = TextUtils.toOption(ex(2)).flatMap {
+    val rank = ex(2).toOption.flatMap {
       str =>
         if (isNumeric(str))
           Some(str.toInt)
@@ -70,25 +72,27 @@ class RaceResultsParser(doc: Document) {
       if (rank.isDefined)
         None
       else
-        TextUtils.toOption(ex(2))
+        ex(2).toOption
     }
 
-    val result = TextUtils.toOption(ex(1))
+    val result = ex(1).toOption
+
+    def parseClassificationType() = ex(3).toOption
 
     RaceResult(
       athleteId = None,
-      distanceType = distanceType,
-      venue = venue,
+      distanceType = parseDistanceType(),
+      venue = parseVenue(),
       distanceTypeWithVenue = distanceTypeWithVenue,
       withQualification = withQualification,
       pk = ex(0),
-      time = result.flatMap(Time.parse(_)),
-      distance = result.flatMap(Distance.parse(_)),
+      time = result.flatMap(TimeParser.parse(_)),
+      distance = result.flatMap(DistanceParser.parse(_)),
       rank = rank,
       rankText = rankText,
-      classificationType = TextUtils.toOption(ex(3)),
+      classificationType = parseClassificationType(),
       wind = None,
-      points = rankingPoints,
+      points = parseRankingPoints(),
       ageGroup = ex(5),
       date = ex(6),
       race = IdName(parseRaceId(), ex(7))

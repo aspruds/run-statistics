@@ -4,7 +4,8 @@ import models.sportlat.id.{EvaluationType, InGroup, RaceDistanceId, Total}
 import models.sportlat.{RaceDistance, RaceResult}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import utils.text.TextUtils
+import services.sportlat.parsers.results.TimeParser
+import utils.text.TextUtils._
 
 import scala.collection.JavaConversions._
 
@@ -14,6 +15,12 @@ object RaceDistanceParser {
     val doc = Jsoup.parse(html)
 
     val currentDistanceLink = doc.select("center a[style=font-weight:bold;]").first
+
+    val trs = doc.select("table tr").toList
+
+    val columnMap: Map[String,Int] = {
+      trs.head.children().map(_.ownText()).zipWithIndex.toMap
+    }
 
     def parseDistanceId(): Option[Long] = {
       val href = currentDistanceLink.attr("href")
@@ -65,22 +72,73 @@ object RaceDistanceParser {
     }
 
     def parseResults(): Seq[RaceResult] = {
-      val trs = doc.select("table tr").toList.drop(1)
-      trs.map {
+      trs.drop(1).map {
         case(tr) =>
 
-          def parseAthleteId(): Option[Long] = {
-            val nameTd = tr.child(2)
-
-            val maybeAthleteId = nameTd.select("a").attr("href").replace("http://www.sportlat.lv/index.php?id=user&uid=", "")
-            TextUtils.toLongOption(maybeAthleteId)
+          def tdByName(name: String): Option[Element] = {
+            val idx = columnMap.get(name)
+            idx.map(tr.child(_))
           }
 
-          def parseBibNumber() = TextUtils.toLongOption(tr.child(4).ownText)
+          def textOption(name: String): Option[String] = tdByName(name).flatMap {
+            _.ownText.toOption
+          }
+
+          def longOption(name: String): Option[Long] = tdByName(name).flatMap {
+            _.ownText.toLongOption
+          }
+
+          def intOption(name: String): Option[Int] = longOption(name).map(_.toInt)
+
+          def parseAthleteId(): Option[Long] = {
+            val nameTd = tdByName("Vārds").get
+            val maybeAthleteId = nameTd.select("a").attr("href").replace("http://www.sportlat.lv/index.php?id=user&uid=", "")
+            maybeAthleteId.toLongOption
+          }
+
+          def parseBibNumber() = intOption("Nr.").flatMap {
+            value =>
+              if(value > 0) Some(value)
+              else None
+          }
+
+          def parseClub() = textOption("Komanda")
+
+          def parseCity() = textOption("Pilsēta")
+
+          def parseAgeGroup() = textOption("Grupa")
+
+          def parseRank() = textOption("Vieta").map {
+            text => text.replace(".", "").toInt
+          }
+
+          def parsePoints() = intOption("Punkti")
+
+          val timeText = {
+            for {
+              td <- tdByName("Finišs")
+              b <- Option(td.select("b").first())
+              text <- b.ownText.toOption
+            } yield text
+          }
+
+          def parseIsDNS() = timeText.map(TimeParser.isDNS(_))
+
+          def parseIsDNF() = timeText.map(TimeParser.isDNF(_))
+
+          def parseTime() = timeText.flatMap(TimeParser.parse(_))
 
           RaceResult(
             athleteId = parseAthleteId(),
-            bibNumber = parseBibNumber()
+            bibNumber = parseBibNumber(),
+            club = parseClub(),
+            city = parseCity(),
+            ageGroup = parseAgeGroup(),
+            rank = parseRank(),
+            points = parsePoints(),
+            isDNF = parseIsDNF(),
+            isDNS = parseIsDNS(),
+            time = parseTime()
           )
       }
     }

@@ -13,4 +13,8 @@ case class RaceDistanceId(
                            raceId: Long,
                            evaluationType: EvaluationType,
                            name: String,
-                           href: String) extends WithName
+                           href: String) extends WithName {
+
+  def identifier = s"race=#$raceId, distanceId=$distanceId"
+
+}

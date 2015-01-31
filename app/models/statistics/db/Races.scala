@@ -13,6 +13,8 @@ with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race] {
 
   def countryId = column[Option[Long]]("country_id")
 
+  def location = column[Option[String]]("location", O.NotNull)
+
   def url = column[Option[String]]("url", O.NotNull)
 
   def * = (
@@ -20,6 +22,7 @@ with WithMetadatas[Race] with WithRelations[Race] with WithNames[Race] {
     name,
     date,
     countryId,
+    location,
     url,
     skriesimId,
     sportlatId,

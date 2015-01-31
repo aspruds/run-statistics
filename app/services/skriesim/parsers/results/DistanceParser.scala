@@ -1,8 +1,6 @@
-package models.skriesim.results
+package services.skriesim.parsers.results
 
-import play.Logger
-
-object Distance {
+object DistanceParser {
    def isDistance(text: String) = text.endsWith("m") || !text.contains(".")
 
   def parse(text: String): Option[BigDecimal] = {

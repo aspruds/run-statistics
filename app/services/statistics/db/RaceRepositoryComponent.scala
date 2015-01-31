@@ -20,10 +20,17 @@ trait RaceRepositoryComponent {
       Logger.debug(s"finding Race by skriesimId: $skriesimId")
       tableReference.filter(_.skriesimId === skriesimId).firstOption
     }
+
+    override def findBySportlatId(sportlatId: Option[Long])(implicit session: Session): Option[Race] = {
+      Logger.debug(s"finding Race by sportlatId: $sportlatId")
+      tableReference.filter(_.sportlatId === sportlatId).firstOption
+    }
   }
 
   trait RaceRepository extends CRUDRepository[Race] {
     def findBySkriesimId(skriesimId: Option[Long])(implicit session: Session): Option[Race]
+
+    def findBySportlatId(sportlatId: Option[Long])(implicit session: Session): Option[Race]
   }
 
 }

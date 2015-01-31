@@ -8,6 +8,7 @@ case class Race(
                  name: String,
                  date: LocalDate,
                  countryId: Option[Long],
+                 location: Option[String],
                  url: Option[String],
                  skriesimId: Option[Long],
                  sportlatId: Option[Long],

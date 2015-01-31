@@ -1,10 +1,11 @@
 package services.skriesim.parsers
 
-import _root_.utils.text.TextUtils
+import _root_.utils.text.TextUtils._
 import models.skriesim.Athlete
 import models.skriesim.id.IdName
 import org.jsoup.Jsoup
-import services.skriesim.parsers.athlete.{DateParser, NameParser, RaceResultsParser}
+import services.skriesim.parsers.athlete.{DateParser, NameParser}
+import services.skriesim.parsers.results.RaceResultsParser
 
 import scala.collection.JavaConversions._
 
@@ -66,7 +67,7 @@ object AthleteParser {
       yearOfBirth = dateParser.parseYearOfBirth(),
       ageGroup = parseAttribute("Vec.gr."),
       sex = parseSex(),
-      country = TextUtils.toOption(parseAttribute("Valsts")),
+      country = parseAttribute("Valsts").toOption,
       clubs = parseClubs(),
       coaches = parseCoaches(),
       raceResults = parseRaceResults(),

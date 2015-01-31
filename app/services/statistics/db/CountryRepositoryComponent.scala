@@ -18,10 +18,16 @@ trait CountryRepositoryComponent {
     override def byCode(code: String)(implicit session: Session) = {
       tableReference.filter(_.code === code).firstOption
     }
+
+    override def byName(name: String)(implicit session: Session) = {
+      tableReference.filter(_.name === name).firstOption
+    }
   }
 
   trait CountryRepository extends CRUDRepository[Country] {
     def byCode(code: String)(implicit session: Session): Option[Country]
+
+    def byName(name: String)(implicit session: Session): Option[Country]
   }
 
 }

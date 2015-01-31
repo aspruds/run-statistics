@@ -1,65 +1,73 @@
 package services.sportlat
 
-import models.sportlat.id.Total
-import models.sportlat.{Athlete, RaceDistance}
+import models.sportlat.id.{RaceDistanceId, RaceId, Total}
+import models.sportlat.{Athlete, RaceDistance, RaceResult}
 import modules.DAL
 import play.api.Logger
-import play.api.Play.current
-import play.api.db.slick.DB
 
 trait SportlatIntegrationServiceComponent {
   this: SportlatDataServiceComponent with DAL =>
 
   val sportlatIntegrationService: SportlatIntegrationService
 
+  case class Result(raceId: RaceId, distance: RaceDistance, result: RaceResult, athlete: Athlete)
+
+  case class RaceWithDistance(raceId: RaceId, distance: RaceDistance)
+
   class DefaultSportlatIntegrationService extends SportlatIntegrationService {
 
-    override def importMainRaceDistances(): Seq[RaceDistance] = {
-      Logger.info("Importing sportlat.lv main race results")
+    override def getMainRaceDistances(): Seq[RaceWithDistance] = {
+      Logger.info("Loading sportlat.lv main race distances")
 
-      DB.withSession {
-        implicit session =>
-          var mainDistances =
-          for {
-            raceId <- sportlatDataService.getRaceIds
-            id <- raceId.id
-          } yield (sportlatDataService.getRaceMainDistance(id))
-          mainDistances.toStream
+      def raceWithDistance(raceId: RaceId, distanceId: Long) = {
+        RaceWithDistance(raceId, sportlatDataService.getRaceMainDistance(distanceId))
       }
+
+      for {
+        raceId <- sportlatDataService.getRaceIds
+        distanceId <- raceId.id
+      } yield raceWithDistance(raceId, distanceId)
     }
 
-    override def importRaceDistances(): Seq[RaceDistance] = {
-      val otherDistances = importMainRaceDistances.flatMap {
-        raceDistance => raceDistance.otherRaceDistances
+    override def getRaceDistances(mainRaceDistances: Seq[RaceWithDistance]): Seq[RaceWithDistance] = {
+      Logger.info("Loading sportlat.lv race distances")
+
+      def raceWithDistance(raceId: RaceId, distanceId: RaceDistanceId) = {
+        RaceWithDistance(raceId, sportlatDataService.getRaceDistance(distanceId))
       }
-      val otherTotalDistances = otherDistances.filter(_.evaluationType == Total())
-      otherTotalDistances.map {
-        case distance => sportlatDataService.getRaceDistance(distance)
-      }.toStream
+
+      for {
+        raceDistance <- mainRaceDistances
+        id <- raceDistance.distance.otherRaceDistances if (id.evaluationType == Total())
+      } yield raceWithDistance(raceDistance.raceId, id)
     }
 
-    override def importAthletes(): Seq[Option[Athlete]] = {
-      val athletes = for {
-        distance <- importRaceDistances
-        result <- distance.results
-        athleteId <- result.athleteId
-      } yield (sportlatDataService.getAthlete(athleteId))
-      athletes.toStream
+    override def getResults(raceDistances: Seq[RaceWithDistance]): Seq[Result] = {
+      Logger.info("Loading sportlat.lv race results")
+
+      for {
+        raceDistance <- raceDistances
+        raceResult <- raceDistance.distance.results
+        athleteId <- raceResult.athleteId
+        athlete <- sportlatDataService.getAthlete(athleteId)
+      } yield Result(raceDistance.raceId, raceDistance.distance, raceResult, athlete)
     }
 
-    override def importAll() = {
-      importMainRaceDistances()
+    override def getResults(): Seq[Result]  = {
+      val mainRaceDistances = getMainRaceDistances()
+      val raceDistances = getRaceDistances(mainRaceDistances)
+      getResults(raceDistances)
     }
   }
 
   trait SportlatIntegrationService {
-    def importMainRaceDistances(): Seq[RaceDistance]
+    def getMainRaceDistances(): Seq[RaceWithDistance]
 
-    def importRaceDistances(): Seq[RaceDistance]
+    def getRaceDistances(mainRaceDistances: Seq[RaceWithDistance]): Seq[RaceWithDistance]
 
-    def importAthletes(): Seq[Option[Athlete]]
+    def getResults(distances: Seq[RaceWithDistance]): Seq[Result]
 
-    def importAll()
+    def getResults(): Seq[Result]
   }
 
 }

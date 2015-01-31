@@ -1,6 +1,6 @@
 package services.skriesim.parsers
 
-import _root_.utils.text.TextUtils
+import _root_.utils.text.TextUtils._
 import models.skriesim.Club
 import org.jsoup.Jsoup
 
@@ -11,26 +11,28 @@ object ClubParser {
     val nameTD = container.select("td.name").first
 
     def getOptionFromElement(selector: String) = {
-      val text = container.select(selector).first.ownText.trim
-      TextUtils.toOption(text)
+      container.select(selector).first.ownText.trim.toOption
     }
 
-    val name = nameTD.ownText
+    def parseName() = nameTD.ownText
 
-    val country = {
+    def parseCountry() = {
       val countryWithBraces = nameTD.select(".disciplineDetails").first.ownText
-      countryWithBraces.replaceAll("\\(|\\)", "")
+      countryWithBraces.replaceAll("\\(|\\)", "").toOption
     }
 
-    val title = getOptionFromElement("div.title")
-
-    val description = getOptionFromElement("div.text")
-
-    val fullDescription = {
-      val desc = container.select("div.text").first.html().trim
-      TextUtils.toOption(desc)
+    def parseTitle() = {
+      getOptionFromElement("div.title")
     }
 
-    Club(None, name, TextUtils.toOption(country), title, description, fullDescription)
+    def parseDescription() = {
+      getOptionFromElement("div.text")
+    }
+
+    def parseFullDescription() = {
+      container.select("div.text").first.html().trim.toOption
+    }
+
+    Club(None, parseName(), parseCountry(), parseTitle(), parseDescription(), parseFullDescription())
   }
 }

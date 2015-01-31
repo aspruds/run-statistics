@@ -1,7 +1,7 @@
 package services.sportlat
 
-import models.sportlat.{Athlete, RaceDistance, RaceResult}
 import models.sportlat.id.{RaceDistanceId, RaceId}
+import models.sportlat.{Athlete, RaceDistance}
 import modules.DAL
 import org.joda.time.DateTime
 import play.api.Logger
@@ -19,7 +19,7 @@ trait SportlatDataServiceComponent {
       Logger.debug(s"parsing sportlat.lv raceIdsForYear $year")
 
       val html = sportlatProvider.getRacesForYear(year)
-      sportlatParser.parseRacesInYear(html).toStream
+      sportlatParser.parseRacesInYear(html)
     }
 
     override def getRaceIds: Seq[RaceId] = {
@@ -27,7 +27,7 @@ trait SportlatDataServiceComponent {
       val years = for(year <- 2002 to currentYear) yield(year)
       years.flatMap {
         year => getRaceIdsForYear(year)
-      }.toStream
+      }
     }
 
     override def getRaceMainDistance(id: Long): RaceDistance = {
@@ -38,7 +38,7 @@ trait SportlatDataServiceComponent {
     }
 
     override def getRaceDistance(raceDistance: RaceDistanceId): RaceDistance = {
-      Logger.debug(s"parsing sportlat.lv raceDistance $raceDistance")
+      Logger.debug(s"parsing sportlat.lv raceDistance ${raceDistance.identifier}")
 
       val html = sportlatProvider.getRaceDistance(raceDistance)
       sportlatParser.parseRaceDistance(html)

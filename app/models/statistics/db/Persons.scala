@@ -17,7 +17,7 @@ with WithMetadatas[Person] with WithRelations[Person] {
 
   def yearOfBirth = column[Option[Int]]("year_of_birth")
 
-  def sex = column[String]("sex", O.NotNull)
+  def sex = column[Option[String]]("sex", O.NotNull)
 
   def countryId = column[Option[Long]]("country_id", O.NotNull)
 

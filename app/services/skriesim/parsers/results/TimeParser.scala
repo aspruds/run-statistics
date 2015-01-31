@@ -1,17 +1,17 @@
-package models.skriesim.results
+package services.skriesim.parsers.results
 
 import org.joda.time.Duration
 
-object Time {
+object TimeParser {
   def isTime(text: String) = text.contains(".") && !text.endsWith("m")
 
   def parse(text: String): Option[Long] = {
     if(isTime(text)) {
-      val parts = text.split(":|\\.").map(_.toLong).toList
-      val durations: List[Long] = parts.size match {
-        case 2 => List(0L,0,0) ::: parts
-        case 3 => List(0L,0) ::: parts
-        case 4 => List(0L) ::: parts
+      val parts = text.split(":|\\.").map(_.toInt).toList
+      val durations: List[Int] = parts.size match {
+        case 2 => List(0,0,0) ::: parts
+        case 3 => List(0,0) ::: parts
+        case 4 => List(0) ::: parts
         case 5 => parts
         case _ => throw new Exception(s"unable to parse duration: $text")
       }

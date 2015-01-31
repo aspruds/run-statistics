@@ -9,7 +9,7 @@ case class Person(
                    familyName: String,
                    dateOfBirth: Option[LocalDate],
                    yearOfBirth: Option[Int],
-                   sex: String,
+                   sex: Option[String],
                    countryId: Option[Long],
                    skriesimId: Option[Long],
                    sportlatId: Option[Long],
