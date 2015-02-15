@@ -41,12 +41,9 @@ trait SportlatPersistenceServiceComponent {
         updatedBy = None
       )
 
-      val persistedPerson = personRepository.findBySportlatId(person.sportlatId.get)
+      val persistedPerson = person.sportlatId.flatMap(personRepository.findBySportlatId(_))
 
-      if(persistedPerson.isDefined) {
-        persistedPerson.get
-      }
-      else {
+      persistedPerson getOrElse {
         personRepository.insert(person)
       }
     }
@@ -68,19 +65,15 @@ trait SportlatPersistenceServiceComponent {
 
       val persistedRace = raceRepository.findBySportlatId(race.sportlatId)
 
-      if(persistedRace.isDefined) {
-        persistedRace.get
-      }
-      else {
+      persistedRace getOrElse {
         raceRepository.insert(race)
       }
     }
 
     private def persistResult(result: Result)(implicit session: Session): Person = {
       Logger.debug("Persisting sportlat.lv result")
-      val race = persistRace(result.raceId)
-      val person = persistAthlete(result.athlete)
-      person
+      persistRace(result.raceId)
+      persistAthlete(result.athlete)
     }
 
     override def persistResults(): PersistedResults = {
