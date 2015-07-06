@@ -5,42 +5,34 @@ import models.http.db.Urls
 import play.api.Play.current
 import play.api.db.slick._
 
-trait UrlRepositoryComponent {
-  val urlRepository: UrlRepository
+trait UrlRepository {
+  def insert(url: Url): Url
 
-  import play.api.db.slick.Config.driver.simple._
-  import Database.dynamicSession
+  def getByUrl(url: String): Option[Url]
 
-  class DefaultUrlRepository extends UrlRepository {
+  def urls: TableQuery[Urls]
+}
 
-    val urls = TableQuery[Urls]
+class DefaultUrlRepository extends UrlRepository {
 
-    private val urlsAutoInc = {
-      val insertInvoker = urls returning urls.map(_.id)
-      insertInvoker into {
-        case (url, id) => url.copy(id = id)
-      }
-    }
+  val urls = TableQuery[Urls]
 
-    override def insert(url: Url): Url = {
-      DB.withDynSession {
-        urlsAutoInc.insert(url)
-      }
-    }
-
-    override def getByUrl(url: String) = {
-      DB.withDynSession {
-        urls.filter(_.url === url).firstOption
-      }
+  private val urlsAutoInc = {
+    val insertInvoker = urls returning urls.map(_.id)
+    insertInvoker into {
+      case (url, id) => url.copy(id = id)
     }
   }
 
-  trait UrlRepository {
-    def insert(url: Url): Url
-
-    def getByUrl(url: String): Option[Url]
-
-    def urls: TableQuery[Urls]
+  override def insert(url: Url): Url = {
+    DB.withDynSession {
+      urlsAutoInc.insert(url)
+    }
   }
 
+  override def getByUrl(url: String) = {
+    DB.withDynSession {
+      urls.filter(_.url === url).firstOption
+    }
+  }
 }

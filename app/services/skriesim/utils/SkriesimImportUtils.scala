@@ -9,11 +9,8 @@ import org.joda.time.LocalDateTime
 import services.skriesim.utils.mappers.CountryMapper
 
 trait SkriesimImportUtils {
-  this: DAL =>
 
-  import play.api.db.slick.Config.driver.simple._
-
-  def mapAthleteToPerson(athlete: Athlete)(implicit session: Session): Person = {
+  def mapAthleteToPerson(athlete: Athlete): Person = {
     Person(
       id = 0,
       givenName = athlete.givenName,
@@ -31,7 +28,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def mapClub(club: SkriesimClub)(implicit session: Session): Club = {
+  def mapClub(club: SkriesimClub): Club = {
     Club(
       id = 0,
       name = club.name,
@@ -45,7 +42,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def mapRace(race: SkriesimRace)(implicit session: Session): Race = {
+  def mapRace(race: SkriesimRace): Race = {
     Race(
       id = 0,
       name = race.name,
@@ -100,7 +97,7 @@ trait SkriesimImportUtils {
     }
   }
 
-  def mapRaceResultToRaceDistance(raceResult: SkriesimRaceResult)(implicit session: Session): RaceDistance = {
+  def mapRaceResultToRaceDistance(raceResult: SkriesimRaceResult): RaceDistance = {
     val distanceType = distanceTypeRepository.findBySkriesimName(raceResult.distanceType)
     assert(distanceType.isDefined)
 
@@ -124,7 +121,7 @@ trait SkriesimImportUtils {
     )
   }
 
-  def mapRaceResult(person: Person, raceResult: SkriesimRaceResult)(implicit session: Session): RaceResult = {
+  def mapRaceResult(person: Person, raceResult: SkriesimRaceResult): RaceResult = {
     val mappedRaceDistance = mapRaceResultToRaceDistance(raceResult)
     val raceDistance = raceDistanceRepository.find(mappedRaceDistance).get
 
@@ -150,11 +147,11 @@ trait SkriesimImportUtils {
     )
   }
 
-  private def getCountryIdByCode(code: String)(implicit session: Session): Option[Long] = {
+  private def getCountryIdByCode(code: String): Option[Long] = {
     countryRepository.byCode(code).map(_.id)
   }
 
-  private def getCountryIdByName(name: String)(implicit session: Session): Option[Long] = {
+  private def getCountryIdByName(name: String): Option[Long] = {
     val code = CountryMapper.getCountryCodeFromName(name)
     getCountryIdByCode(code)
   }

@@ -1,3 +1,5 @@
 package utils.db
 
-object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(play.api.db.slick.Config.driver)
+import slick.driver.PostgresDriver
+
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(PostgresDriver)
