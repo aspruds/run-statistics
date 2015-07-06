@@ -11,7 +11,7 @@ import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import play.api.cache.Cache
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultAgeGroupRepository]
+@ImplementedBy(classOf[DefaultAgeGroupRepository])
 trait AgeGroupRepository extends CRUDRepository[AgeGroup] {
   def findByName(name: String): Option[AgeGroup]
 }

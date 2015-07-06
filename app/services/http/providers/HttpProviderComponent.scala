@@ -3,10 +3,12 @@ package services.http.providers
 import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
-import models.http.Url
+import models.http.UrlCache
 import org.joda.time.LocalDateTime
 import play.api.Logger
+import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
 import services.http.db.UrlRepository
+import slick.driver.JdbcProfile
 
 import scala.io.Source
 import scala.util.Random
@@ -17,6 +19,7 @@ trait HttpProvider {
 }
 
 class DefaultHttpProvider @Inject() (urlRepository: UrlRepository) extends HttpProvider {
+
   val logger: Logger = Logger("DefaultHttpProvider")
 
   override def loadURL(url: String): String = {
@@ -31,7 +34,7 @@ class DefaultHttpProvider @Inject() (urlRepository: UrlRepository) extends HttpP
         Thread.sleep(Random.nextInt(3000))
 
         val content = Source.fromURL(url).mkString
-        urlRepository.insert(Url(0, url, content, new LocalDateTime))
+        urlRepository.insert(UrlCache(0, url, content, new LocalDateTime))
         content
       }
     }

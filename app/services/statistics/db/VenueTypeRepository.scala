@@ -11,7 +11,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultVenueTypeRepository]
+@ImplementedBy(classOf[DefaultVenueTypeRepository])
 trait VenueTypeRepository extends CRUDRepository[VenueType] {
   def findByName(name: String): Option[VenueType]
 }

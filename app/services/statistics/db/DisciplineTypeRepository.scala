@@ -9,7 +9,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import slick.driver.JdbcProfile
 
-@ImplementedBy[DefaultDisciplineTypeRepository]
+@ImplementedBy(classOf[DefaultDisciplineTypeRepository])
 trait DisciplineTypeRepository extends CRUDRepository[DisciplineType]
 
 class DefaultDisciplineTypeRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)

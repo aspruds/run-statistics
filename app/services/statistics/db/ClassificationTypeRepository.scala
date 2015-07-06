@@ -11,7 +11,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultClassificationTypeRepository]
+@ImplementedBy(classOf[DefaultClassificationTypeRepository])
 trait ClassificationTypeRepository extends CRUDRepository[ClassificationType] {
   def findByName(name: String): Option[ClassificationType]
 }

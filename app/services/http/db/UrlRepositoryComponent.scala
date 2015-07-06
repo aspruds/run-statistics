@@ -1,19 +1,26 @@
 package services.http.db
 
-import models.http.Url
-import models.http.db.Urls
-import play.api.Play.current
+import javax.inject.Inject
+
+import com.google.inject.ImplementedBy
+import models.http.UrlCache
 import play.api.db.slick._
+import slick.driver.JdbcProfile
 
+@ImplementedBy(classOf[DefaultUrlRepository])
 trait UrlRepository {
-  def insert(url: Url): Url
+  def insert(url: UrlCache): UrlCache
 
-  def getByUrl(url: String): Option[Url]
+  def getByUrl(url: String): Option[UrlCache]
 
   def urls: TableQuery[Urls]
 }
 
-class DefaultUrlRepository extends UrlRepository {
+class DefaultUrlRepository @Inject() (
+protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository with HasDatabaseConfigProvider[JdbcProfile] {
+
+
+  import driver.api._
 
   val urls = TableQuery[Urls]
 
@@ -24,15 +31,11 @@ class DefaultUrlRepository extends UrlRepository {
     }
   }
 
-  override def insert(url: Url): Url = {
-    DB.withDynSession {
+  override def insert(url: UrlCache): UrlCache = {
       urlsAutoInc.insert(url)
-    }
   }
 
   override def getByUrl(url: String) = {
-    DB.withDynSession {
       urls.filter(_.url === url).firstOption
-    }
   }
 }

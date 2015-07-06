@@ -9,7 +9,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultRaceResultRepository]
+@ImplementedBy(classOf[DefaultRaceResultRepository])
 trait RaceResultRepository extends CRUDRepository[RaceResult] {
   def exists(raceResult: RaceResult): Boolean
 }

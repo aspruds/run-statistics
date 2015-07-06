@@ -1,7 +1,5 @@
 package controllers
 
-import modules.ComponentRegistry
-import play.api.Logger
 import play.api.mvc._
 
 class Application extends Controller {

@@ -10,7 +10,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultPersonsCoachesRepository]
+@ImplementedBy(classOf[DefaultPersonsCoachesRepository])
 trait PersonsCoachesRepository extends CRUDRepository[PersonCoach] {
   def find(personId: Long, coachId: Long): Option[PersonCoach]
 

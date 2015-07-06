@@ -10,7 +10,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultRaceDistanceRepository]
+@ImplementedBy(classOf[DefaultRaceDistanceRepository])
 trait RaceDistanceRepository extends CRUDRepository[RaceDistance] {
   def find(raceDistance: RaceDistance): Option[RaceDistance]
 

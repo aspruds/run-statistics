@@ -12,7 +12,7 @@ import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import slick.driver.JdbcProfile
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultDistanceTypeRepository]
+@ImplementedBy(classOf[DefaultDistanceTypeRepository])
 trait DistanceTypeRepository extends CRUDRepository[DistanceType] {
   def findBySkriesimName(skriesimName: String): Option[DistanceType]
 }

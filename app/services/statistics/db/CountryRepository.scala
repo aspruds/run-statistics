@@ -9,7 +9,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
 
-@ImplementedBy[DefaultCountryRepository]
+@ImplementedBy(classOf[DefaultCountryRepository])
 trait CountryRepository extends CRUDRepository[Country] {
   def byCode(code: String): Option[Country]
 
