@@ -1,14 +1,14 @@
 package services.statistics.db.support
 
 import models.statistics.metadata.WithMetadata
-import models.statistics.metadata.db.WithMetadatas
+import models.statistics.metadata.db.WithMetadatasComponent
 import play.api.db.slick.HasDatabaseConfigProvider
 import slick.driver.JdbcProfile
 import slick.lifted.AbstractTable
 import utils.FutureUtils._
 
-abstract class DefaultCRUDRepository[M <: WithMetadata, T <: AbstractTable[M] with WithMetadatas[M]] extends CRUDRepository[M]
-with HasDatabaseConfigProvider[JdbcProfile] {
+abstract class DefaultCRUDRepository[M <: WithMetadata, T <: AbstractTable[M]] extends CRUDRepository[M]
+with HasDatabaseConfigProvider[JdbcProfile] with WithMetadatasComponent {
   import driver.api._
 
   type VO = T#TableElementType

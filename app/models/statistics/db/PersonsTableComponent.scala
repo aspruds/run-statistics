@@ -1,13 +1,13 @@
 package models.statistics.db
 
 import models.statistics.Person
-import models.statistics.metadata.db.{WithMetadatas, WithRelations}
+import models.statistics.metadata.db._
 import org.joda.time.LocalDate
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 import utils.db.PortableJodaSupport._
 
-trait PersonsTableComponent {
+trait PersonsTableComponent extends WithMetadatasComponent with WithNamesComponent with WithRelationsComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
@@ -15,19 +15,19 @@ trait PersonsTableComponent {
   class PersonsTable(tag: Tag) extends Table[Person](tag, "persons")
   with WithMetadatas[Person] with WithRelations[Person] {
 
-    def givenName = column[String]("given_name", O.NotNull)
+    def givenName = column[String]("given_name")
 
-    def familyName = column[String]("family_name", O.NotNull)
+    def familyName = column[String]("family_name")
 
     def dateOfBirth = column[Option[LocalDate]]("date_of_birth")
 
     def yearOfBirth = column[Option[Int]]("year_of_birth")
 
-    def sex = column[Option[String]]("sex", O.NotNull)
+    def sex = column[Option[String]]("sex")
 
-    def countryId = column[Option[Long]]("country_id", O.NotNull)
+    def countryId = column[Option[Long]]("country_id")
 
-    def isCoach = column[Boolean]("is_coach", O.NotNull)
+    def isCoach = column[Boolean]("is_coach")
 
     def skriesimIdIdx = index("persons_idx_skriesim_id", skriesimId, unique = true)
 

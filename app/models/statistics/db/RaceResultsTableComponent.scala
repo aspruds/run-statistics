@@ -1,11 +1,11 @@
 package models.statistics.db
 
 import models.statistics.RaceResult
-import models.statistics.metadata.db.WithMetadatas
+import models.statistics.metadata.db.{WithNamesComponent, WithMetadatasComponent, WithMetadatas}
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 
-trait RaceResultsTableComponent {
+trait RaceResultsTableComponent extends WithMetadatasComponent with WithNamesComponent {
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._

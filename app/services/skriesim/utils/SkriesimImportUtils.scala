@@ -6,9 +6,12 @@ import models.statistics._
 import models.statistics.metadata.WithName
 import modules.DAL
 import org.joda.time.LocalDateTime
+import services.skriesim.DefaultSkriesimIntegrationService
 import services.skriesim.utils.mappers.CountryMapper
+import services.statistics.db._
 
 trait SkriesimImportUtils {
+  this: DefaultSkriesimIntegrationService =>
 
   def mapAthleteToPerson(athlete: Athlete): Person = {
     Person(

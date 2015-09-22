@@ -6,23 +6,21 @@ import com.google.inject.ImplementedBy
 import models.http.UrlCache
 import play.api.db.slick._
 import slick.driver.JdbcProfile
+import utils.FutureUtils._
 
 @ImplementedBy(classOf[DefaultUrlRepository])
 trait UrlRepository {
   def insert(url: UrlCache): UrlCache
 
   def getByUrl(url: String): Option[UrlCache]
-
-  def urls: TableQuery[Urls]
 }
 
 class DefaultUrlRepository @Inject() (
 protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository with HasDatabaseConfigProvider[JdbcProfile] {
 
-
   import driver.api._
 
-  val urls = TableQuery[Urls]
+  val urls = TableQuery[UrlCache]
 
   private val urlsAutoInc = {
     val insertInvoker = urls returning urls.map(_.id)
@@ -32,7 +30,8 @@ protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository wi
   }
 
   override def insert(url: UrlCache): UrlCache = {
-      urlsAutoInc.insert(url)
+    val action = urlsAutoInc ++= url
+    db.run(action).await()
   }
 
   override def getByUrl(url: String) = {
