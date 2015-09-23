@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.DistanceType
-import models.statistics.db.DistanceTypesTable
+import models.statistics.db.{DistanceTypesTableComponent, DistanceTypesTable}
 import play.Logger
 import play.api.cache.Cache
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -19,9 +19,10 @@ trait DistanceTypeRepository extends CRUDRepository[DistanceType] {
 
 class DefaultDistanceTypeRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends DefaultCRUDRepository[DistanceType, DistanceTypesTable] with DistanceTypeRepository
-  with HasDatabaseConfigProvider[JdbcProfile] {
+  with HasDatabaseConfigProvider[JdbcProfile] with DistanceTypesTableComponent {
 
   import driver.api._
+  import play.api.Play.current
 
   override val tableReference = TableQuery[DistanceTypesTable]
 

@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.Club
-import models.statistics.db.ClubsTable
+import models.statistics.db.{ClubsTableComponent, ClubsTable}
 import play.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
@@ -16,7 +16,7 @@ trait ClubRepository extends CRUDRepository[Club] {
 }
 
 class DefaultClubRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[Club, ClubsTable] with ClubRepository {
+  extends DefaultCRUDRepository[Club, ClubsTable] with ClubRepository with ClubsTableComponent {
 
   import driver.api._
 

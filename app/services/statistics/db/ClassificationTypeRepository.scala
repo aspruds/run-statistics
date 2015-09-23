@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.ClassificationType
-import models.statistics.db.ClassificationTypesTable
+import models.statistics.db.{ClassificationTypesTableComponent, ClassificationTypesTable}
 import play.Logger
 import play.api.cache.Cache
 import play.api.db.slick.DatabaseConfigProvider
@@ -18,9 +18,10 @@ trait ClassificationTypeRepository extends CRUDRepository[ClassificationType] {
 
 class DefaultClassificationTypeRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends DefaultCRUDRepository[ClassificationType, ClassificationTypesTable]
-  with ClassificationTypeRepository {
+  with ClassificationTypeRepository with ClassificationTypesTableComponent {
 
   import driver.api._
+  import play.api.Play.current
 
   override val tableReference = TableQuery[ClassificationTypesTable]
 

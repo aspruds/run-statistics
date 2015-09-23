@@ -3,7 +3,7 @@ package services.statistics.db
 import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
-import models.statistics.db.PersonsCoachesTable
+import models.statistics.db.{PersonsCoachesTableComponent, PersonsCoachesTable}
 import models.statistics.{Person, PersonCoach}
 import org.joda.time.LocalDateTime
 import play.api.db.slick.DatabaseConfigProvider
@@ -18,7 +18,7 @@ trait PersonsCoachesRepository extends CRUDRepository[PersonCoach] {
 }
 
 class DefaultPersonsCoachesRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[PersonCoach, PersonsCoachesTable] with PersonsCoachesRepository {
+  extends DefaultCRUDRepository[PersonCoach, PersonsCoachesTable] with PersonsCoachesRepository with PersonsCoachesTableComponent {
 
   import driver.api._
 

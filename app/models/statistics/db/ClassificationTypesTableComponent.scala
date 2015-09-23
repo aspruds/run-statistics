@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.ClassificationType
-import models.statistics.metadata.db.{WithNamesComponent, WithMetadatasComponent, WithMetadatas, WithNames}
+import models.statistics.metadata.db.{WithMetadatasComponent, WithNamesComponent}
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 
@@ -9,6 +9,7 @@ trait ClassificationTypesTableComponent extends WithMetadatasComponent with With
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
+  import utils.db.PortableJodaSupport._
 
   class ClassificationTypesTable(tag: Tag) extends Table[ClassificationType](tag, "classification_types")
   with WithMetadatas[ClassificationType] with WithNames[ClassificationType] {

@@ -9,6 +9,7 @@ trait AgeGroupsTableComponent extends WithNamesComponent with WithMetadatasCompo
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
+  import utils.db.PortableJodaSupport._
 
   class AgeGroupsTable(tag: Tag) extends Table[AgeGroup](tag, "age_groups") with WithMetadatas[AgeGroup] with WithNames[AgeGroup] {
     def * = (

@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.Club
-import models.statistics.metadata.db.{WithNamesComponent, WithMetadatasComponent, WithMetadatas, WithNames}
+import models.statistics.metadata.db.{WithMetadatasComponent, WithNamesComponent}
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 
@@ -9,6 +9,7 @@ trait ClubsTableComponent extends WithMetadatasComponent with WithNamesComponent
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
+  import utils.db.PortableJodaSupport._
 
   class ClubsTable(tag: Tag) extends Table[Club](tag, "clubs")
   with WithMetadatas[Club] with WithNames[Club] {

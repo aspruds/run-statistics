@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.RaceDistance
-import models.statistics.metadata.db.{WithNamesComponent, WithMetadatasComponent, WithMetadatas}
+import models.statistics.metadata.db.{WithMetadatasComponent, WithNamesComponent}
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 
@@ -9,6 +9,7 @@ trait RaceDistancesTableComponent extends WithMetadatasComponent with WithNamesC
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
+  import utils.db.PortableJodaSupport._
 
   class RaceDistancesTable(tag: Tag) extends Table[RaceDistance](tag, "race_distances")
   with WithMetadatas[RaceDistance] {

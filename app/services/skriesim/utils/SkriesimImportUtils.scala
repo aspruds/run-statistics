@@ -4,11 +4,9 @@ import models.skriesim.id.CodeName
 import models.skriesim.{Club => SkriesimClub, Race => SkriesimRace, RaceResult => SkriesimRaceResult, NonStandardDistance, Athlete}
 import models.statistics._
 import models.statistics.metadata.WithName
-import modules.DAL
 import org.joda.time.LocalDateTime
 import services.skriesim.DefaultSkriesimIntegrationService
 import services.skriesim.utils.mappers.CountryMapper
-import services.statistics.db._
 
 trait SkriesimImportUtils {
   this: DefaultSkriesimIntegrationService =>

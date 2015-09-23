@@ -1,7 +1,7 @@
 package models.statistics.db
 
 import models.statistics.Country
-import models.statistics.metadata.db.{WithNamesComponent, WithMetadatasComponent, WithMetadatas}
+import models.statistics.metadata.db.{WithMetadatasComponent, WithNamesComponent}
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 
@@ -9,6 +9,7 @@ trait CountriesTableComponent extends WithMetadatasComponent with WithNamesCompo
   self: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
+  import utils.db.PortableJodaSupport._
 
   class CountriesTable(tag: Tag) extends Table[Country](tag, "countries") with WithMetadatas[Country] {
 

@@ -8,6 +8,7 @@ import models.sportlat.{Athlete, RaceDistance}
 import org.joda.time.DateTime
 import play.api.Logger
 import services.sportlat.parsers.SportlatParser
+import services.sportlat.providers.SportlatProvider
 
 @ImplementedBy(classOf[DefaultSportlatDataService])
 trait SportlatDataService {

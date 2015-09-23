@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.http.UrlCache
+import models.http.db.UrlCacheTableComponent
 import play.api.db.slick._
 import slick.driver.JdbcProfile
 import utils.FutureUtils._
@@ -16,11 +17,12 @@ trait UrlRepository {
 }
 
 class DefaultUrlRepository @Inject() (
-protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository with HasDatabaseConfigProvider[JdbcProfile] {
+protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository with UrlCacheTableComponent
+with HasDatabaseConfigProvider[JdbcProfile] {
 
   import driver.api._
 
-  val urls = TableQuery[UrlCache]
+  val urls = TableQuery[UrlCacheTable]
 
   private val urlsAutoInc = {
     val insertInvoker = urls returning urls.map(_.id)
@@ -30,11 +32,12 @@ protected val dbConfigProvider: DatabaseConfigProvider) extends UrlRepository wi
   }
 
   override def insert(url: UrlCache): UrlCache = {
-    val action = urlsAutoInc ++= url
+    val action = urlsAutoInc += url
     db.run(action).await()
   }
 
   override def getByUrl(url: String) = {
-      urls.filter(_.url === url).firstOption
+    val action = urls.filter(_.url === url).result.headOption
+    db.run(action).await()
   }
 }

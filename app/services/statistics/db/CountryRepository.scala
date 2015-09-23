@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.Country
-import models.statistics.db.CountriesTable
+import models.statistics.db.{CountriesTableComponent, CountriesTable}
 import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
@@ -17,7 +17,7 @@ trait CountryRepository extends CRUDRepository[Country] {
 }
 
 class DefaultCountryRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[Country, CountriesTable] with CountryRepository {
+  extends DefaultCRUDRepository[Country, CountriesTable] with CountryRepository with CountriesTableComponent {
 
   import driver.api._
 

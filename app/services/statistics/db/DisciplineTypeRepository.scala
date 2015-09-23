@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.DisciplineType
-import models.statistics.db.DisciplineTypesTable
+import models.statistics.db.{DisciplineTypesTableComponent, DisciplineTypesTable}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import slick.driver.JdbcProfile
@@ -14,7 +14,7 @@ trait DisciplineTypeRepository extends CRUDRepository[DisciplineType]
 
 class DefaultDisciplineTypeRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends DefaultCRUDRepository[DisciplineType, DisciplineTypesTable]
-  with HasDatabaseConfigProvider[JdbcProfile] with DisciplineTypeRepository {
+  with HasDatabaseConfigProvider[JdbcProfile] with DisciplineTypeRepository with DisciplineTypesTableComponent {
 
   import driver.api._
 

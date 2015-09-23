@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.RaceResult
-import models.statistics.db.RaceResultsTable
+import models.statistics.db.{RaceResultsTableComponent, RaceResultsTable}
 import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
 import utils.FutureUtils._
@@ -15,7 +15,7 @@ trait RaceResultRepository extends CRUDRepository[RaceResult] {
 }
 
 class DefaultRaceResultRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[RaceResult, RaceResultsTable] with RaceResultRepository {
+  extends DefaultCRUDRepository[RaceResult, RaceResultsTable] with RaceResultRepository with RaceResultsTableComponent {
 
   import driver.api._
 

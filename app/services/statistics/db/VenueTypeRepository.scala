@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.VenueType
-import models.statistics.db.VenueTypesTable
+import models.statistics.db.{VenueTypesTableComponent, VenueTypesTable}
 import play.Logger
 import play.api.cache.Cache
 import play.api.db.slick.DatabaseConfigProvider
@@ -17,9 +17,10 @@ trait VenueTypeRepository extends CRUDRepository[VenueType] {
 }
 
 class DefaultVenueTypeRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[VenueType, VenueTypesTable] with VenueTypeRepository {
+  extends DefaultCRUDRepository[VenueType, VenueTypesTable] with VenueTypeRepository with VenueTypesTableComponent {
 
   import driver.api._
+  import play.api.Play.current
 
   override val tableReference = TableQuery[VenueTypesTable]
 

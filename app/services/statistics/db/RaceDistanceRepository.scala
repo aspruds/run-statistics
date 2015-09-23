@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.RaceDistance
-import models.statistics.db.RaceDistances
+import models.statistics.db.{RaceDistancesTableComponent, RaceDistances}
 import play.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
@@ -18,11 +18,11 @@ trait RaceDistanceRepository extends CRUDRepository[RaceDistance] {
 }
 
 class DefaultRaceDistanceRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[RaceDistance, RaceDistances] with RaceDistanceRepository {
+  extends DefaultCRUDRepository[RaceDistance, RaceDistances] with RaceDistanceRepository with RaceDistancesTableComponent {
 
   import driver.api._
 
-  override val tableReference = TableQuery[RaceDistances]
+  override val tableReference = TableQuery[RaceDistancesTable]
 
   override def copyWithId(valueObject: RaceDistance, id: Long) = valueObject.copy(id = id)
 

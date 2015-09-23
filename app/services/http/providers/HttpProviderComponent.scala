@@ -6,14 +6,12 @@ import com.google.inject.ImplementedBy
 import models.http.UrlCache
 import org.joda.time.LocalDateTime
 import play.api.Logger
-import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
 import services.http.db.UrlRepository
-import slick.driver.JdbcProfile
 
 import scala.io.Source
 import scala.util.Random
 
-@ImplementedBy[DefaultHttpProvider]
+@ImplementedBy(classOf[DefaultHttpProvider])
 trait HttpProvider {
   def loadURL(url: String): String
 }

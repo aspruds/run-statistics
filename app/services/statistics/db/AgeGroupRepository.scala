@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import models.statistics.AgeGroup
-import models.statistics.db.AgeGroupsTable
+import models.statistics.db.{AgeGroupsTable, AgeGroupsTableComponent}
 import play.Logger
 import play.api.db.slick.DatabaseConfigProvider
 import services.statistics.db.support.{CRUDRepository, DefaultCRUDRepository}
@@ -17,9 +17,11 @@ trait AgeGroupRepository extends CRUDRepository[AgeGroup] {
 }
 
 class DefaultAgeGroupRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends DefaultCRUDRepository[AgeGroup, AgeGroupsTable] with AgeGroupRepository {
+  extends DefaultCRUDRepository[AgeGroup, AgeGroupsTable] with AgeGroupRepository
+  with AgeGroupsTableComponent {
 
   import driver.api._
+  import play.api.Play.current
 
   override val tableReference = TableQuery[AgeGroupsTable]
 

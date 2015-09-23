@@ -18,7 +18,7 @@ trait PersonRepository extends CRUDRepository[Person] {
 }
 
 class DefaultPersonRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-extends DefaultCRUDRepository[Person, PersonsTable] with PersonRepository {
+extends DefaultCRUDRepository[Person, PersonsTable] with PersonRepository with PersonsTableComponent {
 
   import driver.api._
 
